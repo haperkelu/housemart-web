@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HouseAuditHistoryEntity">
+	<resultMap id="houseAuditHistory" class="org.housemart.dao.entities.HouseAuditHistoryEntity">
+		<result property="id" column="ID" />
+		<result property="houseId" column="HouseID" />
+		<result property="managerId" column="ManagerID" />
+		<result property="type" column="Type" />
+		<result property="committerId" column="CommitterID" />
+		<result property="preContent" column="PreContent" />
+		<result property="postContent" column="PostContent" />
+		<result property="result" column="Result" />
+		<result property="addTime" column="AddTime" />
+		<result property="updateTime" column="UpdateTime" />
+		<result property="comments" column="Comments" />
+	</resultMap>
+	
+	<insert id="addHouseAuditHistory" parameterClass="org.housemart.dao.entities.HouseAuditHistoryEntity">
+		INSERT INTO house_audit_history(HouseID, ManagerID, Type,
+		CommitterID, PreContent, PostContent, Result, AddTime, UpdateTime, Comments)
+		VALUES(#houseId#, #managerId#, #type#,
+		#committerId#, #preContent#, #postContent#, #result#, #addTime#, #updateTime#, #comments#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="loadHouseAuditHistory" resultMap="houseAuditHistory" parameterClass="uniqueObject">
+		SELECT * FROM house_audit_history
+		WHERE ID = #id#
+	</select>
+	
+	<select id="findHouseAuditHistoryList" resultMap="houseAuditHistory" parameterClass="map">
+		SELECT * FROM house_audit_history
+		<dynamic prepend="WHERE">
+			<isNotNull prepend="AND" property="houseId"> 
+	            HouseID = #houseId#
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="type"> 
+	            Type = #type#
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="result"> 
+	            Result = #result#
+	        </isNotNull>
+            <isNotNull prepend="AND" property="commiterId"> 
+	            CommitterID = #commiterId#
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="typeNull"> 
+	            Type IS NULL
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="resultNull"> 
+	            Result IS NULL
+	        </isNotNull>
+		</dynamic>
+		ORDER BY UpdateTime DESC
+	</select>
+	
+	<select id="findHouseAuditHistoryListByManagerID" resultMap="houseAuditHistory" parameterClass="map">
+		SELECT * FROM house_audit_history
+		WHERE ManagerID  =  #mangerId# and result = 0
+		Order by ID desc
+	</select>	
+	
+	<update id="updateAuditHistoryResultStatus" parameterClass="map">
+		update house_audit_history set result = #result#,  UpdateTime = Now() 
+			<isNotNull prepend="," property="comments"> 
+	            Comments = #comments#
+	        </isNotNull>
+		WHERE ID = #id#
+	</update>
+	
+	<update id="updateAuditHistoryResultStatusByIds" parameterClass="map">
+		update house_audit_history set result = #result#,  UpdateTime = Now()
+		<isNotNull prepend="," property="comments"> 
+            Comments = #comments#
+        </isNotNull>
+		WHERE ID in ($ids$)
+	</update>
+	
+	<update id="updateAuditHistoryForAutoRefresh" parameterClass="map">
+		update house_audit_history set UpdateTime = #updateTime#, AddTime = #addTime#, Comments = #comments#
+		WHERE ID = #id#
+	</update>
+	
+	<select id="findRejectedList" resultMap="houseAuditHistory" parameterClass="map">
+		SELECT A.ID, A.HouseID, A.Type, A.ManagerID, A.CommitterID, A.PreContent, A.PostContent, A.Result, A.Comments, A.AddTime, A.UpdateTime
+		FROM house_audit_history A 
+		LEFT JOIN house H ON A.HouseID = H.ID
+		LEFT JOIN residence R ON R.ID = H.ResidenceID
+		LEFT JOIN region REG ON R.RegionID = REG.RegionID
+		WHERE A.Type = #auditType# AND A.Result = 2 AND H.SourceType = #sourceType# 
+		AND
+		(1
+		<isNotEmpty property="residenceIds">
+			OR H.ResidenceID in ($residenceIds$)
+		</isNotEmpty>
+		<isNotEmpty property="plateIds">
+			OR R.RegionID in ($plateIds$)
+		</isNotEmpty>
+		<isNotEmpty property="regionIds">
+			OR REG.ParentID in ($regionIds$)
+		</isNotEmpty>  
+		)
+		Order by ID desc
+	</select>
+	
+</sqlMap>
+		

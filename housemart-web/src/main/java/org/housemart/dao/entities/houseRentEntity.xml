@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HouseRentEntity">
+	<resultMap id="houseRent" class="org.housemart.dao.entities.HouseRentEntity">
+		<result property="id" column="ID" />
+		<result property="houseId" column="HouseID" />
+		<result property="tagList" column="TagList" />
+		<result property="price" column="Price" />
+		<result property="basePrice" column="BasePrice" />
+		<result property="rentType" column="RentType" />
+		<result property="rentStatus" column="RentStatus" />
+		<result property="rentRec" column="RentRec" />
+		<result property="equipmentList" column="EquipmentList" />
+		<result property="memo" column="Memo" />
+		<result property="dealTime" column="DealTime" />
+		<result property="addTime" column="AddTime" />
+		<result property="updateTime" column="UpdateTime" />
+		<result property="owner" column="Owner" />
+	</resultMap>
+	
+	<insert id="addHouseRent" parameterClass="org.housemart.dao.entities.HouseRentEntity">
+		INSERT INTO house_rent(HouseID, TagList, Price,
+		BasePrice, RentType, RentStatus, RentRec, EquipmentList, Memo, DealTime, AddTime, UpdateTime, Owner)
+		VALUES(#houseId#, #tagList#, #price#,
+		#basePrice#, #rentType#, #rentStatus#, #rentRec#, #equipmentList#, #memo#, #dealTime#, #addTime#, #updateTime#, #owner#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="loadHouseRent" resultMap="houseRent" parameterClass="uniqueObject">
+		SELECT * FROM house_rent
+		WHERE ID = #id#
+	</select>
+	
+	<select id="findHouseRentListByHouseId" resultMap="houseRent" parameterClass="uniqueObject">
+		SELECT * FROM house_rent
+		WHERE HouseID = #id#
+		ORDER BY UpdateTime DESC
+	</select>
+	
+	<select id="findHouseRentList" resultMap="houseRent" parameterClass="map">
+		SELECT *
+		FROM house_rent
+		WHERE 1
+		<isNotNull prepend="AND" property="rentStatus"> 
+            RentStatus = #rentStatus#
+        </isNotNull>
+		ORDER BY UpdateTime DESC
+	</select>
+	
+	<update id="updateHouseRent" parameterClass="org.housemart.dao.entities.HouseRentEntity">
+		UPDATE house_rent
+		<dynamic prepend="SET" >
+			<isNotNull prepend="," property="houseId" > 
+			HouseID = #houseId#
+			</isNotNull>
+			<isNotNull prepend="," property="tagList" >
+			TagList = #tagList#
+			</isNotNull>
+			<isNotNull prepend="," property="price" >
+			Price = #price#
+			</isNotNull>
+			<isNotNull prepend="," property="basePrice" >
+			BasePrice = #basePrice#
+			</isNotNull>
+			<isNotNull prepend="," property="rentType" >
+			RentType = #rentType#
+			</isNotNull>
+			<isNotNull prepend="," property="rentStatus" >
+			RentStatus = #rentStatus#
+			</isNotNull>
+			<isNotNull prepend="," property="rentRec" >
+			RentRec = #rentRec#
+			</isNotNull>
+			<isNotNull prepend="," property="equipmentList" >
+			EquipmentList = #equipmentList#
+			</isNotNull>
+			<isNotNull prepend="," property="memo" >
+			Memo = #memo#
+			</isNotNull>
+			<isNotNull prepend="," property="dealTime" >
+			DealTime = #dealTime#
+			</isNotNull>
+			<isNotNull prepend="," property="addTime" >
+			AddTime = #addTime#
+			</isNotNull>
+			<isNotNull prepend="," property="updateTime" >
+			UpdateTime = #updateTime#
+			</isNotNull>
+			<isNotNull prepend="," property="owner" >
+			Owner = #owner#
+			</isNotNull>
+		</dynamic>
+		WHERE ID = #id#
+	</update>
+	
+	<update id="updateHouseRentByHouseId" parameterClass="org.housemart.dao.entities.HouseRentEntity">
+		UPDATE house_rent
+		<dynamic prepend="SET" >
+			<isNotNull prepend="," property="houseId" > 
+			HouseID = #houseId#
+			</isNotNull>
+			<isNotNull prepend="," property="tagList" >
+			TagList = #tagList#
+			</isNotNull>
+			<isNotNull prepend="," property="price" >
+			Price = #price#
+			</isNotNull>
+			<isNotNull prepend="," property="basePrice" >
+			BasePrice = #basePrice#
+			</isNotNull>
+			<isNotNull prepend="," property="rentType" >
+			RentType = #rentType#
+			</isNotNull>
+			<isNotNull prepend="," property="rentStatus" >
+			RentStatus = #rentStatus#
+			</isNotNull>
+			<isNotNull prepend="," property="rentRec" >
+			RentRec = #rentRec#
+			</isNotNull>
+			<isNotNull prepend="," property="equipmentList" >
+			EquipmentList = #equipmentList#
+			</isNotNull>
+			<isNotNull prepend="," property="memo" >
+			Memo = #memo#
+			</isNotNull>
+			<isNotNull prepend="," property="dealTime" >
+			DealTime = #dealTime#
+			</isNotNull>
+			<isNotNull prepend="," property="addTime" >
+			AddTime = #addTime#
+			</isNotNull>
+			<isNotNull prepend="," property="updateTime" >
+			UpdateTime = #updateTime#
+			</isNotNull>
+			<isNotNull prepend="," property="owner" >
+			Owner = #owner#
+			</isNotNull>
+		</dynamic>
+		WHERE HouseID = #houseId# 
+		ORDER BY UpdateTime DESC
+		LIMIT 1
+	</update>
+</sqlMap>
+		

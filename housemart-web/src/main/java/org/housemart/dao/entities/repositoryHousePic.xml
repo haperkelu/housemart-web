@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="RepositoryHousePicEntity">
+
+	<resultMap id="repositoryHousePic" class="org.housemart.dao.entities.RepositoryHousePicEntity">
+		<result property="id" column="ID" nullValue="0"/>
+		<result property="residenceId" column="ResidenceID" nullValue="0"/>
+		<result property="houseId" column="HouseID" nullValue="0"/>
+		<result property="type" column="Type" nullValue="1"/>
+		<result property="url" column="URL" nullValue=""/>
+		<result property="cloudURL" column="CloudURL" nullValue=""/>
+		<result property="status" column="Status" nullValue="0"/>
+		<result property="crawlStatus" column="CrawlStatus" nullValue="0"/>
+		<result property="addTime" column="AddTime" nullValue="2000/01/01 00:00:00"/>
+		<result property="updateTime" column="UpdateTime" nullValue="2000/01/01 00:00:00"/>
+	</resultMap>
+	
+	<insert id="addHousePic" parameterClass="org.housemart.dao.entities.RepositoryHousePicEntity">
+		INSERT INTO repository.house_pic(ResidenceID, HouseID, Type, URL, CloudURL, Status, CrawlStatus, AddTime, UpdateTime)
+		VALUES(#residenceId#, #houseId#, #type#, #url#, #cloudURL#, #status#, #crawlStatus#, #addTime#, #updateTime#)
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="loadHousePic" resultMap="repositoryHousePic" parameterClass="uniqueObject">
+		SELECT * FROM repository.house_pic
+		WHERE ID = #id#
+	</select>
+	
+	<select id="findHousePic" resultMap="repositoryHousePic" parameterClass="map">
+		SELECT H_P.ID, H_P.ResidenceID, H_P.HouseID, H_P.Type, H_P.URL, H_P.CloudURL,H_P.Status,H_P.CrawlStatus,
+		H_P.AddTime, H_P.UpdateTime
+		FROM repository.house_pic H_P
+		LEFT JOIN repository.house H ON H_P.HouseID = H.ID 
+		WHERE H_P.ResidenceID = #residenceId# AND H_P.Type = #type# AND H_P.CrawlStatus = 1 AND H_P.status = 1
+		<dynamic>
+			<isNotNull prepend="AND" property="east"> 
+	      		ROUND(H.Direction/1000) = 1
+			</isNotNull>
+			<isNotNull prepend="AND" property="south"> 
+	      		ROUND(MOD(H.Direction, 1000)/100) = 1
+			</isNotNull>
+			<isNotNull prepend="AND" property="west"> 
+	      		ROUND(MOD(H.Direction, 100)/10) = 1
+			</isNotNull>
+			<isNotNull prepend="AND" property="north"> 
+	      		 MOD(H.Direction, 10) = 1
+			</isNotNull>
+			<isNotNull prepend="AND" property="shi"> 
+	      		ROUND(H.RoomType/1000) = #shi#
+			</isNotNull>
+			<isNotNull prepend="AND" property="shiGE"> 
+	      		ROUND(H.RoomType/1000) <![CDATA[ >= ]]> #shiGE#
+			</isNotNull>
+			<isNotNull prepend="AND" property="ting"> 
+			    ROUND(MOD(H.RoomType, 1000)/100) = #ting#
+			</isNotNull>
+			<isNotNull prepend="AND" property="wei"> 
+			    ROUND(MOD(H.RoomType, 100)/10) = #wei#
+			</isNotNull>
+			<isNotNull prepend="AND" property="yangtai"> 
+			    MOD(H.RoomType, 10) = #yangtai#
+			</isNotNull>
+			<isNotNull prepend="AND" property="minArea"> 
+				<![CDATA[  H.PropertyArea >= #minArea# ]]>
+			</isNotNull>
+			<isNotNull prepend="AND" property="maxArea"> 
+				<![CDATA[  H.PropertyArea < #maxArea# ]]>
+			</isNotNull>
+		</dynamic>
+		ORDER BY H_P.UpdateTime DESC
+	</select>
+	
+	<select id="findResidencePicById" resultMap="repositoryHousePic" parameterClass="map">
+		SELECT * FROM repository.house_pic
+		WHERE residenceID = #residenceId# AND Type = 1 AND CrawlStatus = 1 AND status = 1
+		ORDER BY UpdateTime DESC
+	</select>	
+	
+	<update id="updateHousePic" parameterClass="org.housemart.dao.entities.RepositoryHousePicEntity">
+		UPDATE repository.house_pic SET ResidenceID = #residenceId#, HouseID = #houseId#, Type = #type#, URL = #url#, CloudURL = #cloudURL#, 
+		Status = #status#, CrawlStatus = #crawlStatus#, AddTime = #addTime#, UpdateTime = #updateTime#
+		WHERE ID = #id#
+	</update>
+
+	<update id="updateCloudURL" parameterClass="map">
+		UPDATE repository.house_pic SET CloudURL = #cloudURL#
+		WHERE ID = #id#
+	</update>	
+	<update id="updateStatus" parameterClass="map">
+		UPDATE repository.house_pic SET Status = #status#, UpdateTime = now()
+		WHERE ID = #id#
+	</update>	
+	
+	<update id="updateRepositoryPicCloudURL" parameterClass="map">
+		UPDATE repository.house_pic SET CloudURL = #cloudURL#, Status = #status#
+		WHERE ID = #id#
+	</update>
+</sqlMap>
+		

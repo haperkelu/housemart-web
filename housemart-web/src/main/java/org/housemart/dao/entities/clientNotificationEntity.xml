@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ClientNotificationEntity">
+
+	<resultMap id="clientNotification" class="org.housemart.dao.entities.ClientNotificationEntity">
+		<result property="id" column="ID" />
+		<result property="content" column="Content" />
+		<result property="target" column="Target" />
+		<result property="addTime" column="AddTime" />
+		<result property="accountID" column="accountID" />
+		<result property="accountName" column="accountName" />
+		<result property="status" column="Status" />
+		<result property="clientUIDs" column="clientUIDs" />
+		<result property="sendTime" column="SendTime" />
+	</resultMap>
+	
+	<resultMap id="clientNotificationSend" class="org.housemart.dao.entities.ClientNotificationSendEntity">
+		<result property="id" column="ID" />
+		<result property="notificationID" column="NotificationID" />
+		<result property="notificationContent" column="NotificationContent" />
+		<result property="status" column="Status" />
+		<result property="clientUIDs" column="clientUIDs" />
+		<result property="sendType" column="SendType" />
+		<result property="processTime" column="ProcessTime" />
+		<result property="note" column="Note" />
+	</resultMap>
+
+	<select id="countClientNotificationList" resultClass="int" parameterClass="map">
+		SELECT 
+			COUNT(*)
+		FROM client_notification AS cn
+		WHERE 1
+	</select>
+	
+	<select id="findClientNotificationList" resultMap="clientNotification" parameterClass="map">
+		SELECT 
+			cn.*, acc.Name AS accountName
+		FROM client_notification AS cn
+		LEFT JOIN admin.account AS acc ON cn.AccountID = acc.ID
+		WHERE 1
+		<isNotNull prepend="AND" property="status"> 
+            cn.status = #status#
+        </isNotNull>
+        <isNotNull prepend="AND" property="currentTime"> 
+            <![CDATA[ cn.SendTime < #currentTime# ]]>
+        </isNotNull>
+        
+        <include refid="common.orderBy" />
+		<include refid="common.limit" />
+	</select>
+	
+	<select id="loadClientNotificationById" resultMap="clientNotification" parameterClass="uniqueObject">
+		SELECT 
+			cn.*, acc.Name AS accountName
+		FROM client_notification AS cn
+		LEFT JOIN admin.account AS acc ON cn.AccountID = acc.ID
+		WHERE cn.ID = #id#
+	</select>
+		
+	<insert id="addClientNotification" parameterClass="org.housemart.dao.entities.ClientNotificationEntity">
+		INSERT INTO client_notification (Content, target, AddTime, AccountID, SendTime, Status, ClientUIDs)
+		VALUES (#content#, #target#, NOW(), #accountID#, #sendTime#, #status#, #clientUIDs#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<update id="updateClientNotification" parameterClass="org.housemart.dao.entities.ClientNotificationEntity">
+		UPDATE client_notification SET Status = #status#
+		WHERE ID = #id#
+	</update>
+	
+	<select id="countClientNotificationSendList" resultClass="int" parameterClass="map">
+		SELECT 
+			COUNT(*)
+		FROM client_notification_send AS cns
+		WHERE 1
+	</select>
+	
+	<select id="findClientNotificationSendList" resultMap="clientNotificationSend" parameterClass="map">
+		SELECT 
+			cns.*, cn.Content AS notificationContent
+		FROM client_notification_send AS cns
+		LEFT JOIN client_notification AS cn ON cns.NotificationID = cn.ID
+		WHERE 1
+		<isNotNull prepend="AND" property="status"> 
+            cns.status = #status#
+        </isNotNull>
+        <include refid="common.orderBy" />
+		<include refid="common.limit" />
+	</select>
+	
+	<select id="loadClientNotificationSendById" resultMap="clientNotification" parameterClass="uniqueObject">
+		SELECT 
+			cns.*, cn.Content AS notificationContent
+		FROM client_notification_send AS cns
+		LEFT JOIN client_notification AS cn ON cns.NotificationID = cn.ID
+		WHERE cns.ID = #id#
+	</select>
+		
+	<insert id="addClientNotificationSend" parameterClass="org.housemart.dao.entities.ClientNotificationSendEntity">
+		INSERT INTO client_notification_send (NotificationID, ClientUIDs, ProcessTime, Status, SendType, Note)
+		VALUES (#notificationID#, #clientUIDs#, #processTime#, #status#, #sendType#, #note#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<update id="updateClientNotificationSend" parameterClass="org.housemart.dao.entities.ClientNotificationSendEntity">
+		UPDATE client_notification_send SET Note = #note#, Status = #status#, ProcessTime = #processTime#
+		WHERE ID = #id#
+	</update>
+	
+	<update id="updateClientNotificationSendByMap" parameterClass="map">
+		UPDATE client_notification_send SET
+			Status = #status#,
+			ProcessTime = #processTime#
+		WHERE 1
+		<isNotNull prepend="AND" property="ids">
+			ID IN ($ids$)
+		</isNotNull>
+	</update>
+</sqlMap>

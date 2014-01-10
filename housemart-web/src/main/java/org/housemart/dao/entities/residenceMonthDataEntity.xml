@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ResidenceMonthDataEntity">
+
+	<resultMap id="residenceMonthData" class="org.housemart.dao.entities.ResidenceMonthDataEntity">
+		<result property="id" column="ID" />
+		<result property="residenceId" column="ResidenceID" />
+		<result property="residenceName" column="ResidenceName" />
+		<result property="year" column="Year" />
+		<result property="month" column="Month" />
+		<result property="annualPriceIncrement" column="AnnualPriceIncrement" />
+		<result property="annualTurnoverPercent" column="AnnualTurnoverPercent" />
+		<result property="rentRevenue" column="RentRevenue" />
+		<result property="averagePrice" column="AveragePrice" />
+		<result property="minRentPrice" column="minRentPrice" />
+		<result property="maxRentPrice" column="maxRentPrice" />
+		<result property="addTime" column="AddTime" />
+		<result property="updateTime" column="UpdateTime" />
+	</resultMap>
+
+	<select id="findMonthData" resultMap="residenceMonthData" parameterClass="map">
+		SELECT * FROM residence_month_data
+		WHERE 1
+		<dynamic>
+			<isNotNull prepend="AND" property="residenceId"> 
+	            ResidenceID = #residenceId#  
+	        </isNotNull>  
+			<isNotNull prepend="AND" property="year"> 
+	    		Year = #year#   
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="month"> 
+	    		Month = #month#   
+	        </isNotNull>  
+        </dynamic> 
+	</select>
+			
+	<select id="findByResidence" resultMap="residenceMonthData" parameterClass="map">
+		SELECT * FROM residence_month_data
+		WHERE ResidenceID = #residenceId# 
+		AND Year = (SELECT MAX(Year) FROM residence_month_data WHERE ResidenceID = #residenceId#) 
+		AND Month = (SELECT MAX(Month) FROM residence_month_data WHERE Year = (SELECT MAX(Year) FROM residence_month_data WHERE ResidenceID = #residenceId#) AND ResidenceID = #residenceId#)
+	</select>	
+	 
+	<insert id="addResidenceMonthData" parameterClass="org.housemart.dao.entities.ResidenceMonthDataEntity">
+		INSERT INTO residence_month_data(ResidenceId, ResidenceName, Year, Month, AnnualPriceIncrement, AnnualTurnoverRate, AnnualTurnoverPercent, RentRevenue, AveragePrice, MinRentPrice, MaxRentPrice, AddTime, UpdateTime)
+		VALUES(#residenceId#, #residenceName#, #year#, #month#, #annualPriceIncrement#, #annualTurnoverRate#, #annualTurnoverPercent#, #rentRevenue#, #averagePrice#, #minRentPrice#, #maxRentPrice#, #addTime#, #updateTime#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<update id="updateResidenceMonthData" parameterClass="org.housemart.dao.entities.ResidenceMonthDataEntity">
+		UPDATE residence_month_data 
+		<dynamic prepend="set" >
+	      <isNotNull prepend="," property="residenceId" >
+	        ResidenceId = #residenceId#
+	      </isNotNull>
+	      <isNotNull prepend="," property="residenceName" >
+	        ResidenceName = #residenceName#
+	      </isNotNull>
+	      <isNotNull prepend="," property="year" >
+	        Year = #year#
+	      </isNotNull>
+	      <isNotNull prepend="," property="month" >
+	        Month = #month#
+	      </isNotNull>
+	      <isNotNull prepend="," property="annualPriceIncrement" >
+	        AnnualPriceIncrement = #annualPriceIncrement#
+	      </isNotNull>
+	      <isNotNull prepend="," property="annualTurnoverRate" >
+	        AnnualTurnoverRate = #annualTurnoverRate#
+	      </isNotNull>
+	      <isNotNull prepend="," property="annualTurnoverPercent" >
+	        AnnualTurnoverPercent = #annualTurnoverPercent#
+	      </isNotNull>
+	      <isNotNull prepend="," property="rentRevenue" >
+	        RentRevenue = #rentRevenue#
+	      </isNotNull>
+    	  <isNotNull prepend="," property="averagePrice" >
+	        AveragePrice = #averagePrice#
+	      </isNotNull>
+	      <isNotNull prepend="," property="minRentPrice" >
+	        MinRentPrice = #minRentPrice#
+	      </isNotNull>
+    	  <isNotNull prepend="," property="maxRentPrice" >
+	        MaxRentPrice = #maxRentPrice#
+	      </isNotNull>
+	      <isNotNull prepend="," property="addTime" >
+	        AddTime = #addTime#
+	      </isNotNull>
+	      <isNotNull prepend="," property="updateTime" >
+	        UpdateTime = #updateTime#
+	      </isNotNull>
+	    </dynamic>
+		WHERE ID = #id#; 	
+	</update> 
+	 
+		
+</sqlMap>

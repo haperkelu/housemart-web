@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+<settings useStatementNamespaces="true"/>
+<typeAlias alias="uniqueObject" type="org.housemart.framework.dao.generic.UniqueIdObject"/>
+<typeAlias alias="residencBuilding" type="org.housemart.dao.entities.ResidenceBuildingEntity"/>
+
+<sqlMap resource="org/housemart/dao/entities/common.xml" />
+<sqlMap resource="org/housemart/dao/entities/region.xml" />
+<sqlMap resource="org/housemart/dao/entities/residence.xml" />
+<sqlMap resource="org/housemart/dao/entities/residenceBuildingEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/residenceCellEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/residenceMonthDataEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/userAccessEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseContactEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/housePropertyEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseRentEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseSaleEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseSoldBuildingEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseProcessEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseAuditHistoryEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/residenceAuditHistoryEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseFavoriteEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/housePicEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/housePicSortEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseTagEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseInteractionEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseInteractionTransferEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/houseInteractionNoticeEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/google-place.xml" />
+<sqlMap resource="org/housemart/dao/entities/areaPositionEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/MaxinRawEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/HouseLeadsEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/keyValueEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/appClientFileEntity.xml" />
+<sqlMap resource="org/housemart/dao/entities/residenceNameHistoryEntity.xml" />
+<!-- repository -->
+<sqlMap resource="org/housemart/dao/entities/repositoryHousePic.xml" />
+<!-- house contact view -->
+<sqlMap resource="org/housemart/dao/entities/houseContactView.xml" />
+</sqlMapConfig>

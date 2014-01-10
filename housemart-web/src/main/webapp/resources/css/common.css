@@ -1,0 +1,20 @@
+#login-toolbar {height:30px;text-align:right;margin:0 20px 300px 0;}
+.table {margin:0 0 20px 0;width:95%;}
+.logo {float:left;width:300px;height:40px;font-size:32px;}
+
+#nav {height:75px;clear:both;}
+#menu {list-style:none;margin:0;padding:0;height:30px;background:#ccc;border-bottom:1px solid #666;}
+#menu .cat {float:left;line-height:30px;width:150px;text-align:center;cursor:pointer;}
+#menu .cat-focus {background:#fff;color:#000;border:1px solid #666;border-bottom:none;}
+#nav .sub-cat {display:none;width:100%;border:1px solid #666;border-top:none;height:30px;margin:0;padding:0;}
+#nav .sub-cat li {float:left;line-height:30px;padding:0 20px;margin:0 20px;list-style:none;}
+#nav .sub-cat li a {text-decoration:none;}
+#nav .sub-cat-focus {display:block;}
+
+.msg {color:red;font-size:12px;}
+
+.action {margin:0 0 20px 0;}
+.action a {margin:0 20px 0 0;}
+
+#sys-msg {position:absolute;width:100%;line-height:22px;text-align:center;font-size:12px;top:-30px;
+border:1px solid #429a44;background: #d7ffd7; outline:none;color:#4f8342;display:none;}

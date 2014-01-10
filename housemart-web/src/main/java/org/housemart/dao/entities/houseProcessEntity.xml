@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HouseProcessEntity">
+	<resultMap id="houseProcess" class="org.housemart.dao.entities.HouseProcessEntity">
+		<result property="id" column="ID" />
+		<result property="houseId" column="HouseID" />
+		<result property="memo" column="Memo" />
+		<result property="addTime" column="AddTime" />
+	</resultMap>
+	
+	<insert id="addHouseProcess" parameterClass="org.housemart.dao.entities.HouseProcessEntity">
+		INSERT INTO house_process(HouseID, Memo, AddTime)
+		VALUES(#houseId#, #memo#, #addTime#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="loadHouseProcess" resultMap="houseProcess" parameterClass="uniqueObject">
+		SELECT * FROM house_process
+		WHERE ID = #id#
+	</select>
+	
+	<update id="updateHouseProcess" parameterClass="org.housemart.dao.entities.HouseProcessEntity">
+		UPDATE house_process SET ID = #id#, HouseID = #houseId#, Memo = #memo#, AddTime = #addTime#
+		WHERE ID = #id#
+	</update>
+	
+	<select id="findHouseProcessListByHouseId" resultMap="houseProcess" parameterClass="map">
+		SELECT * FROM house_process WHERE HouseID = ($houseId$)
+	</select>
+</sqlMap>
+		

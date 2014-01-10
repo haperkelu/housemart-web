@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HouseContactView">
+
+	<resultMap id="houseContactView" class="org.housemart.dao.entities.HouseContactView">
+		<result property="id" column="ID" />
+		<result property="accountId" column="AccountID" />
+		<result property="type" column="Type" />
+		<result property="fromDate" column="FromDate" />
+		<result property="endDate" column="EndDate" />
+		<result property="base" column="Base" />
+		<result property="viewCount" column="ViewCount" />
+		<result property="addTime" column="AddTime" />
+		<result property="updateTime" column="UpdateTime" />
+	</resultMap>
+
+	<select id="findAccountViewInfo" resultMap="houseContactView" parameterClass="map">
+	
+		select * from house_contact_view
+		where AccountID = #accountId# AND Type = #type#;
+		
+	</select>
+
+	<insert id="addAccountView" parameterClass="org.housemart.dao.entities.HouseContactView">
+		INSERT INTO house_contact_view (AccountID, Type,FromDate, EndDate, Base, ViewCount, AddTime, UpdateTime)
+		VALUES(#accountId#, #type#,#fromDate#, #endDate#, #base#, #viewCount#, #addTime#, #updateTime#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>		
+
+	<update id="updateFromToDate" parameterClass="map">
+		update house_contact_view set FromDate = #fromDate#, EndDate = #endDate#, ViewCount = 0
+		where AccountID = #accountId# and Type = #type#;
+	</update>
+	
+	<update id="incrementViewCount" parameterClass="map">
+		update house_contact_view set viewCount = viewCount + 1
+		where AccountID = #accountId# and Type = #type#;
+	</update>
+
+
+</sqlMap>

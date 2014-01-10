@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+   xmlns:p="http://www.springframework.org/schema/p"
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:mvc="http://www.springframework.org/schema/mvc"       
+   xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"> 
+	
+	<!-- placeholder -->
+	<bean id="springContextHolder" class="org.housemart.web.context.SpringContextHolder" />
+	
+	<!-- multipartResolver -->
+	<bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver" p:defaultEncoding="utf-8"/>
+
+	<!-- business bean -->
+	<bean id="resourceProvider" class="org.housemart.resource.ResourceProvider">
+	</bean>
+	
+	<bean id="houseService" class="org.housemart.service.HouseService">
+	</bean>
+	
+	<bean id="clientService" class="org.housemart.service.ClientService">
+	</bean>
+	
+	<!-- business bean -->
+
+	<!-- i18n -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">  
+	    <property name="basenames">  
+			<list>  
+				<value>i18n/housemart</value>  
+			</list>  
+	    </property>  
+	</bean>	
+	<!-- cache bean -->
+	<bean id="defaultCacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation">
+			<value>classpath:ehcache.xml</value>
+		</property>
+	</bean>
+
+	<bean id="ehCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheManager">
+			<ref local="defaultCacheManager" />
+		</property>
+		<property name="cacheName">
+			<value>dataCache</value>
+		</property>
+	</bean>
+	<!-- cache bean -->
+	
+	<bean id="houseMartTimer" class="org.housemart.schedule.HouseMartTimer">
+	</bean>
+	
+	<bean id="searchService" class="org.housemart.service.SearchService">
+	</bean>		
+	
+	<bean id="authenticationService" class="org.housemart.service.AuthenticationService">
+	</bean>	
+
+	<bean id="privilegeService" class="org.housemart.service.priviledge.PrivilegeService">
+		<property name="privilegeDao" ref="privilegeDao" />
+	</bean>		
+
+	<bean id="residencePrivilegeService" class="org.housemart.service.priviledge.ResidencePrivilegeService">
+		<property name="privilegeDao" ref="privilegeDao" />
+	</bean>
+
+	<bean id="houseContactViewService" class="org.housemart.service.HouseContactViewService">
+	</bean>		
+	
+	<bean id="houseInteractionNotifier" class="org.housemart.message.HouseInteractionNotifier">
+	</bean>		
+	
+	<bean id="residencePicCrawlerService" class="org.housemart.pic.service.ResidencePicCrawlerService">
+	</bean>
+		
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:biz-data/mail.properties</value>
+				<value>classpath:biz-data/webKeyValueRes.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding" value="utf-8"/>
+	</bean>
+	<!-- handler interceptor -->
+	
+	<mvc:annotation-driven />
+	<mvc:interceptors><bean id="handlerInterceptor" class="org.housemart.web.handler.HandlerInterceptor"></bean></mvc:interceptors>
+	
+	<!-- handler interceptor -->
+
+
+</beans>  

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PrivilegeEntity">
+
+	<resultMap id="privilege" class="org.housemart.dao.entities.PrivilegeEntity">
+		<result property="id" column="ID" />
+		<result property="name" column="Name" />
+		<result property="resource" column="Resource" />
+		<result property="operationList" column="Operation" />
+	</resultMap>
+	
+	<select id="findPrivilegeByAccountId" resultMap="privilege">
+		SELECT  p.ID, p.Name, p.Resource,p.Operation FROM account AS a
+		JOIN account_role_relationship AS ar ON a.ID = ar.AccountID
+		JOIN role_privilege_relationship AS rp ON ar.RoleID = rp.RoleID
+		JOIN role AS r ON rp.RoleID = r.ID
+		JOIN privilege AS p ON rp.PrivilegeID = p.ID
+		WHERE a.Status = 1 AND  r.Status = 1 AND p.Status = 1 AND a.ID = #id#
+	</select>
+	
+	<insert id="addAccountRole" parameterClass="org.housemart.dao.entities.AccountRole">
+		
+		INSERT INTO account_role_relationship(AccountID, RoleID, `AddTime`)
+		VALUES(#accountId#,#roleId#,Now());
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	
+	</insert>
+	
+	<delete id="deleteAccountRole" parameterClass="org.housemart.dao.entities.AccountRole">
+	
+		DELETE FROM account_role_relationship WHERE AccountID = #accountId#;
+	
+	</delete>
+
+</sqlMap>

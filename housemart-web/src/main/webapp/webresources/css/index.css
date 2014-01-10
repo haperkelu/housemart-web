@@ -1,0 +1,18 @@
+.navbar-static-top{margin-bottom: 0px;}
+.hm-banner{height:500px; background: url('/webresources/img/banner1.jpg') top;}
+.hm-banner .container{color: #fff; position: relative;}
+.hm-banner-desc{position: absolute; top: 80px;}
+.hm-banner-img{position: absolute; top:10px; right: 10px;}
+.hm-banner-download{position: absolute;top: 356px;}
+.hm-banner-download img{height:70px;}
+.hm-download{padding-top:20px;padding-bottom:20px;}
+.hm-download img.img-thumbnail{height: 110px;float: left;margin-right: 20px;}
+.hm-icon-wrap{float:left; margin-right: 20px;}
+.no-padding-bottom{padding-top: 0px;}
+.hm-container{padding-top: 15px;}
+.phone-logo{background: url('/webresources/img/phone-logo.png') no-repeat; padding: 5px 5px 9px 30px;}
+.iphone{background-position: left bottom;}
+.android{background-position: left -2px;}
+.app-store{height: 60px; width: 60px;}
+.app-store-list .row{margin-bottom: 10px;}
+

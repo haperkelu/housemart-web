@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ResidenceAuditHistoryEntity">
+	<resultMap id="residenceAuditHistory" class="org.housemart.dao.entities.ResidenceAuditHistoryEntity">
+		<result property="id" column="ID" />
+		<result property="residenceId" column="ResidenceID" />
+		<result property="managerId" column="ManagerID" />
+		<result property="type" column="Type" />
+		<result property="committerId" column="CommitterID" />
+		<result property="preContent" column="PreContent" />
+		<result property="postContent" column="PostContent" />
+		<result property="result" column="Result" />
+		<result property="addTime" column="AddTime" />
+		<result property="updateTime" column="UpdateTime" />
+	</resultMap>
+	
+	<insert id="addResidenceAuditHistory" parameterClass="org.housemart.dao.entities.ResidenceAuditHistoryEntity">
+		INSERT INTO residence_audit_history(ResidenceID, ManagerID, Type,
+		CommitterID, PreContent, PostContent, Result, AddTime, UpdateTime)
+		VALUES(#residenceId#, #managerId#, #type#,
+		#committerId#, #preContent#, #postContent#, #result#, #addTime#, #updateTime#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="loadResidenceAuditHistory" resultMap="residenceAuditHistory" parameterClass="uniqueObject">
+		SELECT * FROM residence_audit_history
+		WHERE ID = #id#
+	</select>
+	
+	<select id="findResidenceAuditHistoryList" resultMap="residenceAuditHistory" parameterClass="map">
+		SELECT * FROM residence_audit_history
+		<dynamic prepend="WHERE">
+			<isNotNull prepend="AND" property="residenceId"> 
+	            ResidenceID = #residenceId#
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="type"> 
+	            Type = #type#
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="result"> 
+	            Result = #result#
+	        </isNotNull>
+            <isNotNull prepend="AND" property="commiterId"> 
+	            CommitterID = #commiterId#
+	        </isNotNull>
+		</dynamic>
+		ORDER BY UpdateTime DESC
+	</select>
+	
+	<select id="findResidenceAuditHistoryListByManagerID" resultMap="residenceAuditHistory" parameterClass="map">
+		SELECT * FROM residence_audit_history
+		WHERE ManagerID  =  #mangerId# and result = 0
+		Order by ID desc
+	</select>	
+	
+	<update id="updateAuditHistoryResultStatus" parameterClass="map">
+		update residence_audit_history set result = #result#,  UpdateTime = Now()
+		WHERE ID = #id#
+	</update>
+	
+	<update id="updateAuditHistoryResultStatusByIds" parameterClass="map">
+		update residence_audit_history set result = #result#,  UpdateTime = Now()
+		WHERE ID in ($ids$)
+	</update>
+	
+</sqlMap>
+		

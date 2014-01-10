@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ResidenceBuildingEntity">
+	
+	<resultMap id="residencBuilding" class="org.housemart.dao.entities.ResidenceBuildingEntity">
+		<result property="id" column="ID" />
+		<result property="residenceId" column="ResidenceID" />
+		<result property="prefix" column="Prefix" />
+		<result property="suffix" column="Suffix" />
+		<result property="codeType" column="CodeType" />
+		<result property="codeBegin" column="CodeBegin" />
+		<result property="codeEnd" column="CodeEnd" />
+		<result property="period" column="Period" />
+		<result property="cellCount" column="CellCount" />
+	</resultMap>
+	
+	<resultMap id="residencBuildingExt" class="org.housemart.dao.entities.ResidenceBuildingEntity">
+		<result property="id" column="ID" />
+		<result property="residenceId" column="ResidenceID" />
+		<result property="prefix" column="Prefix" />
+		<result property="suffix" column="Suffix" />
+		<result property="codeType" column="CodeType" />
+		<result property="codeBegin" column="CodeBegin" />
+		<result property="codeEnd" column="CodeEnd" />
+		<result property="residenceName" column="ResidenceName" />	
+		<result property="period" column="Period" />	
+		<result property="buildingType" column="BuildingType" />
+		<result property="stair" column="Stair" />	
+		<result property="houseHold" column="HouseHold" />	
+	</resultMap>	
+	
+	<select id="findResidenceBuildingListByResidenceId" resultMap="residencBuildingExt" parameterClass="uniqueObject">
+		SELECT rdb.ID, '' AS ResidenceName, rdb.ResidenceID, rdb.Prefix, rdb.Suffix, 
+		rdb.CodeType, rdb.CodeBegin, rdb.CodeEnd, rdb.Period, rdb.Stair, rdb.HouseHold,rdb.BuildingType,
+		SUM(CASE WHEN rdbc.`status` = 1 THEN 1 ELSE 0 END) AS CellCount
+		FROM residence_building AS rdb
+		LEFT JOIN residence_building_cell AS rdbc ON rdb.ID = rdbc.BuildingID
+		WHERE rdb.`status` = 1 and rdb.ResidenceID = #id#
+		Group by  rdb.ID, rdb.ResidenceID, rdb.Prefix, rdb.Suffix, 
+		rdb.CodeType, rdb.CodeBegin, rdb.CodeEnd, rdb.Period, rdb.Stair,rdb.HouseHold, rdb.BuildingType
+		order by rdb.Prefix, rdb.CodeType
+	</select>
+	<select id="findResidenceBuildingListByIds" resultMap="residencBuilding" parameterClass="map">
+		SELECT rdb.ID, rdb.ResidenceID, rdb.Prefix, rdb.Suffix, 
+		rdb.CodeType, rdb.CodeBegin, rdb.CodeEnd, rdb.Period, 
+		SUM(CASE WHEN rdbc.`status` = 1 THEN 1 ELSE  0 END) AS CellCount
+		FROM residence_building AS rdb
+		LEFT JOIN residence_building_cell AS rdbc ON rdb.ID = rdbc.BuildingID
+		WHERE rdb.`status` = 1 and rdb.id in ($ids$)
+		Group by  rdb.ID, rdb.ResidenceID, rdb.Prefix, rdb.Suffix, 
+		rdb.CodeType, rdb.CodeBegin, rdb.CodeEnd, rdb.Period
+		order by rdb.Prefix, rdb.CodeType
+	</select>	
+	
+	<select id="loadResidenceBuildingById" resultMap="residencBuildingExt" parameterClass="uniqueObject">
+		SELECT rd.Name AS ResidenceName, rdb.ID, rdb.ResidenceID, rdb.Prefix, rdb.Suffix, 
+		rdb.CodeType, rdb.CodeBegin, rdb.CodeEnd, rdb.Period, rdb.Stair, rdb.HouseHold, rdb.BuildingType
+		FROM residence_building AS rdb
+		JOIN residence AS rd on rdb.ResidenceID = rd.ID
+		WHERE rdb.`status` = 1 and rdb.id = #id#
+	</select>	
+	
+	<update id="updateResidenceBuildingBaseInfo" parameterClass="residencBuilding">
+		UPDATE residence_building SET Period = #period#, BuildingType = #buildingType#, Stair = #stair#, HouseHold = #houseHold#
+		WHERE ID = #id#; 	
+	</update>		
+	
+	<delete id="deleteResidencBulding" parameterClass="uniqueObject">
+		UPDATE residence_building SET `Status` = 2
+		WHERE ID = #id# 
+	</delete>
+	
+	<delete id="deleteResidencBuldingPhysical" parameterClass="uniqueObject">
+		DELETE FROM residence_building
+		WHERE ID = #id# 
+	</delete>
+	
+
+</sqlMap>

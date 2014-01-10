@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<!-- Data Source -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://${housemart.mysql.url}:3306/basedata?characterEncoding=utf-8" />
+		<property name="username" value="root" />
+		<property name="password" value="${housemart.mysql.password}" />
+	</bean>
+
+	<bean id="logDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://${housemart.mysql.url}:3306/routinelog?characterEncoding=utf-8" />
+		<property name="username" value="root" />
+		<property name="password" value="${housemart.mysql.password}" />
+	</bean>
+	
+	<bean id="adminDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://${housemart.mysql.url}:3306/admin?characterEncoding=utf-8" />
+		<property name="username" value="root" />
+		<property name="password" value="${housemart.mysql.password}" />
+	</bean>
+	
+	<bean id="mobileDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://${housemart.mysql.url}:3306/mobile?characterEncoding=utf-8" />
+		<property name="username" value="root" />
+		<property name="password" value="${housemart.mysql.password}" />
+	</bean>
+	<!-- Data Source -->
+
+	<!-- Transaction manager for a single JDBC DataSource -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- Spring提供的iBatis的SqlMap配置 -->
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:sqlmap/sqlMapConfig.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="logSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:sqlmap/sqlMapConfig.xml" />
+		<property name="dataSource" ref="logDataSource" />
+	</bean>
+
+	<bean id="adminSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:sqlmap/adminSqlMapConfig.xml" />
+		<property name="dataSource" ref="adminDataSource" />
+	</bean>
+	
+	<bean id="mobileSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:sqlmap/mobileSqlMapConfig.xml" />
+		<property name="dataSource" ref="mobileDataSource" />
+	</bean>
+
+	<bean id="residenceDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.ResidenceEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="residenceBuildingDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.ResidenceBuildingEntity</value>
+		</constructor-arg>
+	</bean>	
+
+	<bean id="residenceCellDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.ResidenceCellEntity</value>
+		</constructor-arg>
+	</bean>	
+
+	<bean id="residenceMonthDataDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.ResidenceMonthDataEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="userAccessDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="logSqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.UserAccessEntity</value>
+		</constructor-arg>
+	</bean>	
+	
+	<bean id="regionDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.RegionEntity</value>
+		</constructor-arg>
+	</bean>		
+
+	<bean id="houseDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseEntity</value>
+		</constructor-arg>
+	</bean>	
+	
+	<bean id="houseContactDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseContactEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="housePropertyDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HousePropertyEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="houseRentDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseRentEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="houseSaleDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseSaleEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="houseSoldBuildingDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseSoldBuildingEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="houseProcessDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseProcessEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="houseAuditHistoryDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseAuditHistoryEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="residenceAuditHistoryDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.ResidenceAuditHistoryEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="houseFavoriteDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseFavoriteEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="housePicDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HousePicEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="housePicSortDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HousePicSortEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="houseTagDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseTagEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="houseInteractionDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseInteractionEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="houseInteractionTransferDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseInteractionTransferEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="houseInteractionNoticeDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseInteractionNoticeEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="privilegeDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="adminSqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.PrivilegeEntity</value>
+		</constructor-arg>
+	</bean>
+	<bean id="accountDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="adminSqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.AccountEntity</value>
+		</constructor-arg>
+	</bean>
+	<bean id="accountResidenceDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="adminSqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.AccountResidenceEntity</value>
+		</constructor-arg>
+	</bean>
+	<bean id="accountRevokeDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="adminSqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.AccountRevokeEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="googlePlaceDao" class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.GooglePlaceBaseEntity</value>
+		</constructor-arg>
+	</bean>	
+
+	<bean id="areaPositionDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.AreaPositionEntity</value>
+		</constructor-arg>
+	</bean>	
+
+	<bean id="maxinRawDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.MaxinRawEntity</value>
+		</constructor-arg>
+	</bean>	
+
+	<bean id="houseLeadsDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseLeadsEntity</value>
+		</constructor-arg>
+	</bean>			
+	
+	<bean id="keyValueDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.KeyValueEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- repository -->
+	<bean id="repositoryHousePicDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.RepositoryHousePicEntity</value>
+		</constructor-arg>
+	</bean>	
+	
+	<!-- house contact view -->
+	<bean id="houseContactViewDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.HouseContactView</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="clientRegisterDao" class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="mobileSqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.ClientRegisterEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="appClientFileDao" class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.AppClientFileEntity</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="clientNotificationDao" class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="mobileSqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.ClientNotificationEntity</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="residenceNameHistoryDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.dao.entities.ResidenceNameHistoryEntity</value>
+		</constructor-arg>
+	</bean>	
+</beans>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ResidenceEntity">
+
+	<resultMap id="residence" class="org.housemart.dao.entities.ResidenceExtEntity">
+		<result property="residenceId" column="ID" />
+		<result property="regionId" column="regionId" />
+		<result property="parentRegionId" column="ParentRegionId" />
+		<result property="regionName" column="regionName" />
+		<result property="plateName" column="plateName" />
+		<result property="residenceName" column="residenceName" />
+		<result property="aliasName" column="AliasName" />
+		<result property="address" column="Address" />
+		<result property="picCount" column="PicCount" />
+		<result property="pinyinName" column="PinyinName" />
+		<result property="firstPinyin" column="FirstPinyin" />
+		<result property="forceShow" column="ForceShow" />
+		<result property="zombie" column="Zombie" />
+		<result property="lockBasicInfo" column="LockBasicInfo" />
+		<result property="lockMap" column="LockMap" />
+		<result property="lockPic" column="LockPic" />		
+		<result property="status" column="Status" />
+		<result property="headCount" column="HeadCount" />
+	</resultMap>
+	
+	<resultMap id="residenceDetail" class="org.housemart.dao.entities.ResidenceExtEntity">
+		<result property="id" column="ID" />
+		<result property="residenceId" column="ID" />
+		<result property="parentRegionId" column="ParentRegionId" />
+		<result property="regionId" column="regionId" />
+		<result property="regionName" column="regionName" />
+		<result property="plateName" column="plateName" />
+		<result property="residenceName" column="residenceName" />
+		<result property="aliasName" column="AliasName" />
+		<result property="address" column="Address" />
+		<result property="headCount" column="HeadCount" />
+		<result property="parking" column="Parking" />
+		<result property="propertyType" column="PropertyType" />
+		<result property="greenRate" column="GreenRate" />
+		<result property="volumeRate" column="VolumeRate" />
+		<result property="propertyFee" column="PropertyFee" />
+		<result property="forceShow" column="ForceShow" />
+		<result property="zombie" column="Zombie" />
+		<result property="developer" column="Developer" />
+		<result property="finishedTime" column="FinishedTime" />
+		<result property="creator" column="Creator" />
+		<result property="lockBasicInfo" column="LockBasicInfo" />
+		<result property="lockMap" column="LockMap" />
+		<result property="lockPic" column="LockPic" />
+		<result property="status" column="Status" />
+		<result property="picCount" column="PicCount" />
+	</resultMap>
+	
+	<resultMap id="residencBuilding" class="org.housemart.dao.entities.ResidenceBuildingEntity">
+		<result property="id" column="ID" />
+		<result property="residenceId" column="ResidenceID" />
+		<result property="prefix" column="Prefix" />
+		<result property="suffix" column="Suffix" />
+		<result property="codeType" column="CodeType" />
+		<result property="codeBegin" column="CodeBegin" />
+		<result property="codeEnd" column="CodeEnd" />
+	</resultMap>	
+
+	<select id="findResidenceList" resultMap="residence">
+		SELECT rd.ID, rd.RegionID as parentRegionId, rr.RegionID as regionId, rr.Name as regionName, r.Name as plateName, rd.Name as residenceName, rd.AliasName as AliasName,
+		rd.Address, IFNULL(pc.PicCount,0) as PicCount, rd.PinyinName,
+		rd.FirstPinyin, rd.Status, rd.ForceShow, rd.Zombie, rd.LockBasicInfo, rd.LockMap, rd.LockPic, rd.HeadCount
+		FROM residence AS rd
+		JOIN region AS r ON rd.RegionID = r.RegionID
+		JOIN region AS rr ON r.ParentID = rr.RegionID
+		Left JOIN view_residence_pic_count AS pc on pc.ResidenceId=rd.ID
+		<dynamic>
+			<isNotNull property="picApprove">
+		Left JOIN view_residence_pic_under_approve AS appr on appr.ResidenceId=rd.ID
+			</isNotNull>
+		</dynamic>
+		<dynamic prepend="WHERE">
+			<isNotNull prepend="AND" property="id">
+	            rd.RegionID = #id#  
+	        </isNotNull>  
+	        <isNotNull prepend="AND" property="regionId">
+	            rr.RegionID = #regionId#  
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="forceShow">
+	            rd.ForceShow = #forceShow#  
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="zombie">
+	            rd.Zombie = #zombie#  
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="lockBasicInfo">
+	            rd.LockBasicInfo = #lockBasicInfo#  
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="lockMap">
+	            rd.LockMap = #lockMap#  
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="lockPic">
+	            rd.LockPic = #lockPic#  
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="status">
+	            rd.Status = #status#  
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="creator">
+	            rd.Creator = #creator#  
+	        </isNotNull>    		
+			<isNotNull prepend="AND" property="residenceName">
+	            (rd.name LIKE '%$residenceName$%'  OR rd.AliasName LIKE '%$residenceName$%')
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="residenceKey">
+	            (rd.name LIKE '%$residenceKey$%' OR rd.PinyinName LIKE '$residenceKey$%' OR rd.FirstPinyin LIKE '$residenceKey$%' OR rd.AliasName LIKE '%$residenceKey$%')
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="residenceNameEqual">
+	            rd.name = #residenceNameEqual#
+	        </isNotNull>
+			<isEqual property="hasPic" compareValue="1">
+	           AND IFNULL(pc.PicCount,0) > 0 
+			</isEqual>
+			<isEqual property="hasPic" compareValue="0">
+	           AND IFNULL(pc.PicCount,0) = 0 
+			</isEqual>		
+			<isEqual property="picApprove" compareValue="1">
+	           AND IFNULL(appr.PicCount,0) > 0 
+			</isEqual>
+			<isEqual property="picApprove" compareValue="0">
+	           AND IFNULL(appr.PicCount,0) = 0 
+			</isEqual>		
+		</dynamic>
+		
+		ORDER BY parentRegionId, regionId, rd.PinyinName ASC
+	</select>
+		
+	<select id="loadResidence" resultMap="residenceDetail" parameterClass="uniqueObject">
+		SELECT rd.ID, rd.RegionID as regionId, rr.RegionID as parentRegionId, rr.Name as regionName, r.Name as plateName, rd.Name as residenceName, rd.AliasName as AliasName,
+		rd.Address, rd.HeadCount, rd.Parking, rd.PropertyType, rd.GreenRate, rd.VolumeRate, rd.ForceShow, rd.Zombie, rd.PropertyFee, rd.Developer,
+		rd.FinishedTime, rd.Creator, rd.Status,(SELECT COUNT(1) FROM house_pic WHERE ResidenceID = rd.ID AND Status = 1) PicCount,
+		rd.LockBasicInfo, rd.LockMap, rd.LockPic
+		FROM residence AS rd
+		JOIN region AS r ON rd.RegionID = r.RegionID
+		JOIN region AS rr ON r.ParentID = rr.RegionID
+		WHERE rd.`status` = 1 and rd.ID = #id#
+	</select>	
+	 
+	<select id="loadResidenceById" resultMap="residenceDetail" parameterClass="uniqueObject">
+		SELECT rd.ID, rd.RegionID as regionId, rr.RegionID as parentRegionId, rr.Name as regionName, r.Name as plateName, rd.Name as residenceName, rd.AliasName as AliasName,
+		rd.Address, rd.HeadCount, rd.Parking, rd.PropertyType, rd.GreenRate, rd.VolumeRate, rd.ForceShow, rd.Zombie, rd.PropertyFee, rd.Developer,
+		rd.FinishedTime, rd.Creator, rd.Status,(SELECT COUNT(1) FROM house_pic WHERE ResidenceID = rd.ID AND Status = 1) PicCount, rd.LockBasicInfo, rd.LockMap, rd.LockPic
+		FROM residence AS rd
+		JOIN region AS r ON rd.RegionID = r.RegionID
+		JOIN region AS rr ON r.ParentID = rr.RegionID
+		WHERE rd.ID = #id#
+	</select>
+	 
+	<insert id="addResidence" parameterClass="org.housemart.dao.entities.ResidenceExtEntity">
+		INSERT INTO residence(RegionId, Name, AliasName, Address, HeadCount,
+		Parking, GreenRate, PropertyFee, VolumeRate, PropertyType, Developer, FinishedTime, Status, Creator, PinyinName, FirstPinyin)
+		VALUES(#regionId#, #residenceName#, #aliasName#, #address#, #headCount#,
+		#parking#, #greenRate#, #propertyFee#, #volumeRate#, #propertyType#, #developer#, #finishedTime#, 0, #creator#, #pinyinName#, #firstPinyin#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<update id="updateResidence" parameterClass="org.housemart.dao.entities.ResidenceExtEntity">
+		UPDATE residence
+		<dynamic prepend="set" >
+	      <isNotNull prepend="," property="regionId" >
+	        RegionId = #regionId#
+	      </isNotNull>
+	      <isNotNull prepend="," property="residenceName" >
+	        Name = #residenceName#
+	      </isNotNull>
+	      <isNotNull prepend="," property="aliasName" >
+	        AliasName = #aliasName#
+	      </isNotNull>
+	      <isNotNull prepend="," property="address" >
+	        Address = #address#
+	      </isNotNull>
+	      <isNotNull prepend="," property="headCount" >
+	        HeadCount = #headCount#
+	      </isNotNull>
+	      <isNotNull prepend="," property="parking" >
+	        Parking = #parking#
+	      </isNotNull>
+	      <isNotNull prepend="," property="greenRate" >
+	        GreenRate = #greenRate#
+	      </isNotNull>
+	      <isNotNull prepend="," property="propertyFee" >
+	        PropertyFee = #propertyFee#
+	      </isNotNull>
+	      <isNotNull prepend="," property="volumeRate" >
+	        VolumeRate = #volumeRate#
+	      </isNotNull>
+	      <isNotNull prepend="," property="propertyType" >
+	        PropertyType = #propertyType#
+	      </isNotNull>
+	      <isNotNull prepend="," property="developer" >
+	        Developer = #developer#
+	      </isNotNull>
+	      <isNotNull prepend="," property="finishedTime" >
+	        FinishedTime = #finishedTime#
+	      </isNotNull>
+	    </dynamic>
+		WHERE ID = #id#; 	
+	</update>
+	
+	
+	<update id="updateShowStatus" parameterClass="map">
+		UPDATE residence Set ForceShow = #forceShow#, Zombie = #zombie#
+		WHERE ID = #id#; 	
+	</update>
+	
+	<update id="updateLockStatus" parameterClass="map">
+		UPDATE residence Set LockBasicInfo = #lockBasicInfo#, LockMap = #lockMap#, LockPic = #lockPic#
+		WHERE ID = #id#; 	
+	</update>
+	 
+	<insert id="addResidenceBuilding" parameterClass="residencBuilding">
+		INSERT INTO residence_building(ResidenceID, Prefix, Suffix, CodeType,
+		CodeBegin, CodeEnd, Period, Stair, HouseHold, BuildingType)
+		VALUES(#residenceId#, #prefix#, #suffix#,
+		#codeType#, #codeBegin#, #codeEnd#, #period#, #stair#, #houseHold#, #buildingType#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="findResidenceBuildingListByResidenceId" resultMap="residencBuilding" parameterClass="uniqueObject">
+		SELECT ID, ResidenceID, Prefix, Suffix, CodeType, CodeBegin, CodeEnd
+		FROM residence AS rd
+		JOIN region AS r ON rd.RegionID = r.RegionID
+		JOIN region AS rr ON r.ParentID = rr.RegionID
+		WHERE rd.`status` = 1 and rd.ResidenceID = #id#
+	</select>	
+
+	<update id="updatePinyin" parameterClass="map">
+		UPDATE residence SET PinyinName = #pinyinName#, FirstPinyin = #firstPinyin#
+		WHERE ID = #id#; 	
+	</update>		
+	
+	<update id="updateStatus" parameterClass="map">
+		UPDATE residence SET Status = #status#
+		WHERE ID = #id#; 	
+	</update>		
+</sqlMap>

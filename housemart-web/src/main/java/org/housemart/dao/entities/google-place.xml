@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="GooglePlaceBaseEntity">
+
+	<resultMap id="googlePlace" class="org.housemart.dao.entities.GooglePlaceBaseEntity">
+		<result property="residenceId" column="ResidenceId" />
+		<result property="address" column="Address" />
+		<result property="name" column="Name" />
+		<result property="lat" column="Lat" />
+		<result property="lng" column="Lng" />
+		<result property="type" column="Type" />
+		<result property="keyword" column="Search" />
+		<result property="id" column="ID" />
+		<result property="isMain" column="IsMain" />
+	</resultMap>	
+	
+
+	<select id="findRawDatByResidenceId" resultMap="googlePlace" parameterClass="map">
+		select * from mobile.google_map_place_base
+		where ResidenceID = #residenceId#
+	</select>
+	
+	<update id="resetResidencePosition"  parameterClass="map">
+		update mobile.google_map_place_base set IsMain = 0
+		where ResidenceID = #residenceId#	
+	</update>	
+
+	<update id="updateResidencePosition"  parameterClass="map">
+		update mobile.google_map_place_base set IsMain = 1
+		where ID = #id# 	
+	</update>
+	
+	<insert id="addResidencePosition"  parameterClass="org.housemart.dao.entities.GooglePlaceBaseEntity">
+		insert into mobile.google_map_place_base(ResidenceID,Address,NAME,Lat,Lng,Type,AddTime,Search,IsMain)
+		values(#residenceId#, #address#, #name#,#lat#,#lng#,#type#,Now(),null,#isMain#); 	
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>		
+	</insert>		
+	
+	<select id="findSetPositionResidenceById" resultMap="googlePlace" parameterClass="uniqueObject">
+		select * from mobile.google_map_place_base
+		where ResidenceID = #id# and isMain = 1
+	</select>	 
+	
+
+</sqlMap>

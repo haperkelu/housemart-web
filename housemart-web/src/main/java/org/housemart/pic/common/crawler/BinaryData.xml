@@ -1,0 +1,14 @@
+<config charset="utf-8">
+	<script>
+		http.client.params.soTimeout = 5000;
+		http.client.params.connectionManagerTimeout = 5000;
+		http.client.httpConnectionManager.params.connectionTimeout = 5000;
+	</script>
+
+
+	<file action="write" path='${filePath}' type="binary">
+        <http url='${url}'/>
+    </file>
+
+
+</config>

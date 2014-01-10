@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AccountEntity">
+
+	<resultMap id="account" class="org.housemart.dao.entities.AccountExtEntity">
+		<result property="id" column="ID" />
+		<result property="loginName" column="LoginName" />
+		<result property="name" column="Name" />
+		<result property="gender" column="Gender" />
+		<result property="identityID" column="IdentityID" />
+		<result property="contactInfo1" column="ContactInfo1" />
+		<result property="contactInfo2" column="ContactInfo2" />
+		<result property="positionType" column="PositionType" />
+		<result property="managerID" column="ManagerID" />
+		<result property="countHouse" column="countHouse" />
+		<result property="countHouseMono" column="countHouseMono" />
+		<result property="countHouseInteraction" column="countHouseInteraction" />
+		<result property="type" column="Type" />
+		<result property="company" column="Company" />
+		<result property="companyAddress" column="CompanyAddress" />
+		<result property="note" column="Note" />
+		<result property="picURL" column="PicURL" />
+		<result property="idURL" column="IDURL" />
+		<result property="cardURL" column="CardURL" />
+		<result property="addTime" column="AddTime" />
+		<result property="status" column="Status" />
+		<result property="picLocked" column="PicLocked" />
+		<result property="idLocked" column="IDLocked" />
+		<result property="cardLocked" column="CardLocked" />
+		<result property="weixin" column="WeiXin" />
+		<result property="weixinJoined" column="WeiXinJoined" />
+	</resultMap>
+
+	<select id="countAccountList" resultClass="int" parameterClass="map">
+		SELECT 
+			COUNT(*)
+		FROM account AS acc
+		WHERE 1
+		<isNotNull prepend="AND" property="status"> 
+            acc.Status IN ($status$)
+        </isNotNull>
+        <isNull prepend="AND" property="status"> 
+        	acc.Status = 1
+        </isNull>
+		<isNotNull prepend="AND" property="positionType"> 
+            acc.PositionType IN ($positionType$)
+        </isNotNull>
+        <isNotNull prepend="AND" property="type"> 
+            acc.Type IN ($type$)
+        </isNotNull>
+        <isNotNull prepend="AND" property="company"> 
+            acc.Company like  '%$company$%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="loginName"> 
+            acc.LoginName = #loginName#
+        </isNotNull>
+        <isNotNull prepend="AND" property="searchKeyword"> 
+            (acc.Name like '%$searchKeyword$%' OR acc.loginName like '%$searchKeyword$%')
+        </isNotNull>
+        <isNotNull prepend="AND" property="source"> 
+            acc.Source IN ($source$)
+        </isNotNull> 
+	</select>
+	
+	<select id="findAccountList" resultMap="account" parameterClass="map">
+		SELECT 
+			acc.*
+			<isNotNull prepend="," property="countHouse">
+				(SELECT count(*) FROM basedata.house_contact as hc WHERE hc.Committer = acc.ID) as countHouse
+			</isNotNull>
+			<isNotNull prepend="," property="countHouseMono">
+				(SELECT count(*) FROM basedata.house_interaction as him WHERE him.AgentID = acc.ID AND him.Status = 2 AND him.EndDate > NOW()) as countHouseMono
+			</isNotNull>
+			<isNotNull prepend="," property="countHouseInteraction">
+				(SELECT count(*) FROM basedata.house_interaction as hi WHERE hi.AgentID = acc.ID AND hi.Status = 1 AND hi.EndDate > NOW()) as countHouseInteraction
+			</isNotNull>
+			
+			<isNull prepend="," property="countHouse">
+				0 as countHouse
+			</isNull>
+			<isNull prepend="," property="countHouseMono">
+				0 as countHouseMono
+			</isNull>
+			<isNull prepend="," property="countHouseInteraction">
+				0 as countHouseInteraction
+			</isNull>
+		FROM account AS acc
+		WHERE 1
+		<isNotNull prepend="AND" property="status"> 
+            acc.Status IN ($status$)
+        </isNotNull>
+        <isNull prepend="AND" property="status"> 
+        	acc.Status = 1
+        </isNull>
+		<isNotNull prepend="AND" property="positionType"> 
+            acc.PositionType IN ($positionType$)
+        </isNotNull>
+        <isNotNull prepend="AND" property="type"> 
+            acc.Type IN ($type$)
+        </isNotNull>
+        <isNotNull prepend="AND" property="company"> 
+            acc.Company like  '%$company$%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="loginName"> 
+            acc.LoginName = #loginName#
+        </isNotNull>
+        <isNotNull prepend="AND" property="identityID"> 
+            acc.IdentityID = #identityID#
+        </isNotNull>
+        <isNotNull prepend="AND" property="searchKeyword"> 
+            (acc.Name like '%$searchKeyword$%' OR acc.loginName like '%$searchKeyword$%')
+        </isNotNull>
+        <isNotNull prepend="AND" property="source"> 
+            acc.Source IN ($source$)
+        </isNotNull>
+        <isNotNull prepend="AND" property="idNotIn"> 
+            acc.ID NOT IN ($idNotIn$)
+        </isNotNull>
+        <include refid="common.orderBy" />
+		<include refid="common.limit" />
+	</select>
+	
+	<select id="loadAccountById" resultMap="account" parameterClass="uniqueObject">
+		SELECT
+			acc.*,
+			0 as countHouse, 0 as countHouseMono, 0 as countHouseInteraction	
+		FROM account AS acc
+		WHERE acc.Status = 1 and acc.ID = #id#
+	</select>
+	
+	<select id="loadEditAccountById" resultMap="account" parameterClass="uniqueObject">
+		SELECT
+			acc.*,
+			0 as countHouse, 0 as countHouseMono, 0 as countHouseInteraction
+		FROM account AS acc
+		WHERE acc.ID = #id#
+	</select>
+	
+	<select id="loadAccountByIdAndPassword" resultMap="account" parameterClass="map">
+		SELECT
+			acc.*, 
+			0 as countHouse, 0 as countHouseMono, 0 as countHouseInteraction
+		FROM account AS acc
+		WHERE acc.Status = 1 and acc.ID = #id#
+		<isNotNull prepend="AND" property="password"> 
+            acc.Password = #password#
+        </isNotNull>
+	</select>	
+	
+	<select id="loadAccountByNameAndPassword" resultMap="account" parameterClass="map">
+		SELECT
+			acc.*, 
+			0 as countHouse, 0 as countHouseMono, 0 as countHouseInteraction
+		FROM account AS acc
+		WHERE acc.Status = 1 and acc.LoginName = #loginName# and acc.Password = #password#
+	</select>			
+	
+	<insert id="addAccount" parameterClass="org.housemart.dao.entities.AccountExtEntity">
+		INSERT INTO account (LoginName, Password, Name, Gender, IdentityID, ContactInfo1, ContactInfo2, EmergencyContact,
+			PositionType, ManagerID, Status, AddTime, UpdateTime,
+			Type, Company, Note, PicURL, IDURL, CardURL, PicLocked, IDLocked, CardLocked,
+			CompanyAddress, WeiXin, WeiXinJoined, Source)
+		VALUES(#loginName#, #password#, #name#, #gender#, #identityID#, #contactInfo1#, #contactInfo2#, #emergencyContact#,
+			#positionType#, #managerID#, #status#, #addTime#, #updateTime#,
+			#type#, #company#, #note#, #picURL#, #idURL#, #cardURL#, #picLocked#, #idLocked#, #cardLocked#,
+			#companyAddress#, #weixin#, #weixinJoined#, #source#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<update id="updateAccount" parameterClass="org.housemart.dao.entities.AccountExtEntity">
+		UPDATE account SET LoginName = #loginName#, Name = #name#, Gender = #gender#,
+		IdentityID = #identityID#, ContactInfo1 = #contactInfo1#, ContactInfo2 = #contactInfo2#, 
+		EmergencyContact = #emergencyContact#, PositionType = #positionType#,
+		ManagerID = #managerID#, UpdateTime = #updateTime#,
+		Type = #type#, Company = #company#, Note = #note#, PicURL = #picURL#, IDURL = #idURL#, CardURL = #cardURL#,
+		PicLocked = #picLocked#, IDLocked = #idLocked#, CardLocked = #cardLocked#
+		<isNotNull prepend="," property="companyAddress"> 
+            CompanyAddress = #companyAddress#
+        </isNotNull>
+        <isNotNull prepend="," property="weixin"> 
+            WeiXin = #weixin#
+        </isNotNull>
+        <isNotNull prepend="," property="weixinJoined"> 
+            WeiXinJoined = #weixinJoined#
+        </isNotNull>
+		WHERE ID = #id#
+	</update>
+	
+	<update id="deleteAccount" parameterClass="uniqueObject">
+		UPDATE account SET Status = 0,
+		UpdateTime = NOW()
+		WHERE ID = #id#
+	</update>
+	
+	<update id="updateAccountPassword" parameterClass="map">
+		UPDATE account SET Password = #password#,
+		UpdateTime = NOW()
+		WHERE ID = #id#
+		<isNotNull prepend="AND" property="oldPwd">
+			Password = #oldPwd#
+		</isNotNull>
+	</update>
+	
+	<update id="updateAccountByMap" parameterClass="map">
+		UPDATE account SET
+			UpdateTime = NOW()
+			<isNotNull prepend="," property="status">
+			Status = #status#
+			</isNotNull>
+		WHERE 1
+		<isNotNull prepend="AND" property="ids">
+			ID IN ($ids$)
+		</isNotNull>
+	</update>
+</sqlMap>

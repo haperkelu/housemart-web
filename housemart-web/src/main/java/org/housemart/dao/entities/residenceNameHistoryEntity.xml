@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ResidenceNameHistoryEntity">
+	<resultMap id="residenceNameHistory" class="org.housemart.dao.entities.ResidenceNameHistoryEntity">
+		<result property="id" column="ID" />
+		<result property="residenceId" column="ResidenceID" />
+		<result property="oldName" column="OldName" />
+		<result property="addTime" column="AddTime" />
+		<result property="accountId" column="AccountId" />
+		<result property="accountName" column="AccountName" />
+		<result property="type" column="Type" />
+	</resultMap>
+	
+	<insert id="addResidenceNameHistory" parameterClass="org.housemart.dao.entities.ResidenceNameHistoryEntity">
+		INSERT INTO residence_name_history(ResidenceID, OldName, AddTime, AccountId, Type)
+		VALUES(#residenceId#, #oldName#, #addTime#, #accountId#, #type#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="findResidenceNameHistoryList" resultMap="residenceNameHistory" parameterClass="map">
+		SELECT rr.ID, rr.OldName, rr.AddTime, rd.Name as AccountName, rr.AccountId as AccountId, rr.ResidenceID as ResidenceID, rr.Type as Type
+		FROM basedata.residence_name_history as rr
+		JOIN admin.account as rd on rr.AccountId = rd.ID
+		<dynamic prepend="WHERE">
+			<isNotNull prepend="AND" property="residenceId"> 
+	            rr.ResidenceID = #residenceId#
+	        </isNotNull>
+			<isNotNull prepend="AND" property="type"> 
+	            rr.Type = #type#
+	        </isNotNull>
+		</dynamic>
+		ORDER BY AddTime DESC
+	</select>
+	
+</sqlMap>
+		

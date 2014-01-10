@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AccountResidenceEntity">
+
+	<resultMap id="accountResidence" class="org.housemart.dao.entities.AccountResidenceEntity">
+		<result property="id" column="ID" />
+		<result property="accountID" column="AccountID" />
+		<result property="residenceID" column="ResidenceID" />
+		<result property="residenceIDType" column="ResidenceIDType" />
+		<result property="residenceName" column="residenceName" />
+		<result property="residencePinyinName" column="residencePinyinName" />
+		<result property="residenceZombie" column="residenceZombie" />
+	</resultMap>
+	
+	<resultMap id="account" class="org.housemart.dao.entities.AccountExtEntity">
+		<result property="id" column="id" />
+		<result property="loginName" column="loginName" />
+		<result property="name" column="name" />
+		<result property="positionType" column="positionType" />
+		<result property="type" column="Type" />
+	</resultMap>
+
+	<select id="findAccountResidenceList" resultMap="accountResidence" parameterClass="uniqueObject">
+		SELECT 
+			ar.ID as id, ar.AccountID as accountID, ar.ResidenceIDType as ResidenceIDType, ar.ResidenceID as residenceID,
+			r.Name as residenceName, r.PinyinName as residencePinyinName, r.zombie AS residenceZombie
+		FROM account_residence_relationship AS ar
+		INNER JOIN basedata.residence AS r ON r.ID = ar.ResidenceID
+		WHERE ar.AccountID = #id# AND ar.ResidenceIDType = 0
+		ORDER BY r.PinyinName ASC
+	</select>
+	
+	<select id="findAccountRegionList" resultMap="accountResidence" parameterClass="uniqueObject">
+		SELECT 
+			ar.ID as id, ar.AccountID as accountID, ar.ResidenceIDType as ResidenceIDType, ar.ResidenceID as residenceID,
+			r.Name as residenceName, r.NickName as residencePinyinName, 0 AS residenceZombie
+		FROM account_residence_relationship AS ar
+		INNER JOIN basedata.region AS r ON r.RegionID = ar.ResidenceID
+		WHERE ar.accountID = #id# AND ar.ResidenceIDType > 0
+		ORDER BY ar.ResidenceIDType DESC, r.NickName ASC
+	</select>
+	
+	<select id="findResidenceAccountList" resultMap="account" parameterClass="map">
+		SELECT * FROM
+		(
+		(
+		SELECT 
+			acc.ID as id, acc.LoginName as loginName, acc.Name as name, acc.PositionType as positionType, acc.Type as type
+		FROM account_residence_relationship AS ar
+		INNER JOIN account AS acc ON acc.ID = ar.AccountID
+		WHERE acc.Status = 1 AND ar.residenceidtype = 0
+		<isNotNull prepend="AND" property="type"> 
+            acc.Type IN ($type$)
+        </isNotNull>
+		<isNotNull prepend="AND" property="accountID"> 
+            ar.AccountID = #accountID#
+        </isNotNull>
+		<isNotNull prepend="AND" property="residenceID"> 
+            ar.ResidenceID = #residenceID#
+        </isNotNull>
+        <isNotNull prepend="AND" property="positionType"> 
+            acc.PositionType IN ($positionType$)
+        </isNotNull>
+        )
+        UNION
+        (
+        SELECT 
+			acc.ID as id, acc.LoginName as loginName, acc.Name as name, acc.PositionType as positionType, acc.Type as type
+		FROM basedata.residence r
+		INNER JOIN account_residence_relationship AS ar ON r.regionid = ar.residenceid
+		INNER JOIN account AS acc ON acc.ID = ar.AccountID
+		WHERE acc.Status = 1 AND ar.residenceidtype = 1
+		<isNotNull prepend="AND" property="type"> 
+            acc.Type = #type#
+        </isNotNull>
+		<isNotNull prepend="AND" property="accountID"> 
+            ar.AccountID = #accountID#
+        </isNotNull>
+		<isNotNull prepend="AND" property="residenceID"> 
+            r.ID = #residenceID#
+        </isNotNull>
+        <isNotNull prepend="AND" property="positionType"> 
+            acc.PositionType IN ($positionType$)
+        </isNotNull>
+        )
+        UNION
+        (
+        SELECT 
+			acc.ID as id, acc.LoginName as loginName, acc.Name as name, acc.PositionType as positionType, acc.Type as type
+		FROM basedata.residence r
+		INNER JOIN basedata.region rg on r.regionid = rg.regionid
+		INNER JOIN basedata.region rgr on rgr.RegionID = rg.ParentID
+		INNER JOIN account_residence_relationship AS ar ON rgr.RegionID = ar.residenceid
+		INNER JOIN account AS acc ON acc.ID = ar.AccountID
+		WHERE acc.Status = 1 and ar.residenceidtype = 2
+		<isNotNull prepend="AND" property="type"> 
+            acc.Type = #type#
+        </isNotNull>
+		<isNotNull prepend="AND" property="accountID"> 
+            ar.AccountID = #accountID#
+        </isNotNull>
+		<isNotNull prepend="AND" property="residenceID"> 
+            r.ID = #residenceID#
+        </isNotNull>
+        <isNotNull prepend="AND" property="positionType"> 
+            acc.PositionType IN ($positionType$)
+        </isNotNull>
+        )
+        ) residence_account
+        ORDER BY id DESC
+	</select>
+	
+	<select id="loadResidenceManager" resultMap="accountResidence" parameterClass="map">
+		SELECT 
+			ar.ID as id, ar.AccountID as accountID, ar.ResidenceID as residenceID, ar.ResidenceIDType as ResidenceIDType,
+			r.Name as residenceName, r.PinyinName as residencePinyinName, r.zombie AS residenceZombie
+		FROM account_residence_relationship AS ar
+		INNER JOIN account as acc on ar.AccountID = acc.ID
+		left JOIN basedata.residence AS r ON r.ID = ar.ResidenceID
+		WHERE ar.residenceID = #id# and acc.PositionType = '区域经理'
+	</select>	
+	
+	<insert id="addAccountResidence" parameterClass="org.housemart.dao.entities.AccountResidenceEntity">
+		INSERT INTO account_residence_relationship (AccountID, ResidenceID, ResidenceIDType, AddTime, UpdateTime)
+		VALUES(#accountID#, #residenceID#, #residenceIDType#, #addTime#, #updateTime#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<delete id="deleteAccountResidences" parameterClass="uniqueObject">
+		DELETE FROM account_residence_relationship
+		WHERE AccountID = #id# 
+	</delete>
+	
+	<delete id="deleteResidenceAccounts" parameterClass="map">
+		DELETE FROM account_residence_relationship
+		WHERE ResidenceID = #residenceID#
+        <isNotNull prepend="AND" property="positionType"> 
+            AccountID IN (SELECT acc.ID FROM account AS acc WHERE acc.Status = 1 AND acc.PositionType IN ($positionType$))
+        </isNotNull> 
+	</delete>
+</sqlMap>

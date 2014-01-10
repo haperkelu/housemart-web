@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="RegionEntity">
+
+	<resultMap id="region" class="org.housemart.dao.entities.RegionEntity">
+		<result property="id" column="RegionID" />
+		<result property="name" column="Name" />
+		<result property="level" column="Level" />
+	</resultMap>
+	
+	<select id="findRegionListByLevel" resultMap="region">
+		SELECT RegionID, Name, Level
+		FROM region AS rd
+		WHERE Level = #level#
+	</select>
+
+	<select id="findPlateListByRegionId" resultMap="region">
+		SELECT RegionID, Name, Level
+		FROM region AS rd
+		WHERE ParentID = #parentId#
+	</select>
+	
+	<select id="findRegionById" resultMap="region">
+		SELECT RegionID, Name, Level
+		FROM region
+		WHERE RegionID = #id#
+	</select>
+</sqlMap>

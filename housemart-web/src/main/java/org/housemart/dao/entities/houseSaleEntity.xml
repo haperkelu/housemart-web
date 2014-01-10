@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HouseSaleEntity">
+	<resultMap id="houseSale" class="org.housemart.dao.entities.HouseSaleEntity">
+		<result property="id" column="ID" />
+		<result property="houseId" column="HouseID" />
+		<result property="tagList" column="TagList" />
+		<result property="avgPrice" column="AvgPrice" />
+		<result property="price" column="Price" />
+		<result property="basePrice" column="BasePrice" />
+		<result property="dealType" column="DealType" />
+		<result property="saleStatus" column="SaleStatus" />
+		<result property="saleRec" column="SaleRec" />
+		<result property="source" column="Source" />
+		<result property="memo" column="Memo" />
+		<result property="dealTime" column="DealTime" />
+		<result property="addTime" column="AddTime" />
+		<result property="updateTime" column="UpdateTime" />
+		<result property="owner" column="Owner" />
+	</resultMap>
+	
+	<insert id="addHouseSale" parameterClass="org.housemart.dao.entities.HouseSaleEntity">
+		INSERT INTO house_sale(HouseID, TagList, AvgPrice, Price,
+		BasePrice, DealType, SaleStatus, SaleRec, Source, Memo, DealTime, AddTime, UpdateTime, Owner)
+		VALUES(#houseId#, #tagList#, #avgPrice#, #price#,
+		#basePrice#, #dealType#, #saleStatus#, #saleRec#, #source#, #memo#, #dealTime#, #addTime#, #updateTime#, #owner#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="loadHouseSale" resultMap="houseSale" parameterClass="uniqueObject">
+		SELECT * FROM house_sale
+		WHERE ID = #id#
+	</select>
+	
+	<select id="findHouseSaleListByHouseId" resultMap="houseSale" parameterClass="uniqueObject">
+		SELECT * FROM house_sale
+		WHERE HouseID = #id#
+		ORDER BY UpdateTime DESC
+	</select>
+	
+	<select id="findHouseSaleList" resultMap="houseSale" parameterClass="map">
+		SELECT *
+		FROM house_sale
+		WHERE 1
+		<isNotNull prepend="AND" property="saleStatus"> 
+            SaleStatus = #saleStatus#
+        </isNotNull>
+		ORDER BY UpdateTime DESC
+	</select>
+	
+	<update id="updateHouseSale" parameterClass="org.housemart.dao.entities.HouseSaleEntity">
+		UPDATE house_sale
+		<dynamic prepend="SET" >
+			<isNotNull prepend="," property="houseId" > 
+			HouseID = #houseId#
+			</isNotNull>
+			<isNotNull prepend="," property="tagList" >
+			TagList = #tagList#
+			</isNotNull>
+			<isNotNull prepend="," property="avgPrice" >
+			AvgPrice = #avgPrice#
+			</isNotNull>
+			<isNotNull prepend="," property="price" >
+			Price = #price#
+			</isNotNull>
+			<isNotNull prepend="," property="basePrice" >
+			BasePrice = #basePrice#
+			</isNotNull>
+			<isNotNull prepend="," property="dealType" >
+			DealType = #dealType#
+			</isNotNull>
+			<isNotNull prepend="," property="saleStatus" >
+			SaleStatus = #saleStatus#
+			</isNotNull>
+			<isNotNull prepend="," property="saleRec" >
+			SaleRec = #saleRec#
+			</isNotNull>
+			<isNotNull prepend="," property="source" >
+			Source = #source#
+			</isNotNull>
+			<isNotNull prepend="," property="memo" >
+			Memo = #memo#
+			</isNotNull>
+			<isNotNull prepend="," property="dealTime" >
+			DealTime = #dealTime#
+			</isNotNull>
+			<isNotNull prepend="," property="addTime" >
+			AddTime = #addTime#
+			</isNotNull>
+			<isNotNull prepend="," property="updateTime" >
+			UpdateTime = #updateTime#
+			</isNotNull>
+			<isNotNull prepend="," property="owner" >
+			Owner = #owner#
+			</isNotNull>
+		</dynamic>
+		WHERE ID = #id#
+	</update>
+	
+	<update id="updateHouseSaleByHouseId" parameterClass="org.housemart.dao.entities.HouseSaleEntity">
+		UPDATE house_sale
+		<dynamic prepend="SET" >
+			<isNotNull prepend="," property="houseId" > 
+			HouseID = #houseId#
+			</isNotNull>
+			<isNotNull prepend="," property="tagList" >
+			TagList = #tagList#
+			</isNotNull>
+			<isNotNull prepend="," property="avgPrice" >
+			AvgPrice = #avgPrice#
+			</isNotNull>
+			<isNotNull prepend="," property="price" >
+			Price = #price#
+			</isNotNull>
+			<isNotNull prepend="," property="basePrice" >
+			BasePrice = #basePrice#
+			</isNotNull>
+			<isNotNull prepend="," property="dealType" >
+			DealType = #dealType#
+			</isNotNull>
+			<isNotNull prepend="," property="saleStatus" >
+			SaleStatus = #saleStatus#
+			</isNotNull>
+			<isNotNull prepend="," property="saleRec" >
+			SaleRec = #saleRec#
+			</isNotNull>
+			<isNotNull prepend="," property="source" >
+			Source = #source#
+			</isNotNull>
+			<isNotNull prepend="," property="memo" >
+			Memo = #memo#
+			</isNotNull>
+			<isNotNull prepend="," property="dealTime" >
+			DealTime = #dealTime#
+			</isNotNull>
+			<isNotNull prepend="," property="addTime" >
+			AddTime = #addTime#
+			</isNotNull>
+			<isNotNull prepend="," property="updateTime" >
+			UpdateTime = #updateTime#
+			</isNotNull>
+			<isNotNull prepend="," property="owner" >
+			Owner = #owner#
+			</isNotNull>
+		</dynamic>
+		WHERE HouseID = #houseId# 
+		ORDER BY UpdateTime DESC
+		LIMIT 1
+	</update>
+	
+</sqlMap>
+		

@@ -1,0 +1,44 @@
+<config charset="utf-8">
+	<script>
+		http.client.params.soTimeout = 5000;
+		http.client.params.connectionManagerTimeout = 5000;
+		http.client.httpConnectionManager.params.connectionTimeout = 5000;
+	</script>
+
+
+	<var-def name="page">
+		<html-to-xml>
+			<http url="${url}" charset="utf-8" method="get">
+			</http>
+		</html-to-xml>
+	</var-def>
+
+	<loop item="item" index="i">
+		<list>
+			<var name="page" />
+		</list>
+
+		<body>
+			<var-def name="json">
+				<xquery>
+					<xq-param name="item">
+						<var name="item" />
+					</xq-param>
+					<xq-expression>  
+                  <![CDATA[ 
+                  	declare variable $item as node() external;
+                    let $json := data($item) 
+                    return 
+                    	$json 
+                    ]]>
+					</xq-expression>
+				</xquery>
+			</var-def>
+			<template>
+				${jsonData.add(json)};
+			</template>
+
+		</body>
+	</loop>
+
+</config>

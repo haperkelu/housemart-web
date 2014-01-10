@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="RepositoryHouseEntity">
+	
+	<resultMap id="house" class="org.housemart.dao.entities.RepositoryHouseEntity">
+		<result property="id" column="ID" />
+		<result property="name" column="Name" />
+		<result property="status" column="Status" />
+		<result property="residenceId" column="ResidenceID" />
+		<result property="cellId" column="CellID" />
+		<result property="picId" column="PicID" />
+		<result property="roomTypePicId" column="RoomTypePicID" />
+		<result property="direction" column="Direction" />
+		<result property="propertyArea" column="PropertyArea" />
+		<result property="occupiedArea" column="OccupiedArea" />
+		<result property="buildTime" column="BuildTime" />
+		<result property="houseType" column="HouseType" />
+		<result property="roomType" column="RoomType" />
+		<result property="decorating" column="Decorating" />
+		<result property="hasKey" column="HasKey" />
+		<result property="hasKeyMemo" column="HasKeyMemo" />
+		<result property="viewHouseType" column="ViewHouseType" />
+		<result property="memo" column="Memo" />
+		<result property="addTime" column="AddTime" />
+		<result property="updateTime" column="UpdateTime" />
+		<result property="creator" column="Creator" />
+		<result property="lastUpdater" column="LastUpdater" />
+	</resultMap>
+	
+	<insert id="addHouse" parameterClass="org.housemart.dao.entities.RepositoryHouseEntity">
+		INSERT INTO repository.house(Name, Status, ResidenceID, CellID,
+		PicID, RoomTypePicID, Direction, PropertyArea, OccupiedArea, BuildTime, HouseType,
+		RoomType, Decorating, HasKey, HasKeyMemo, ViewHouseType, Memo, AddTime, UpdateTime, Creator, LastUpdater)
+		VALUES(#name#, #status#, #residenceId#, #cellId#,
+		#picId#, #roomTypePicId#, #direction#, #propertyArea#, #occupiedArea#, #buildTime#, #houseType#,
+		#roomType#, #decorating#, #hasKey#, #hasKeyMemo#, #viewHouseType#, #memo#, #addTime#, #updateTime#, #creator#, #lastUpdater#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="loadHouse" resultMap="house" parameterClass="uniqueObject">
+		SELECT * FROM repository.house
+		WHERE ID = #id#
+	</select>
+	
+	<select id="findHouseByResicendeId" resultMap="house" parameterClass="map">
+		SELECT * FROM repository.house
+		WHERE ResidenceID = #id#
+	</select>
+	
+	<update id="updateHouse" parameterClass="org.housemart.dao.entities.RepositoryHouseEntity">
+		UPDATE repository.house
+		<dynamic prepend="set" >
+	      <isNotNull prepend="," property="name" >
+	        Name = #name#
+	      </isNotNull>
+	      <isNotNull prepend="," property="status" >
+	        Status = #status#
+	      </isNotNull>
+	      <isNotNull prepend="," property="residenceId" >
+	        ResidenceID = #residenceId#
+	      </isNotNull>
+	      <isNotNull prepend="," property="cellId" >
+	       	CellID = #cellId#
+	      </isNotNull>
+	      <isNotNull prepend="," property="picId" >
+	        PicID = #picId#
+	      </isNotNull>
+	      <isNotNull prepend="," property="roomTypePicId" >
+	        RoomTypePicID = #roomTypePicId#
+	      </isNotNull>
+	      <isNotNull prepend="," property="direction" >
+	        Direction = #direction#
+	      </isNotNull>
+	      <isNotNull prepend="," property="propertyArea" >
+	       	PropertyArea = #propertyArea#
+	      </isNotNull>
+	      <isNotNull prepend="," property="occupiedArea" >
+	        OccupiedArea = #occupiedArea#
+	      </isNotNull>
+	      <isNotNull prepend="," property="buildTime" >
+	        BuildTime = #buildTime#
+	      </isNotNull>
+	      <isNotNull prepend="," property="houseType" >
+	        HouseType = #houseType#
+	      </isNotNull>
+	      <isNotNull prepend="," property="roomType" >
+	        RoomType = #roomType#
+	      </isNotNull>
+	      <isNotNull prepend="," property="decorating" >
+	        Decorating = #decorating#
+	      </isNotNull>
+	      <isNotNull prepend="," property="hasKey" >
+	        HasKey = #hasKey#
+	      </isNotNull>
+	      <isNotNull prepend="," property="hasKeyMemo" >
+	        HasKeyMemo = #hasKeyMemo#
+	      </isNotNull>
+	      <isNotNull prepend="," property="viewHouseType" >
+	        ViewHouseType = #viewHouseType#
+	      </isNotNull>
+	      <isNotNull prepend="," property="memo" >
+	        Memo = #memo#
+	      </isNotNull>
+	      <isNotNull prepend="," property="addTime" >
+	        AddTime = #addTime#
+	      </isNotNull>
+	      <isNotNull prepend="," property="updateTime" >
+	        UpdateTime = #updateTime#
+	      </isNotNull>
+	      <isNotNull prepend="," property="creator" >
+	        Creator = #creator#
+	      </isNotNull>
+	      <isNotNull prepend="," property="lastUpdater" >
+	        LastUpdater = #lastUpdater#
+	      </isNotNull>
+		</dynamic>
+		WHERE ID = #id#
+	</update>	
+	
+</sqlMap>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HouseFavoriteEntity">
+	<resultMap id="houseFavorite" class="org.housemart.dao.entities.HouseFavoriteEntity">
+		<result property="id" column="ID" />
+		<result property="houseId" column="HouseID" />
+		<result property="userId" column="UserID" />
+		<result property="addTime" column="AddTime" />
+	</resultMap>
+	
+	<insert id="addHouseFavorite" parameterClass="org.housemart.dao.entities.HouseFavoriteEntity">
+		INSERT INTO house_favorite(HouseID, userID, AddTime)
+		VALUES(#houseId#, #userId#, #addTime#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<delete id="deleteHouseFavorite" parameterClass="uniqueObject">
+		DELETE FROM house_favorite
+		WHERE ID = #id# 
+	</delete>
+	
+	<select id="loadHouseFavorite" resultMap="houseFavorite" parameterClass="uniqueObject">
+		SELECT * FROM house_favorite
+		WHERE ID = #id#
+	</select>
+	
+	<update id="updateHouseFavorite" parameterClass="org.housemart.dao.entities.HouseFavoriteEntity">
+		UPDATE house_favorite SET ID = #id#, HouseID = #houseId#, UserID = #userId#, AddTime = #addTime#
+		WHERE ID = #id#
+	</update>
+	
+	<select id="findHouseFavoriteListByHouseIdAndUserId" resultMap="houseFavorite" parameterClass="map">
+		SELECT * FROM house_favorite WHERE HouseID = #houseId# AND UserID = #userId# 
+	</select>
+	
+	<select id="findLatestHouseFavoriteList" resultMap="houseFavorite" parameterClass="map">
+		SELECT *
+		FROM (SELECT * FROM house_favorite ORDER BY AddTime DESC) HF
+		<dynamic prepend="WHERE">
+			<isNotNull prepend="IN" property="houseIds"> 
+	            HouseID in ($houseIds$)
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="userId"> 
+	            UserID = #userId#
+	        </isNotNull>
+		</dynamic>
+		GROUP BY HouseID 
+		<dynamic prepend="ORDER BY">
+			<isNotNull property="houseIds">
+				FIELD (HouseID, $houseIds$)
+			</isNotNull>
+		</dynamic>
+	</select>
+	
+</sqlMap>
+		

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AccountRevokeEntity">
+
+	<resultMap id="accountRevoke" class="org.housemart.dao.entities.AccountRevokeExtEntity">
+		<result property="id" column="ID" />
+		<result property="accountID" column="AccountID" />
+		<result property="accountLoginName" column="accountLoginName" />
+		<result property="accountName" column="accountName" />
+		<result property="managerName" column="managerName" />
+		<result property="managerPhone" column="managerPhone" />
+		<result property="addTime" column="addTime" />
+		<result property="status" column="status" />
+	</resultMap>
+
+	<select id="findAccountRevokeList" resultMap="accountRevoke" parameterClass="map">
+		SELECT 
+			accr.ID, accr.AccountID as accountID, acc.LoginName as accountLoginName, acc.Name as accountName,
+			m.Name as managerName, m.ContactInfo1 as managerPhone,
+			accr.AddTime as addTime, accr.Status as status
+		FROM account_revoke AS accr
+		INNER JOIN account AS acc ON acc.ID = accr.AccountID
+		LEFT JOIN account AS m ON m.ID = acc.ManagerID
+		WHERE 1
+		<isNotNull prepend="AND" property="accountStatus"> 
+            acc.Status IN ($accountStatus$)
+        </isNotNull>
+        <isNull prepend="AND" property="accountStatus"> 
+        	acc.Status = 1
+        </isNull>
+		<isNotNull prepend="AND" property="accountID"> 
+            accr.accountID = #accountID#
+        </isNotNull>
+        <isNotNull prepend="AND" property="status"> 
+            accr.status = #status#
+        </isNotNull> 
+		ORDER BY accr.addTime DESC
+	</select>
+	
+	<select id="loadAccountRevokeById" resultMap="accountRevoke" parameterClass="uniqueObject">
+		SELECT 
+			accr.ID, accr.AccountID as accountID, acc.LoginName as accountLoginName, acc.Name as accountName,
+			m.Name as managerName, m.ContactInfo1 as managerPhone,
+			accr.AddTime as addTime, accr.Status as status
+		FROM account_revoke AS accr
+		INNER JOIN account AS acc ON acc.ID = accr.AccountID
+		LEFT JOIN account AS m ON m.ID = acc.ManagerID
+		WHERE accr.ID = #id#
+	</select>
+	
+	<insert id="addAccountRevoke" parameterClass="org.housemart.dao.entities.AccountRevokeEntity">
+		INSERT INTO account_revoke (AccountID, Status, AddTime)
+		VALUES(#accountID#, #status#, #addTime#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<update id="updateAccountRevoke" parameterClass="org.housemart.dao.entities.AccountRevokeEntity">
+		UPDATE account_revoke SET Status = #status#
+		WHERE ID = #id#
+	</update>
+</sqlMap>

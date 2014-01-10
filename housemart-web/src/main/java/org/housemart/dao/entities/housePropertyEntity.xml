@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HousePropertyEntity">
+	<resultMap id="houseProperty" class="org.housemart.dao.entities.HousePropertyEntity">
+		<result property="id" column="ID" />
+		<result property="houseId" column="HouseID" />
+		<result property="propertyCode" column="PropertyCode" />
+		<result property="propertyOwner" column="PropertyOwner" />
+		<result property="loan" column="Loan" />
+		<result property="version" column="Version" />
+		<result property="addTime" column="AddTime" />
+		<result property="updateTime" column="UpdateTime" />
+	</resultMap>
+	
+	<insert id="addHouseProperty" parameterClass="org.housemart.dao.entities.HousePropertyEntity">
+		INSERT INTO house_property(HouseID, PropertyCode, PropertyOwner,
+		Loan, Version, AddTime, UpdateTime)
+		VALUES(#houseId#, #propertyCode#, #propertyOwner#,
+		#loan#, #version#, #addTime#, #updateTime#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="loadHouseProperty" resultMap="houseProperty" parameterClass="uniqueObject">
+		SELECT * FROM house_property
+		WHERE ID = #id#
+	</select>
+	
+	<select id="findHousePropertyListByHouseId" resultMap="houseProperty" parameterClass="uniqueObject">
+		SELECT * FROM house_property
+		WHERE HouseID = #id#
+		ORDER BY UpdateTime DESC
+	</select>
+	
+	<update id="updateHouseProperty" parameterClass="org.housemart.dao.entities.HousePropertyEntity">
+		UPDATE house_property SET ID = #id#, HouseID = #houseId#, PropertyCode = #propertyCode#, 
+		PropertyOwner = #propertyOwner#, Loan = #loan#, Version = #version#, AddTime = #addTime#, UpdateTime = #updateTime#
+		WHERE ID = #id#
+	</update>
+	
+	<update id="updateHousePropertyByHouseId" parameterClass="org.housemart.dao.entities.HousePropertyEntity">
+		UPDATE house_property SET HouseID = #houseId#, PropertyCode = #propertyCode#, 
+		PropertyOwner = #propertyOwner#, Loan = #loan#, Version = #version#, AddTime = #addTime#, UpdateTime = #updateTime#
+		WHERE HouseID = #houseId#
+	</update>
+</sqlMap>

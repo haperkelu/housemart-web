@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlrewrite>
+	<rule>
+		<from>^/residenceList$</from>
+		<to type="forward">/residenceList.controller</to>
+	</rule>
+	<rule>
+		<from>^/residence/([0-9]+)$</from>
+		<to type="forward">/residenceDetail.controller?id=$1</to>
+	</rule>
+	<rule>
+		<from>^/residenceBuildingCell$</from>
+		<to type="forward">/residenceBuildingCell.controller</to>
+	</rule>
+	<rule>
+		<from>^/addResidenceBuilding$</from>
+		<to type="forward">/addResidenceBuilding.controller</to>
+	</rule>
+	<rule>
+		<from>^/addBuildingResult$</from>
+		<to type="forward">/addBuildingResult.controller</to>
+	</rule>
+	<rule>
+		<from>^/residenceCellList$</from>
+		<to type="forward">/residenceCellList.controller</to>
+	</rule>	
+	<rule>
+		<from>^/addResidenceCell$</from>
+		<to type="forward">/addResidenceCell.controller</to>
+	</rule>	
+	<rule>
+		<from>^/addResidenceCellResult$</from>
+		<to type="forward">/addResidenceCellResult.controller</to>
+	</rule>
+	<rule>
+		<from>^/login$</from>
+		<to type="forward">/login.controller</to>
+	</rule>				
+	<rule>
+		<from>^/loginSubmit$</from>
+		<to type="forward">/loginSubmit.controller</to>
+	</rule>	
+	<rule>
+		<from>^/residenceBuildingEdit$</from>
+		<to type="forward">/residenceBuildingEdit.controller</to>
+	</rule>	
+	<rule>
+		<from>^/residenceBuildingUpdateSubmit$</from>
+		<to type="forward">/residenceBuildingUpdateSubmit.controller</to>
+	</rule>		
+	<rule>
+		<from>^/apps/d/android/customer</from>
+		<to type="forward">/client/appFile/download.controller?clientType=p</to>
+	</rule>
+	<rule>
+		<from>^/apps/d/android/agent</from>
+		<to type="forward">/client/appFile/download.controller?clientType=b</to>
+	</rule>		
+</urlrewrite>   

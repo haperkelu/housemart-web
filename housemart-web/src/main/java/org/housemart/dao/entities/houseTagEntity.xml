@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HouseTagEntity">
+	<resultMap id="houseTag" class="org.housemart.dao.entities.HouseTagEntity">
+		<result property="id" column="ID" />
+		<result property="name" column="Name" />
+		<result property="categoryName" column="CategoryName" />
+		<result property="memo" column="Memo" />
+	</resultMap>
+	
+	<insert id="addHouseTag" parameterClass="org.housemart.dao.entities.HouseTagEntity">
+		INSERT INTO house_tag(Name, CategoryName, Memo)
+		VALUES(#name#, #categoryName#, #memo#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="loadHouseTag" resultMap="houseTag" parameterClass="uniqueObject">
+		SELECT * FROM house_tag
+		WHERE ID = #id#
+	</select>
+	
+	<select id="findHouseTagList" resultMap="houseTag" parameterClass="map">
+		SELECT * FROM house_tag
+		<dynamic prepend="WHERE">
+			<isNotNull prepend="AND" property="name"> 
+	            Name = #name#
+	        </isNotNull>
+	        <isNotNull prepend="AND" property="categoryName"> 
+	            CategoryName = #categoryName#
+	        </isNotNull>
+		</dynamic>
+	</select>
+	
+	<select id="findHouseTagListByIds" resultMap="houseTag" parameterClass="map">
+		SELECT * FROM house_tag WHERE ID IN ($ids$) ORDER BY FIELD (ID, $ids$)
+	</select>
+	
+	<update id="updateHouseTag" parameterClass="org.housemart.dao.entities.HouseTagEntity">
+		UPDATE house_tag SET Name = #name#, CategoryName = #categoryName#, Memo = #memo#
+		WHERE ID = #id#
+	</update>
+	
+	
+</sqlMap>
+		

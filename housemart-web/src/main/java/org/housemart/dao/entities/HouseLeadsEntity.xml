@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HouseLeadsEntity">
+
+	<resultMap id="houseLeads" class="org.housemart.dao.entities.HouseLeadsEntity">
+		<result property="id" column="ID" />
+		<result property="contactName" column="ContactName" />
+		<result property="mobile" column="Mobile" />
+		<result property="residenceName" column="ResidenceName" />
+		<result property="address" column="Address" />
+		<result property="area" column="Area" />
+		<result property="addTime" column="AddTime" />
+	</resultMap>
+	
+	<resultMap id="feeback" class="org.housemart.dao.entities.FeedBackEntity">
+		<result property="id" column="ID" />
+		<result property="name" column="Name" />
+		<result property="mobile" column="Mobile" />
+		<result property="content" column="Content" />
+		<result property="addTime" column="AddTime" />
+	</resultMap>	
+	
+	<select id="findAllList" resultMap="houseLeads" parameterClass="map">
+	
+		select * from mobile.house_leads
+		order by 1 desc
+		<include refid="common.limit" />
+		
+	</select>
+
+	<select id="findAllFeedBackList" resultMap="feeback" parameterClass="map">
+	
+		select * from mobile.housemart_feedback
+		order by 1 desc
+		<include refid="common.limit" />
+		
+	</select>
+
+</sqlMap>

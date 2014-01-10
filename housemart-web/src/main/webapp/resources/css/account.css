@@ -1,0 +1,30 @@
+#table-user {}
+#table-user th {width:100px;}
+
+#table-user #residences span {float:left;margin:5px 20px 5px 0;cursor:pointer;
+	border:1px dashed #aaa;padding:2px 5px;}
+#table-user #residences span a, #table-user #selectedResidences span a {text-decoration:none;color:#000;}
+#table-user #residences .selected a {color:red;}
+
+#table-user #selectedResidences span {float:left;margin:5px 20px 5px 0;cursor:pointer;
+	border:1px solid #aaa;padding:2px 5px;}
+#table-user #selectedResidences span input {display:hidden;}
+
+#table-user #residences .zombie a, #table-user #selectedResidences .zombie a {color:#888;}
+
+#table-user #city {width:100px;}
+#table-user #region, #table-user #plate {width:100px;}
+
+#dlg-reset-account-name, #dlg-close-account-name {color:#0000ff;}
+
+.dlg-buttons {text-align:center;margin:20px 0;}
+.dlg-content {text-align:center;margin:20px 0;}
+
+#btn-interaction-transfer {display:none;}
+
+#search-brokers .focus {font-weight:bold;background:#ddd;}
+#search-brokers {height:80px;margin:0;padding:0;line-height:25px;}
+#search-brokers span {float:left;padding:2px 5px;margin:5px 20px 5px 0; border:1px solid #aaa;
+	cursor:pointer;}
+	
+.residence-index {clear:both;}

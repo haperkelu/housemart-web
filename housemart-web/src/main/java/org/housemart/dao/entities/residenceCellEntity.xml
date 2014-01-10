@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ResidenceCellEntity">
+	
+	<resultMap id="residencCell" class="org.housemart.dao.entities.ResidenceCellEntity">
+		<result property="id" column="ID" />
+		<result property="buildingId" column="BuildingID" />
+		<result property="codeType" column="CodeType" />
+		<result property="codeBegin" column="CodeBegin" />
+		<result property="codeEnd" column="CodeEnd" />
+		<result property="floorBegin" column="FloorBegin" />
+		<result property="floorEnd" column="FloorEnd" />	
+	</resultMap>
+			
+	<select id="findResidenceCellListByBuildingId" resultMap="residencCell" parameterClass="uniqueObject">
+		SELECT ID, BuildingID, CodeType, CodeBegin, CodeEnd, FloorBegin, FloorEnd
+		FROM residence_building_cell AS rbc
+		WHERE rbc.`Status` = 1 and rbc.BuildingID = #id#
+		order by CodeType, FloorBegin, CodeBegin
+	</select>
+
+	<select id="findResidenceCellListByIds" resultMap="residencCell" parameterClass="map">
+		SELECT ID, BuildingID, CodeType, CodeBegin, CodeEnd, FloorBegin, FloorEnd
+		FROM residence_building_cell AS rbc
+		WHERE rbc.`Status` = 1 and rbc.ID in ($ids$)
+		order by CodeType, FloorBegin, CodeBegin
+	</select>	
+	
+	<typeAlias alias="residencCell" type="org.housemart.dao.entities.ResidenceCellEntity"/>
+	<insert id="addResidenceCell" parameterClass="residencCell">
+		INSERT INTO residence_building_cell(BuildingID, CodeType, CodeBegin, CodeEnd,FloorBegin, FloorEnd)
+		VALUES(#buildingId#, #codeType#, #codeBegin#, #codeEnd#, #floorBegin#, #floorEnd#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<delete id="deleteResidenceCell" parameterClass="uniqueObject">
+		UPDATE residence_building_cell SET `Status` = 2
+		WHERE ID = #id# 
+	</delete>
+	
+	<delete id="deleteResidenceCellPhysical" parameterClass="uniqueObject">
+		DELETE FROM residence_building_cell
+		WHERE ID = #id# 
+	</delete>
+
+</sqlMap>

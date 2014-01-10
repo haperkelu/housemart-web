@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HouseSoldBuildingEntity">
+	<resultMap id="houseSoldBuilding" class="org.housemart.dao.entities.HouseSoldBuildingEntity">
+		<result property="id" column="ID" />
+		<result property="houseId" column="HouseID" />
+		<result property="buildingInfo" column="BuildingInfo" />
+	</resultMap>
+	
+	<insert id="addHouseSoldBuilding" parameterClass="org.housemart.dao.entities.HouseSoldBuildingEntity">
+		INSERT INTO house_sold_building(HouseID, BuildingInfo)
+		VALUES(#houseId#, #buildingInfo#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="loadHouseSoldBuilding" resultMap="houseSoldBuilding" parameterClass="uniqueObject">
+		SELECT * FROM house_sold_building
+		WHERE ID = #id#
+	</select>
+	
+	<select id="findHouseSoldBuildingByHouseId" resultMap="houseSoldBuilding" parameterClass="uniqueObject">
+		SELECT * FROM house_sold_building
+		WHERE HouseID = #id#
+		ORDER BY UpdateTime DESC
+	</select>
+	
+	<update id="updateHouseSoldBuilding" parameterClass="org.housemart.dao.entities.HouseSoldBuildingEntity">
+		UPDATE house_sold_building SET HouseID = #houseId#, BuildingInfo = #buildingInfo#
+		WHERE ID = #id#
+	</update>
+	
+	<update id="updateHouseSaleByHouseId" parameterClass="org.housemart.dao.entities.HouseSoldBuildingEntity">
+		UPDATE house_sold_building SET BuildingInfo = #buildingInfo#
+		WHERE HouseID = #houseId# 
+	</update>
+	
+</sqlMap>
+		

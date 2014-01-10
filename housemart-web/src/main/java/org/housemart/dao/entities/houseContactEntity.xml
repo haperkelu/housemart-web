@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HouseContactEntity">
+	<resultMap id="houseContact" class="org.housemart.dao.entities.HouseContactEntity">
+		<result property="id" column="ID" />
+		<result property="houseId" column="HouseID" />
+		<result property="contactType" column="ContactType" />
+		<result property="name" column="Name" />
+		<result property="mobile" column="Mobile" />
+		<result property="status" column="Status" />
+		<result property="addTime" column="AddTime" />
+		<result property="updateTime" column="UpdateTime" />
+		<result property="committer" column="Committer" />
+	</resultMap>
+	
+	<insert id="addHouseContact" parameterClass="org.housemart.dao.entities.HouseContactEntity">
+		INSERT INTO house_contact(HouseID, ContactType, Name,
+		Mobile, Memo, Status, AddTime, UpdateTime, Committer)
+		VALUES(#houseId#, #contactType#, #name#, #mobile#, #memo#,
+		#status#, #addTime#, #updateTime#, #committer#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+
+	<insert id="addHouseContactNew" parameterClass="org.housemart.dao.entities.HouseContactEntity">
+		INSERT INTO house_contact(HouseID, ContactType, Name,
+		Mobile, Mobile2, Mobile3, Memo, Status, AddTime, UpdateTime, Committer)
+		VALUES(#houseId#, #contactType#, #name#, #mobile#,#mobile2#, #mobile3#, #memo#,
+		#status#, #addTime#, #updateTime#, #committer#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="loadHouseContact" resultMap="houseContact" parameterClass="uniqueObject">
+		SELECT * FROM house_contact
+		WHERE ID = #id#
+	</select>
+	
+	<select id="findHouseContactListByHouseId" resultMap="houseContact" parameterClass="map">
+		SELECT * FROM house_contact
+		WHERE HouseID = #houseId# 
+		<isNotNull prepend="AND" property="status" >
+			Status = #status#
+		</isNotNull>
+		ORDER BY UpdateTime DESC
+	</select>
+	
+	<update id="updateHouseContact" parameterClass="org.housemart.dao.entities.HouseContactEntity">
+		UPDATE house_contact SET HouseID = #houseId#, ContactType = #contactType#, Name = #name#,
+		Mobile = #mobile#, Memo = #memo#, Status = #status#, AddTime = #addTime#, UpdateTime = #updateTime#, Committer = #committer#
+		WHERE ID = #id#
+	</update>
+	
+	<update id="updateHouseContactByHouseId" parameterClass="org.housemart.dao.entities.HouseContactEntity">
+		UPDATE house_contact 
+		<dynamic prepend="set" >
+	      <isNotNull prepend="," property="houseId" >
+	    	HouseID = #houseId#
+	      </isNotNull>
+	      <isNotNull prepend="," property="contactType" >
+	    	ContactType = #contactType#
+	      </isNotNull>
+	      <isNotNull prepend="," property="name" >
+	    	Name = #name#
+	      </isNotNull>
+	      <isNotNull prepend="," property="mobile" >
+	    	Mobile = #mobile#
+	      </isNotNull>
+	      <isNotNull prepend="," property="memo" >
+	    	Memo = #memo#
+	      </isNotNull>
+	      <isNotNull prepend="," property="status" >
+	    	Status = #status#
+	      </isNotNull>
+	      <isNotNull prepend="," property="addTime" >
+	    	AddTime = #addTime#
+	      </isNotNull>
+	      <isNotNull prepend="," property="updateTime" >
+	    	UpdateTime = #updateTime#
+	      </isNotNull>
+	      <isNotNull prepend="," property="committer" >
+	    	Committer = #committer#
+	      </isNotNull>
+	    </dynamic>
+		WHERE HouseID = #houseId# 
+		ORDER BY UpdateTime DESC
+		LIMIT 1
+	</update>
+</sqlMap>
+		
