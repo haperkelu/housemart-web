@@ -19,6 +19,23 @@
 						${(house.id)!}
 					</td>			
 				</tr>
+				<#if isAdmin?exists && isAdmin == true>
+					<tr>
+						<td>
+							迁移
+						</td>
+						<td>
+							小区名或拼音：
+							<input type="text" name="residenceName" value="" />
+							<input type="button" value="搜索" onclick="refreshResidenceList(false)"/>
+							
+							<p id="residences">
+				
+							</p>										
+			
+						</td>
+					</tr>				
+				</#if>
 				<tr>
 					<td>
 						<span style="color:red;">*</span> 小区
@@ -252,6 +269,17 @@
 			</div>
 			<div class="view-1" style="display:none;">
 			</div>
+			
+			<div id="dlg-move-house" title="迁移到其它小区">
+				<input type="hidden" id="destResidenceId"/>
+			    <div class="dlg-content">
+			    	确定要把当前房源迁移到<span id="destResidenceName" style="color:red;"></span>？
+			    </div>
+			    <div class="dlg-buttons">
+			    	<input type="button" value="确定" onclick='moveToResidence();'/>
+			    	<input type="button" value="取消" onclick='$("#dlg-move-house").dialog("close");'/>
+			    </div>
+			</div>
 		</div>
 		
 		<div id="dlg-assign-house" title="分配房源">
@@ -271,6 +299,15 @@
 		    </div>
 		</div>
 		
+		<style>
+			#residences span {float:left;margin:5px 20px 5px 0;cursor:pointer;
+				border:1px dashed #aaa;padding:2px 5px;}
+				
+			#selectedResidences span {float:left;margin:5px 20px 5px 0;cursor:pointer;
+				border:1px solid #aaa;padding:2px 5px;}
+				
+			#selectedResidences span input {display:hidden;}
+		</style>
 		<script>
 			$(document).ready(function(){
 				init();
@@ -299,6 +336,14 @@
 				refreshHousePicList(1);
 				
 				$("#floor").attr("disabled", "disabled");
+				
+				$("#dlg-move-house").dialog(
+					{
+						autoOpen: false,
+						width: 500,
+						modal: true,
+						resizable: false
+					});
 			}
 			
 			// bind
@@ -471,7 +516,152 @@
 					}
 			  	});
 			}
+		
+			function refreshResidenceList(selectedOpt){
+	
+				$('#residences').html("数据加载中...");
+				if (selectedOpt)
+				{
+					if($("#plate").find("option:selected").val() > 0 ||
+							$("#region").find("option:selected").val() > 0)
+					{
+						$("input[name='residenceName']").val("");
+					  	$.ajax({
+							type: "post",
+							url: "/ajax/getResidenceListByPlateId.controller",
+							data: {plateId: $("#plate").find("option:selected").val(), regionId: $("#region").find("option:selected").val()},
+							dataType: "json",
+							contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+							success: function (data) {
+								showResidenceList(data);
+							},
+							error: function (XMLHttpRequest, textStatus, errorThrown) {
+							}
+					  	});
+				  	}
+				}
+				else
+				{
+					var key = $.trim($("input[name='residenceName']").val());
+					if (key != "")
+					{
+						$('#region').val("");
+						$('#plate').val("");
+						 
+						$.ajax({
+							type: "post",
+							url: "/ajax/getResidenceListByResidenceName.controller",
+							data: {residenceName: key},
+							dataType: "json",
+							contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+							success: function (data) {
+								showResidenceList(data);
+							},
+							error: function (XMLHttpRequest, textStatus, errorThrown) {
+							}
+					  	});
+					}
+				}
+			}
 			
+			function showResidenceList(data)
+			{
+				var total = '';
+				var index = '';
+				var indexList = new Array();
+				for(var i in data.bizData){
+					var alpha = data.bizData[i].pinyinName.toUpperCase().charAt(0).toUpperCase();
+					
+					if (alpha.charCodeAt(0) < 65 || alpha.charCodeAt(0) > 90)
+					{
+						alpha = "";
+					}
+					
+					var option = '<span class="region-residence index-' + alpha + '" id="res-' + data.bizData[i].residenceId + '" onclick="addAccountResidence(' + data.bizData[i].residenceId + ',\'' + data.bizData[i].residenceName + '\')">' + 
+					(data.bizData[i].pinyinName != null ? alpha + " " : "") + 
+					data.bizData[i].residenceName + '</span>';
+					total += option;
+					
+					if ($.inArray(alpha, indexList) < 0)
+					{
+						indexList.push(alpha);
+					}
+					indexList.sort();
+				}
+				index += '<div class="residence-index">';
+				for (var i in indexList)
+				{
+					var alpha = indexList[i];
+					if (alpha == "")
+					{
+						alpha = "其它";
+					}
+					
+					index += '<a href="javascript:void(0)" onclick="showResidenceAlphaList(this)">' + alpha + '</a> ';
+				}
+				index += '</div>';
+				$('#residences').html(index + total);
+				$(".region-residence").hide();
+				if (indexList.length > 0)
+				{
+					$(".index-" + indexList[0]).show();
+				}
+				
+				markSelectedResidences();
+			}
+			
+			function showResidenceAlphaList(obj)
+			{
+				$(".region-residence").hide();
+				var alpha = $(obj).html();
+				if (alpha == "其它")
+				{
+					alpha = "";
+				}
+				$(".index-" + alpha).show();;
+			}
+			
+			function markSelectedResidences()
+			{
+				$(".region-residence").each(function(){
+					var id = $(this).attr("id");
+					id = id.split("-");
+					id = id[1];
+					if ($("#select-res-" + id).length > 0)
+					{
+						$(this).css("color", "red");
+					}
+					else
+					{
+						$(this).css("color", "black");
+					}
+				});
+			}
+			
+			function addAccountResidence(id, name)
+			{
+				$("#destResidenceId").val(id);
+				$("#destResidenceName").html(name);
+				$("#dlg-move-house").dialog("open");		
+			}
+		
+			function moveToResidence(){
+				var destResidenceId = $("#destResidenceId").val();
+				var houseId = $("#houseId").val(); 
+				$.ajax({
+					type: "post",
+					url: "/ajax/changeResidence.controller",
+					data: {residenceId: destResidenceId, houseId: houseId},
+					dataType: "json",
+					contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+					success: function (data) {
+						alert("迁移成功");
+						location.reload();
+					},
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+					}
+			  	});		
+			}	
 		</script>
 	</body>
 </html>
