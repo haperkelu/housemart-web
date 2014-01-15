@@ -367,11 +367,9 @@
 						for(var i in data.bizData){
 							var pic; 
 							pic =  '<p class="pic" _pId="' + data.bizData[i].id + '" style="float:left;margin:10px 20px 10px 0;">' 
-								+ '<img src="' + data.bizData[i].cloudUrl + '" width="280" height="210" /></br>'
-								/*
+								+ '<img src="' + data.bizData[i].cloudUrl + '" width="280" height="210" class="img-thumbnail" ' + 'data-pic-id="' + data.bizData[i].id + '"'  + '/></br>'
 								+  '<a href="javascript:move(\''  + data.bizData[i].id + '\', \'up\');">上移</a>&nbsp;&nbsp;'
 								+  '<a href="javascript:move(\''  + data.bizData[i].id + '\', \'down\');">下移</a>&nbsp;&nbsp;'
-								*/
 								+  '<a href="javascript:removePic(' + data.bizData[i].id + ')" onclick="return confirm(\'是否将此图片删除?\')">删除此图片</a>'
 								+ '</p>';
 							html += pic;
@@ -403,6 +401,46 @@
 					}
 			  	}); 
 			  	
+			}
+			
+			function move(picId, type){
+				$("#shade").show();
+							
+				var cur = $("img[data-pic-id='"+ picId +"']").parent();
+				var pre = cur.prev();
+				var next = cur.next();
+				
+				if(type == 'up'){
+					$(pre).before(cur);
+				}else{
+					$(cur).before(next);
+				}
+				
+				var sort = "";
+				var houseId = ${(house.id)!};
+				var picElements = cur.parent().find(".img-thumbnail");
+				picElements.each(function(i){
+					var pId = $(this).attr("data-pic-id");
+					sort = sort + pId;
+					if(i < picElements.size() - 1){
+						sort = sort + ","
+					}
+				})
+					
+				$.ajax({
+					type: "get",
+					url: "/addOrUpdateSort.controller",
+					data: {picId: picId, houseId: houseId, sort: sort},
+					dataType: "json",
+					contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+					success: function (data) {
+						$("#shade").hide();
+					},
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						$("#shade").hide();
+						alert("移动图片失败");
+					}
+			  	});
 			}
 			
 			function checkHouseType()
