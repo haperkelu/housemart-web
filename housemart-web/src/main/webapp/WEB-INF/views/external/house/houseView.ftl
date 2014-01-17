@@ -42,7 +42,7 @@
 			            </tr>
 			            <tr>
 			                <td><b>占地面积</b></td>
-			                <td>${(house.propertyArea)!}平米</td>
+			                <td>${(house.occupiedArea)!}平米</td>
 			            </tr>
 			            <#if (house.saleSaleStatus!0) == 1>
 			            <tr>
