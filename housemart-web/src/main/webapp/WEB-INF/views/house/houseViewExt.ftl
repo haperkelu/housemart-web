@@ -77,14 +77,14 @@
 						${(house.propertyArea)!}平米
 					</td>
 				</tr>
+				<#if ((house.occupiedArea!0) > 0)>
 				<tr>
 					<td>
 						占地面积
 					</td>
-					<td>
-						${(house.occupiedArea)!}平米
-					</td>
+					<td>${(house.occupiedArea)!}平米</td>
 				</tr>
+				</#if>
 				<#if (house.saleSaleStatus!0) == 1>
 				<tr>
 					<td>
