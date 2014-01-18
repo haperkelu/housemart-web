@@ -14,9 +14,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections.Transformer;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -41,7 +41,6 @@ import org.housemart.util.JsonUtils;
 import org.housemart.util.PinyinTranslator;
 import org.housemart.web.beans.AjaxResultBean;
 import org.housemart.web.context.HouseMartContext;
-import org.housemart.web.context.SpringContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,8 +49,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
-import bsh.StringUtil;
 
 /**
  * @author pai.li
@@ -117,7 +114,8 @@ public class ResidenceController extends BaseController {
       }
     }
     
-    List<ResidenceEntity> list = null;
+    List<Object> list = null;
+    List<ResidenceEntity> newList = null;
     Map<String,Object> param = new HashMap<String,Object>();
     param.put("residenceName", decodedResidenceName);
     param.put("status", 1);
@@ -158,10 +156,19 @@ public class ResidenceController extends BaseController {
     if (page == null) page = 0;
     if (pageSize == null) pageSize = 20;
 
-    list = (List<ResidenceEntity>) residenceDao.paginate("findResidenceList", page * pageSize, pageSize, param);
+    list = residenceDao.paginate("findResidenceList", page * pageSize, pageSize, param).getResult();
     
-    if (!CollectionUtils.isEmpty(list)) {
-      for (ResidenceEntity item : list) {
+    if(!CollectionUtils.isEmpty(list)){
+        newList = (List<ResidenceEntity>) CollectionUtils.transformedCollection(list, new Transformer() {		
+    		@Override
+    		public Object transform(Object arg0) {
+    			return arg0;
+    		}
+    	});
+    }
+    
+    if (!CollectionUtils.isEmpty(newList)) {
+      for (ResidenceEntity item : newList) {
     	  
         List<GooglePlaceBaseEntity> tempList = googlePlaceDao.select(
             "findSetPositionResidenceById",
@@ -170,7 +177,7 @@ public class ResidenceController extends BaseController {
           GooglePlaceBaseEntity target = tempList.get(0);
           if (!StringUtils.isEmpty(target.getLat())
               && !StringUtils.isEmpty(target.getLng())) {
-            item.setPositionSet(true);
+        	  item.setPositionSet(true);
           }
         }
         
