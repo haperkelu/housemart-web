@@ -158,11 +158,7 @@ public class ResidenceController extends BaseController {
     if (page == null) page = 0;
     if (pageSize == null) pageSize = 20;
 
-    param.put("skip", (page != null && pageSize != null) ? page * pageSize
-        : null);
-    param.put("count", pageSize);
-
-    list = residenceDao.select("findResidenceList", param);
+    list = (List<ResidenceEntity>) residenceDao.paginate("findResidenceList", page * pageSize, pageSize, param);
     
     if (!CollectionUtils.isEmpty(list)) {
       for (ResidenceEntity item : list) {
