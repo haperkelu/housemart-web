@@ -43,8 +43,7 @@ public class ResidenceExportController extends BaseController {
   
   @SuppressWarnings("unchecked")
   @RequestMapping(value = "residenceExport.controller", method = RequestMethod.GET)
-  public ModelAndView residenceList(ModelMap model,
-      @RequestParam String regionId, String plateId) {
+  public ModelAndView residenceList(ModelMap model, @RequestParam String regionId, String plateId) {
     
     List<ResidenceEntity> rlist = null;
     Map<String,Object> param = new HashMap<String,Object>();
@@ -54,8 +53,7 @@ public class ResidenceExportController extends BaseController {
       
       Map<String,Object> paramPlate = new HashMap<String,Object>();
       paramPlate.put("id", plateId);
-      List<RegionEntity> plates = regionDao
-          .select("findRegionById", paramPlate);
+      List<RegionEntity> plates = regionDao.select("findRegionById", paramPlate);
       if (CollectionUtils.isNotEmpty(plates)) {
         model.addAttribute("plateName", plates.get(0).getName());
       }
@@ -65,8 +63,7 @@ public class ResidenceExportController extends BaseController {
       
       Map<String,Object> paramRegion = new HashMap<String,Object>();
       paramRegion.put("id", regionId);
-      List<RegionEntity> regions = regionDao.select("findRegionById",
-          paramRegion);
+      List<RegionEntity> regions = regionDao.select("findRegionById", paramRegion);
       if (CollectionUtils.isNotEmpty(regions)) {
         model.addAttribute("regionName", regions.get(0).getName());
       }
@@ -85,18 +82,22 @@ public class ResidenceExportController extends BaseController {
         residence.put("region", r.getRegionName());
         residence.put("plate", r.getPlateName());
         residence.put("residenceName", r.getResidenceName());
+        residence.put("alias", r.getAliasName());
+        if (StringUtils.isBlank(r.getAliasName())) {
+          residence.put("alias", "");
+        }
+        residence.put("forceShow", 1 == r.getForceShow() ? "是" : "否");
+        residence.put("zombie", 1 == r.getZombie() ? "是" : "否");
         String headCount = "0";
         if (r.getHeadCount() != null) {
-          headCount = RegularHelper.getFirstValue(r.getHeadCount(),
-              RegularHelper.REG_NUMBER);
+          headCount = RegularHelper.getFirstValue(r.getHeadCount(), RegularHelper.REG_NUMBER);
           headCount = StringUtils.isBlank(headCount) ? "0" : headCount;
         }
         residence.put("headCount", headCount);
         
         Map<String,Object> para = new HashMap<String,Object>();
         para.put("residenceId", r.getResidenceId());
-        List<ResidenceMonthDataEntity> monthDatas = residenceMonthDataDao
-            .select("findByResidence", para);
+        List<ResidenceMonthDataEntity> monthDatas = residenceMonthDataDao.select("findByResidence", para);
         
         ResidenceMonthDataEntity monthData = null;
         if (monthDatas != null && monthDatas.size() > 0) {
@@ -106,14 +107,9 @@ public class ResidenceExportController extends BaseController {
         if (monthData != null) {
           residence.put("year", monthData.getYear());
           residence.put("month", monthData.getMonth());
-          residence.put("annualPriceIncrement",
-              monthData.getAnnualPriceIncrement());
-          residence.put("annualTurnoverPercent",
-              monthData.getAnnualTurnoverPercent());
-          residence.put(
-              "annualTurnoverRate",
-              monthData.getAnnualTurnoverRate() != null ? monthData
-                  .getAnnualTurnoverRate() : "");
+          residence.put("annualPriceIncrement", monthData.getAnnualPriceIncrement());
+          residence.put("annualTurnoverPercent", monthData.getAnnualTurnoverPercent());
+          residence.put("annualTurnoverRate", monthData.getAnnualTurnoverRate() != null ? monthData.getAnnualTurnoverRate() : "");
           residence.put("rentRevenue", monthData.getRentRevenue());
           
           residence.put("averagePrice", monthData.getAveragePrice());

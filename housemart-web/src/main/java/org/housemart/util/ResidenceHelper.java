@@ -14,11 +14,9 @@ import org.housemart.dao.entities.ResidenceEntity;
 public class ResidenceHelper {
   
   public static enum EXCEL_COL {
-    ALL("全部"), ID("小区编号"), REGION("小区编号"), PLATE("板块"), NAME("小区名称"), YEAR(
-        "数据年份"), MONTH("数据月份"), ANNUAL_PRICE_INCREMENT("年涨幅"), ANNUAL_TURNOVER_PERCENT(
-        "年换手百分比"), ANNUAL_TURNOVER_RATE("年换手比"), RENT_REVENUE("年租金回报"), AVERAGE_PRICE(
-        "小区均价"), MIN_RENT_PRICE("最低租金"), MAX_RENT_PRICE("最高租金"), HEADCOUNT(
-        "小区户数");
+    ALL("全部"), ID("小区编号"), REGION("行政区"), PLATE("板块"), NAME("小区名称"), ALIAS("小区别名"), FORCESHOW("是否强制显示"), ZOMBIE("是否暗小区"), YEAR("数据年份"), MONTH(
+        "数据月份"), ANNUAL_PRICE_INCREMENT("年涨幅"), ANNUAL_TURNOVER_PERCENT("年换手百分比"), ANNUAL_TURNOVER_RATE("年换手比"), RENT_REVENUE(
+        "年租金回报"), AVERAGE_PRICE("小区均价"), MIN_RENT_PRICE("最低租金"), MAX_RENT_PRICE("最高租金"), HEADCOUNT("小区户数");
     String val;
     
     EXCEL_COL(String val) {
