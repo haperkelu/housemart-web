@@ -1,6 +1,10 @@
-﻿<title>小区列表 </title>
+<title>小区列表 </title>
 <body>
 <br/>
+	<input type="hidden" value="${(totalCount)!0}" id="totalCount"/>
+	<input type="hidden" name="page" value="${(page)!}" id="page"/>
+	<input type="hidden" name="pageSize" value="${(pageSize)!}" id="pageSize"/>
+	
 	<div class="col-sm-3">
 	<label class="col-sm-3 control-label" for="J_positionSet">设置坐标</label>
 	<select id="J_positionSet" name="positionSet" data-original-title="全部" class="form-control">
@@ -67,6 +71,10 @@
 <a href="/editResidence.controller?regionId=${regionId}&plateId=${(plateId)!}" target="_blank">新建此版块的小区</a>
 </div>
 <br/>
+<div>
+	共搜索到<span style="color:red;">${(totalCount)!0}</span>个房源，本页显示<span style="color:red;">${(pageCount)!0}</span>个房源
+</div>
+<br/>
 <table>
 <thead><tr><th>区域</th><th>板块</th><th>小区名称</th><th>栋座数</th><th>单元数</th><th>是否设置地标</th><th>有效图片数量</th><th>是否强制显示</th><th>是否暗小区</th><th>是否锁定基本信息</th><th>是否暗锁定地图</th><th>是否锁定图片</th></tr></thead>
 <tbody>
@@ -88,9 +96,12 @@
 </#list>
 </tbody>
 </table>
+<div id="pagination" class="pagination">
+</div>	
 <script>
 	var currentRegion = <#if regionId?? && regionId != ''>${(regionId)!}<#else>''</#if>;
 	var currentPlate = <#if plateId?? && plateId != ''>${(plateId)!}<#else>''</#if>;
+	var callbackCounter = 0;
 	$(document).ready(function(){		
 		$('#region').change(function(){ 
 			refreshPlateList();
@@ -98,13 +109,37 @@
 		
 		$('#submit').click(function(){
 			$('#residenceName').val(encodeURI(encodeURI($('#maskName').val())));
-			location.href = location.pathname + '?positionSet='  + $("#J_positionSet").find("option:selected").val()+'&forceShow='+ $("#J_forceShow").find("option:selected").val()  +'&zombie=' + $("#J_zombie").find("option:selected").val()  +'&lockBasicInfo='  + $("#J_lockBasicInfo").find("option:selected").val()  +'&lockMap='  + $("#J_lockMap").find("option:selected").val()+'&lockPic='  + $("#J_lockPic").find("option:selected").val()  +'&hasPic='  + $("#J_hasPic").find("option:selected").val()+'&picApprove='  + $("#J_picApprove").find("option:selected").val() +'&regionId='  + $("#region").find("option:selected").val()  +'&plateId=' + $("#plate").find("option:selected").val() + '&residenceName=' + $("#residenceName").val();
+			$("#page").val(0);
+			submit();
 		});
 		
 		$('#export').click(function(){
 			location.href = '/residenceExport.controller?regionId='  + $("#region").find("option:selected").val()  +'&plateId=' + $("#plate").find("option:selected").val();
 		});
+		
+		$("#pagination").pagination(parseInt($("#totalCount").val()), {
+			num_edge_entries: 2,
+			num_display_entries: 4,
+			callback: pageselectCallback,
+			items_per_page:$("#pageSize").val(),
+			current_page:parseInt($("#page").val())
+		});
+		
 	});
+	
+	// funcs
+	function pageselectCallback(page_index, jq){
+		if(callbackCounter>0){
+			$("#page").val(page_index);
+			submit();
+		}
+		callbackCounter++;
+	}
+	
+	function submit() {
+		location.href = location.pathname + '?positionSet='  + $("#J_positionSet").find("option:selected").val()+'&forceShow='+ $("#J_forceShow").find("option:selected").val()  +'&zombie=' + $("#J_zombie").find("option:selected").val()  +'&lockBasicInfo='  + $("#J_lockBasicInfo").find("option:selected").val()  +'&lockMap='  + $("#J_lockMap").find("option:selected").val()+'&lockPic='  + $("#J_lockPic").find("option:selected").val()  +'&hasPic='  + $("#J_hasPic").find("option:selected").val()+'&picApprove='  + $("#J_picApprove").find("option:selected").val() +'&regionId='  + $("#region").find("option:selected").val()  +'&plateId=' + $("#plate").find("option:selected").val() + '&residenceName=' + $("#residenceName").val() +'&page=' + $("#page").val() + '&pageSize=' + $("#pageSize").val();	
+	}
+	
 
 	$.ajax({
 		type: "post",
