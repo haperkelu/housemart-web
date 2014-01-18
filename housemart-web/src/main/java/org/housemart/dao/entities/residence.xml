@@ -61,14 +61,7 @@
 		<result property="codeEnd" column="CodeEnd" />
 	</resultMap>	
 
-	<select id="findResidenceList" resultMap="residence">
-		SELECT rd.ID, rd.RegionID as parentRegionId, rr.RegionID as regionId, rr.Name as regionName, r.Name as plateName, rd.Name as residenceName, rd.AliasName as AliasName,
-		rd.Address, IFNULL(pc.PicCount,0) as PicCount, rd.PinyinName,
-		rd.FirstPinyin, rd.Status, rd.ForceShow, rd.Zombie, rd.LockBasicInfo, rd.LockMap, rd.LockPic, rd.HeadCount
-		FROM residence AS rd
-		JOIN region AS r ON rd.RegionID = r.RegionID
-		JOIN region AS rr ON r.ParentID = rr.RegionID
-		Left JOIN view_residence_pic_count AS pc on pc.ResidenceId=rd.ID
+	<sql id="residenceListWhereClause">
 		<dynamic>
 			<isNotNull property="picApprove">
 		Left JOIN view_residence_pic_under_approve AS appr on appr.ResidenceId=rd.ID
@@ -125,8 +118,29 @@
 			</isEqual>		
 		</dynamic>
 		
-		ORDER BY parentRegionId, regionId, rd.PinyinName ASC
+		ORDER BY parentRegionId, regionId, rd.PinyinName ASC		
+	
+	</sql>
+
+	<select id="findResidenceList" resultMap="residence">
+		SELECT rd.ID, rd.RegionID as parentRegionId, rr.RegionID as regionId, rr.Name as regionName, r.Name as plateName, rd.Name as residenceName, rd.AliasName as AliasName,
+		rd.Address, IFNULL(pc.PicCount,0) as PicCount, rd.PinyinName,
+		rd.FirstPinyin, rd.Status, rd.ForceShow, rd.Zombie, rd.LockBasicInfo, rd.LockMap, rd.LockPic, rd.HeadCount
+		FROM residence AS rd
+		JOIN region AS r ON rd.RegionID = r.RegionID
+		JOIN region AS rr ON r.ParentID = rr.RegionID
+		Left JOIN view_residence_pic_count AS pc on pc.ResidenceId=rd.ID
+		<include refid="residenceListWhereClause" />
 	</select>
+	
+	<select id="countResidenceList" resultClass="int" parameterClass="map">
+		SELECT count(1)
+		FROM residence AS rd
+		JOIN region AS r ON rd.RegionID = r.RegionID
+		JOIN region AS rr ON r.ParentID = rr.RegionID
+		Left JOIN view_residence_pic_count AS pc on pc.ResidenceId=rd.ID
+		<include refid="residenceListWhereClause" />
+	</select>	
 		
 	<select id="loadResidence" resultMap="residenceDetail" parameterClass="uniqueObject">
 		SELECT rd.ID, rd.RegionID as regionId, rr.RegionID as parentRegionId, rr.Name as regionName, r.Name as plateName, rd.Name as residenceName, rd.AliasName as AliasName,
