@@ -116,9 +116,7 @@
 			<isEqual property="picApprove" compareValue="0">
 	           AND IFNULL(appr.PicCount,0) = 0 
 			</isEqual>		
-		</dynamic>
-		
-		ORDER BY parentRegionId, regionId, rd.PinyinName ASC		
+		</dynamic>	
 	
 	</sql>
 
@@ -131,6 +129,7 @@
 		JOIN region AS rr ON r.ParentID = rr.RegionID
 		Left JOIN view_residence_pic_count AS pc on pc.ResidenceId=rd.ID
 		<include refid="residenceListWhereClause" />
+		ORDER BY parentRegionId, regionId, rd.PinyinName ASC			
 	</select>
 	
 	<select id="countResidenceList" resultClass="int" parameterClass="map">
