@@ -72,7 +72,7 @@
 </div>
 <br/>
 <div>
-	共搜索到<span style="color:red;">${(totalCount)!0}</span>个房源，本页显示<span style="color:red;">${(pageCount)!0}</span>个房源
+	共搜索到<span style="color:red;">${(totalCount)!0}</span>个房源，本页显示<span style="color:red;">${(pageCount)!0}</span>个小区
 </div>
 <br/>
 <table>

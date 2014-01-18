@@ -155,7 +155,7 @@ public class ResidenceController extends BaseController {
     
     // for pagination query
     if (page == null) page = 0;
-    if (pageSize == null) pageSize = 20;
+    if (pageSize == null) pageSize = 100;
 
     list = residenceDao.paginate("findResidenceList", page, pageSize, param).getResult();
 
