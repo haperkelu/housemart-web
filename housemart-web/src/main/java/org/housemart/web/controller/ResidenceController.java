@@ -212,7 +212,7 @@ public class ResidenceController extends BaseController {
     model.addAttribute("lockBasicInfo", lockBasicInfo);
     model.addAttribute("lockMap", lockMap);
     model.addAttribute("lockPic", lockPic);
-    model.addAttribute("list", list);
+    model.addAttribute("list", newList);
     model.addAttribute("regionId", regionId);
     model.addAttribute("plateId", plateId);
     model.addAttribute("residenceName", decodedResidenceName);
@@ -221,7 +221,7 @@ public class ResidenceController extends BaseController {
     model.addAttribute("page", page);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("totalCount", totalCount);
-    model.addAttribute("pageCount", list == null ? 0 : list.size());
+    model.addAttribute("pageCount", newList == null ? 0 : newList.size());
     return "residence/residenceList";
   }
   
