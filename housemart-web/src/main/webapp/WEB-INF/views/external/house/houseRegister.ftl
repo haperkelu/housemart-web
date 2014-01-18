@@ -147,7 +147,11 @@
 							${(house.occupiedArea)!}平米
 							<input type="hidden" name="occupiedArea" value="${(house.occupiedArea)!}" id="J_cover">
 							<#else>
+							<#if ((house.occupiedArea!0) > 0)>
 							<input type="input" name="occupiedArea" value="${(house.occupiedArea)!}" class="form-control" id="J_cover" placeholder="占地面积">
+							<#else>
+							<input type="input" name="occupiedArea" value="" class="form-control" id="J_cover" placeholder="占地面积">
+							</#if>
 		                    <i data-original-title="面积必须为数字" class="input-group-addon">平米</i>
 							</#if>  
 		                </div>	
