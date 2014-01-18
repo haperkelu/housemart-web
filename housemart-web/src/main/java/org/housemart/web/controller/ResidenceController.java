@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
@@ -157,14 +158,14 @@ public class ResidenceController extends BaseController {
     if (pageSize == null) pageSize = 20;
 
     list = residenceDao.paginate("findResidenceList", page * pageSize, pageSize, param).getResult();
-    
+
     if(!CollectionUtils.isEmpty(list)){
-        newList = (List<ResidenceEntity>) CollectionUtils.transformedCollection(list, new Transformer() {		
-    		@Override
-    		public Object transform(Object arg0) {
-    			return arg0;
-    		}
-    	});
+    	newList = new ArrayList<ResidenceEntity>();
+    	Iterator<Object> iterator = list.iterator();
+    	while(iterator.hasNext()){
+    		newList.add((ResidenceEntity)iterator.next());
+    		iterator.remove();
+    	}
     }
     
     if (!CollectionUtils.isEmpty(newList)) {
