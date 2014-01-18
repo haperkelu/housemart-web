@@ -90,7 +90,7 @@ public class ResidenceController extends BaseController {
   @SuppressWarnings("rawtypes")
   GenericDao residenceNameHistoryDao;
   
-  @Autowired
+ @Autowired
   ResidencePrivilegeService residencePrivilegeService;
   
   @Autowired
@@ -104,10 +104,9 @@ public class ResidenceController extends BaseController {
    */
   @SuppressWarnings("unchecked")
   @RequestMapping(value = "residenceList.controller", method = RequestMethod.GET)
-  public String residenceList(Model model, final String positionSet,
-      String forceShow, String zombie, String lockBasicInfo, String lockMap,
-      String lockPic, final String hasPic, final String picApprove,
-      String regionId, String plateId, String residenceName) {
+  public String residenceList(Model model, final String positionSet, String forceShow, String zombie, 
+		 String lockBasicInfo, String lockMap, String lockPic, final String hasPic, final String picApprove, String regionId, String plateId,
+		 String residenceName, Integer page, Integer pageSize) {
     
     String decodedResidenceName = null;
     if (residenceName != null) {
@@ -129,34 +128,45 @@ public class ResidenceController extends BaseController {
       param.put("regionId", regionId);
     }
     if (!StringUtils.isEmpty(positionSet)) {
-      param.put("positionSet", positionSet);
-    }
+        param.put("positionSet", positionSet);
+      }
     if (!StringUtils.isEmpty(forceShow)) {
-      param.put("forceShow", forceShow);
-    }
+        param.put("forceShow", forceShow);
+      }
     if (!StringUtils.isEmpty(zombie)) {
-      param.put("zombie", zombie);
-    }
+        param.put("zombie", zombie);
+      }
     if (!StringUtils.isEmpty(lockBasicInfo)) {
-      param.put("lockBasicInfo", lockBasicInfo);
-    }
+        param.put("lockBasicInfo", lockBasicInfo);
+      }
     if (!StringUtils.isEmpty(lockMap)) {
-      param.put("lockMap", lockMap);
-    }
+        param.put("lockMap", lockMap);
+      }
     if (!StringUtils.isEmpty(lockPic)) {
-      param.put("lockPic", lockPic);
-    }
+        param.put("lockPic", lockPic);
+      }    
     if (!StringUtils.isEmpty(hasPic)) {
-      param.put("hasPic", hasPic);
-    }
+        param.put("hasPic", hasPic);
+      }
     if (!StringUtils.isEmpty(picApprove)) {
-      param.put("picApprove", picApprove);
-    }
+        param.put("picApprove", picApprove);
+      }
+
+    Integer totalCount = residenceDao.count("countResidenceList", param);
+    
+    // for pagination query
+    if (page == null) page = 0;
+    if (pageSize == null) pageSize = 20;
+
+    param.put("skip", (page != null && pageSize != null) ? page * pageSize
+        : null);
+    param.put("count", pageSize);
+
     list = residenceDao.select("findResidenceList", param);
     
     if (!CollectionUtils.isEmpty(list)) {
       for (ResidenceEntity item : list) {
-        
+    	  
         List<GooglePlaceBaseEntity> tempList = googlePlaceDao.select(
             "findSetPositionResidenceById",
             new UniqueIdObject(item.getResidenceId()));
@@ -169,39 +179,27 @@ public class ResidenceController extends BaseController {
         }
         
         searchService.populateResidenceData(item);
-        
+       
       }
-      CollectionUtils.filter(list, new Predicate() {
-        
-        @Override
-        public boolean evaluate(Object item) {
-          ResidenceEntity obj = (ResidenceEntity) item;
-          if (!StringUtils.isEmpty(positionSet)
-              && StringUtils.equals(positionSet, "1") && !obj.isPositionSet()) {
-            return false;
-          }
-          if (!StringUtils.isEmpty(positionSet)
-              && StringUtils.equals(positionSet, "0") && obj.isPositionSet()) {
-            return false;
-          }
-          
-          // if (!StringUtils.isEmpty(hasPic) && StringUtils.equals(hasPic, "0")
-          // && obj.getPicCount() > 0) {return false;}
-          // else if (!StringUtils.isEmpty(hasPic) && StringUtils.equals(hasPic,
-          // "1") && obj.getPicCount() == 0) {return false;}
-          
-          // if (!StringUtils.isEmpty(picApprove) &&
-          // StringUtils.equals(picApprove, "0") && obj.getPicApprove() > 0)
-          // {return false;}
-          // else if (!StringUtils.isEmpty(picApprove) &&
-          // StringUtils.equals(picApprove, "1") && obj.getPicApprove() == 0)
-          // {return false;}
-          
-          return true;
-        }
-        
-      });
-      
+      CollectionUtils.filter(list, new Predicate(){
+
+		@Override
+		public boolean evaluate(Object item) {
+			ResidenceEntity obj = (ResidenceEntity)item;
+	      	if (!StringUtils.isEmpty(positionSet) && StringUtils.equals(positionSet, "1") && !obj.isPositionSet()) {return false;}
+	      	if (!StringUtils.isEmpty(positionSet) && StringUtils.equals(positionSet, "0")&&obj.isPositionSet()) {return false;}
+	      	
+	      	//if (!StringUtils.isEmpty(hasPic) && StringUtils.equals(hasPic, "0") && obj.getPicCount() > 0) {return false;}
+	      	//else if (!StringUtils.isEmpty(hasPic) && StringUtils.equals(hasPic, "1") && obj.getPicCount() == 0) {return false;}
+
+	      	//if (!StringUtils.isEmpty(picApprove) && StringUtils.equals(picApprove, "0") && obj.getPicApprove() > 0) {return false;}
+	      	//else if (!StringUtils.isEmpty(picApprove) && StringUtils.equals(picApprove, "1") && obj.getPicApprove() == 0) {return false;}
+
+	      	return true;
+		}
+
+      	});
+ 
     }
     
     model.addAttribute("positionSet", positionSet);
@@ -216,6 +214,10 @@ public class ResidenceController extends BaseController {
     model.addAttribute("residenceName", decodedResidenceName);
     model.addAttribute("hasPic", hasPic);
     model.addAttribute("picApprove", picApprove);
+    model.addAttribute("page", page);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("totalCount", totalCount);
+    model.addAttribute("pageCount", list == null ? 0 : list.size());
     return "residence/residenceList";
   }
   
@@ -390,27 +392,27 @@ public class ResidenceController extends BaseController {
     return new ModelAndView("jsonView", "json", result);
     
   }
-  
+
   @RequestMapping(value = "ajax/getNameHistory.controller")
   public ModelAndView getNameHistory(
       @RequestParam("residenceId") int residenceId,
       @RequestParam("nameType") int nameType) {
-    Map<String,Object> param = new HashMap<String,Object>();
-    param.put("residenceId", residenceId);
-    param.put("type", nameType);
-    
-    @SuppressWarnings("unchecked")
-    List<ResidenceNameHistoryEntity> list = residenceNameHistoryDao.select(
-        "findResidenceNameHistoryList", param);
-    // for (ResidenceNameHistoryEntity item : list) {
-    // item.datetime
-    // }
-    
-    AjaxResultBean result = new AjaxResultBean();
-    result.setBizData(list);
+	Map<String,Object> param = new HashMap<String,Object>();
+	param.put("residenceId", residenceId);
+	param.put("type", nameType);
+	    
+	@SuppressWarnings("unchecked")
+	List<ResidenceNameHistoryEntity> list = residenceNameHistoryDao.select("findResidenceNameHistoryList", param);
+    //for (ResidenceNameHistoryEntity item : list) {
+    //	item.datetime
+    //}
+
+	AjaxResultBean result = new AjaxResultBean();
+	result.setBizData(list);
     return new ModelAndView("jsonView", "json", result);
     
   }
+
   
   /**
    * 
@@ -1015,60 +1017,60 @@ public class ResidenceController extends BaseController {
       Map<String,Object[]> map = new HashMap<String,Object[]>();
       
       if (residence.getResidenceName() != null
-          && !StringUtils.equals(residencePre.getResidenceName(),
-              residence.getResidenceName())) {
-        
-        // check exist
-        Map<String,Object> param = new HashMap<String,Object>();
-        param.put("residenceNameEqual", residence.getResidenceName().trim());
-        List<ResidenceEntity> exists = residenceDao.select("findResidenceList",
-            param);
-        if (CollectionUtils.isNotEmpty(exists)) {
-          
-          Map<String,Object> param2 = new HashMap<String,Object>();
-          param2.put("residenceId", residenceId);
-          List<ResidenceMonthDataEntity> monthDatas2 = residenceMonthDataDao
-              .select("findByResidence", param2);
-          ResidenceMonthDataEntity monthData2 = new ResidenceMonthDataEntity();
-          if (monthDatas2 != null && monthDatas2.size() > 0) {
-            monthData2 = monthDatas2.get(0);
+              && !StringUtils.equals(residencePre.getResidenceName(),
+                  residence.getResidenceName())) {
+    	  
+          // check exist
+          Map<String,Object> param = new HashMap<String,Object>();
+          param.put("residenceNameEqual", residence.getResidenceName().trim());
+          List<ResidenceEntity> exists = residenceDao.select("findResidenceList",
+              param);
+          if (CollectionUtils.isNotEmpty(exists)) {
+
+            Map<String,Object> param2 = new HashMap<String,Object>();
+            param2.put("residenceId", residenceId);
+            List<ResidenceMonthDataEntity> monthDatas2 = residenceMonthDataDao.select(
+                "findByResidence", param2);
+            ResidenceMonthDataEntity monthData2 = new ResidenceMonthDataEntity();
+            if (monthDatas2 != null && monthDatas2.size() > 0) {
+              monthData2 = monthDatas2.get(0);
+            }
+            
+            model.addAttribute("entity", residence);
+            model.addAttribute("plateId", plateId);
+            model.addAttribute("regionId", regionId);
+            model.addAttribute("monthData", monthData2);
+
+            
+            HouseMartContext.setSysMsg("小区已存在");
+            return new ModelAndView("/residence/residenceDetailForEdit");
           }
-          
-          model.addAttribute("entity", residence);
-          model.addAttribute("plateId", plateId);
-          model.addAttribute("regionId", regionId);
-          model.addAttribute("monthData", monthData2);
-          
-          HouseMartContext.setSysMsg("小区已存在");
-          return new ModelAndView("/residence/residenceDetailForEdit");
-        }
-        
-        map.put(ResidenceAuditContentKeys.RESIDENCENAME, new Object[] {
-            residencePre.getResidenceName(), residence.getResidenceName()});
+    	  
+          map.put(ResidenceAuditContentKeys.RESIDENCENAME,
+                new Object[] {residencePre.getResidenceName(), residence.getResidenceName()});
       }
-      
+
       if (residence.getAliasName() != null) {
-        String[] names = StringUtils.split(
-            StringUtils.replace(residence.getAliasName(), "，", ","), ',');
-        for (int i = 0; i < names.length; i++) {
-          names[i] = StringUtils.trim(names[i]);
-        }
-        residence.setAliasName(StringUtils.join(names, ','));
-        
-        if (!StringUtils.equals(residencePre.getAliasName(),
-            residence.getAliasName())) {
-          map.put(ResidenceAuditContentKeys.ALIASNAME, new Object[] {
-              residencePre.getAliasName(), residence.getAliasName()});
-        }
+    	  String[] names = StringUtils.split(StringUtils.replace(residence.getAliasName(),"，", ","), ',');
+    	  for (int i = 0; i < names.length; i++) {
+    		  names[i] = StringUtils.trim(names[i]);
+    	  }
+    	  residence.setAliasName(StringUtils.join(names, ','));
+    	  
+          if (!StringUtils.equals(residencePre.getAliasName(),
+                      residence.getAliasName())) {
+                map.put(ResidenceAuditContentKeys.ALIASNAME,
+                    new Object[] {residencePre.getAliasName(), residence.getAliasName()});
+              }
       }
-      
+
       if (residence.getRegionId() != null
-          && !StringUtils.equals(residencePre.getRegionId(),
-              residence.getRegionId())) {
-        map.put(ResidenceAuditContentKeys.REGIONID,
-            new Object[] {residencePre.getRegionId(), residence.getRegionId()});
-      }
-      
+              && !StringUtils.equals(residencePre.getRegionId(),
+                  residence.getRegionId())) {
+            map.put(ResidenceAuditContentKeys.REGIONID,
+                new Object[] {residencePre.getRegionId(), residence.getRegionId()});
+          }
+
       if (residence.getAddress() != null
           && !StringUtils.equals(residencePre.getAddress(),
               residence.getAddress())) {
@@ -1176,57 +1178,52 @@ public class ResidenceController extends BaseController {
         
         if (hasPower == PriviledgeResultType.Direct.getValue()) {
           
-          // Add name change history
+           // Add name change history
           if (residence.getResidenceName() != null
-              && !StringUtils.equals(residencePre.getResidenceName(),
-                  residence.getResidenceName())) {
-            ResidenceNameHistoryEntity nameHistoryEntity = new ResidenceNameHistoryEntity();
-            nameHistoryEntity.setResidenceId(residenceId);
-            
-            String decodedResidenceName = null;
-            try {
-              decodedResidenceName = URLDecoder.decode(residencePre
-                  .getResidenceName().trim(), "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-              logger.error(e.getMessage(), e);
-            }
-            
-            nameHistoryEntity.setOldName(decodedResidenceName);
-            nameHistoryEntity.setAddTime(new Date());
-            nameHistoryEntity.setAccountId(HouseMartContext.getCurrentUserId());
-            // type=1 means residencenamehistory
-            nameHistoryEntity.setType(1);
-            residenceNameHistoryDao.add("addResidenceNameHistory",
-                nameHistoryEntity);
+                  && !StringUtils.equals(residencePre.getResidenceName(),
+                      residence.getResidenceName())) {
+        	  ResidenceNameHistoryEntity nameHistoryEntity=new ResidenceNameHistoryEntity();
+        	  nameHistoryEntity.setResidenceId(residenceId);
+        	  
+        	  String decodedResidenceName = null;
+        	  try {
+        		  decodedResidenceName = URLDecoder.decode(residencePre.getResidenceName().trim(), "UTF-8");
+        	      } catch (UnsupportedEncodingException e) {
+        	        logger.error(e.getMessage(), e);
+        	      }
+ 
+        	  nameHistoryEntity.setOldName(decodedResidenceName);
+        	  nameHistoryEntity.setAddTime(new Date());
+        	  nameHistoryEntity.setAccountId(HouseMartContext.getCurrentUserId());
+        	  //type=1 means residencenamehistory
+        	  nameHistoryEntity.setType(1);
+              residenceNameHistoryDao.add("addResidenceNameHistory", nameHistoryEntity);
           }
-          
+
           // Add aliasName change history
-          if (residence.getAliasName() != null
-              && residencePre.getAliasName() != null
-              && !StringUtils.equals(residencePre.getAliasName(),
-                  residence.getAliasName())) {
-            ResidenceNameHistoryEntity nameHistoryEntity = new ResidenceNameHistoryEntity();
-            nameHistoryEntity.setResidenceId(residenceId);
-            
-            String decodedAliasName = null;
-            try {
-              decodedAliasName = URLDecoder.decode(residencePre.getAliasName()
-                  .trim(), "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-              logger.error(e.getMessage(), e);
-            }
-            
-            nameHistoryEntity.setOldName(decodedAliasName);
-            nameHistoryEntity.setAddTime(new Date());
-            nameHistoryEntity.setAccountId(HouseMartContext.getCurrentUserId());
-            // type=2 means aliasnamehistory
-            nameHistoryEntity.setType(2);
-            residenceNameHistoryDao.add("addResidenceNameHistory",
-                nameHistoryEntity);
-          }
-          
-          auditService.approveResidenceStatusAndContent(residenceId, id);
-        }
+         if (residence.getAliasName() != null && residencePre.getAliasName() != null
+                 && !StringUtils.equals(residencePre.getAliasName(),
+                     residence.getAliasName())) {
+       	  ResidenceNameHistoryEntity nameHistoryEntity=new ResidenceNameHistoryEntity();
+       	  nameHistoryEntity.setResidenceId(residenceId);
+       	  
+       	  String decodedAliasName = null;
+       	  try {
+       		decodedAliasName = URLDecoder.decode(residencePre.getAliasName().trim(), "UTF-8");
+       	      } catch (UnsupportedEncodingException e) {
+       	        logger.error(e.getMessage(), e);
+       	      }
+
+	       	  nameHistoryEntity.setOldName(decodedAliasName);
+	       	  nameHistoryEntity.setAddTime(new Date());
+	       	  nameHistoryEntity.setAccountId(HouseMartContext.getCurrentUserId());
+        	  //type=2 means aliasnamehistory
+	       	  nameHistoryEntity.setType(2);
+	       	  residenceNameHistoryDao.add("addResidenceNameHistory", nameHistoryEntity);
+         }
+
+         auditService.approveResidenceStatusAndContent(residenceId, id);
+       }
       }
       HouseMartContext.setSysMsg("保存成功，等待审核");
     } else {
@@ -1260,7 +1257,7 @@ public class ResidenceController extends BaseController {
       monthData.setAnnualPriceIncrement(residence.getAnnualPriceIncrement());
       monthData.setAnnualTurnoverPercent(residence.getAnnualTurnoverPercent());
       monthData.setRentRevenue(residence.getRentRevenue());
-      monthData.setMonth(c.get(Calendar.MONTH) + 1);
+      monthData.setMonth(c.get(Calendar.MONTH));
       monthData.setYear(c.get(Calendar.YEAR));
       monthData.setAddTime(new Date());
       monthData.setUpdateTime(new Date());
