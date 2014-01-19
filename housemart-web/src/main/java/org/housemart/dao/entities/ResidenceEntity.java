@@ -43,6 +43,16 @@ public class ResidenceEntity implements Entity {
  
   protected int updateAuditPendingCount = 0;
  
+  protected int year;
+  protected int month;
+  protected double annualPriceInc;
+  protected double avgPrice;
+  protected double annualTurnover;
+  protected double annualRentRevenue;
+  
+  private int onSaleCount;
+  private int onRentCount;
+  
   public static enum StatusEnum {
     Default(0), Valid(1), Invalid(2);
     public Integer value;
@@ -352,5 +362,70 @@ public String getAliasName() {
 public void setAliasName(String aliasName) {
 	this.aliasName = aliasName;
 }
- 
+
+public double getAnnualPriceInc() {
+  return annualPriceInc;
+}
+
+public void setAnnualPriceInc(double annualInc) {
+  this.annualPriceInc = annualInc;
+}
+
+public double getAvgPrice() {
+  return avgPrice;
+}
+
+public void setAvgPrice(double avgPrice) {
+  this.avgPrice = avgPrice;
+}
+
+public double getAnnualTurnover() {
+  return annualTurnover;
+}
+
+public void setAnnualTurnover(double annualTurnover) {
+  this.annualTurnover = annualTurnover;
+}
+
+public double getAnnualRentRevenue() {
+  return annualRentRevenue;
+}
+
+public void setAnnualRentRevenue(double annualRentRevenue) {
+  this.annualRentRevenue = annualRentRevenue;
+}
+
+public int getYear() {
+  return year;
+}
+
+public void setYear(int year) {
+  this.year = year;
+}
+
+public int getMonth() {
+  return month;
+}
+
+public void setMonth(int month) {
+  this.month = month;
+}
+
+public int getOnSaleCount() {
+  return onSaleCount;
+}
+
+public void setOnSaleCount(int onSaleCount) {
+  this.onSaleCount = onSaleCount;
+}
+
+public int getOnRentCount() {
+  return onRentCount;
+}
+
+public void setOnRentCount(int onRentCount) {
+  this.onRentCount = onRentCount;
+}
+
+
 }

@@ -15,9 +15,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
-import org.apache.commons.collections.Transformer;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -26,9 +26,9 @@ import org.housemart.dao.entities.GooglePlaceBaseEntity;
 import org.housemart.dao.entities.ResidenceBuildingEntity;
 import org.housemart.dao.entities.ResidenceCellEntity;
 import org.housemart.dao.entities.ResidenceEntity;
-import org.housemart.dao.entities.ResidenceNameHistoryEntity;
 import org.housemart.dao.entities.ResidenceExtEntity;
 import org.housemart.dao.entities.ResidenceMonthDataEntity;
+import org.housemart.dao.entities.ResidenceNameHistoryEntity;
 import org.housemart.framework.dao.generic.GenericDao;
 import org.housemart.framework.dao.generic.UniqueIdObject;
 import org.housemart.resource.ResourceProvider;
@@ -204,6 +204,25 @@ public class ResidenceController extends BaseController {
 
       	});
  
+      
+      for (ResidenceEntity r : newList) {
+        Map<String,Object> para = new HashMap<String,Object>();
+        para.put("residenceId", r.getResidenceId());
+        List<ResidenceMonthDataEntity> monthDatas = residenceMonthDataDao.select("findByResidence", para);
+        
+        ResidenceMonthDataEntity monthData = null;
+        if (monthDatas != null && monthDatas.size() > 0) {
+          monthData = monthDatas.get(0);
+          r.setYear(monthData.getYear());
+          r.setMonth(monthData.getMonth());
+          r.setAnnualPriceInc(monthData.getAnnualPriceIncrement());
+          r.setAnnualRentRevenue(monthData.getRentRevenue());
+          r.setAnnualTurnover(monthData.getAnnualTurnoverPercent());
+          r.setAvgPrice(monthData.getAveragePrice());
+        }
+        
+      }
+      
     }
     
     model.addAttribute("positionSet", positionSet);

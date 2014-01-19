@@ -2,6 +2,13 @@
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap namespace="ResidenceEntity">
 
+	<sql id="allValideHouses">
+		SELECT B_H.ID,B_H.ResidenceID, B_H.PropertyArea from basedata.house B_H 
+		INNER JOIN house_interaction V_HI ON V_HI.houseid = B_H.id AND V_HI.status > 0
+		INNER JOIN admin.account V_A ON V_HI.agentid = V_A.id AND V_A.status = 1
+		WHERE B_H.status = 1 AND <![CDATA[ V_HI.StartDate <= now() AND V_HI.EndDate >= now() ]]> 
+	</sql>
+		
 	<resultMap id="residence" class="org.housemart.dao.entities.ResidenceExtEntity">
 		<result property="residenceId" column="ID" />
 		<result property="regionId" column="regionId" />
@@ -21,6 +28,8 @@
 		<result property="lockPic" column="LockPic" />		
 		<result property="status" column="Status" />
 		<result property="headCount" column="HeadCount" />
+		<result property="onSaleCount" column="OnSaleCount" />
+		<result property="onRentCount" column="OnRentCount" />
 	</resultMap>
 	
 	<resultMap id="residenceDetail" class="org.housemart.dao.entities.ResidenceExtEntity">
@@ -123,7 +132,11 @@
 	<select id="findResidenceList" resultMap="residence">
 		SELECT rd.ID, rd.RegionID as parentRegionId, rr.RegionID as regionId, rr.Name as regionName, r.Name as plateName, rd.Name as residenceName, rd.AliasName as AliasName,
 		rd.Address, IFNULL(pc.PicCount,0) as PicCount, rd.PinyinName,
-		rd.FirstPinyin, rd.Status, rd.ForceShow, rd.Zombie, rd.LockBasicInfo, rd.LockMap, rd.LockPic, rd.HeadCount
+		rd.FirstPinyin, rd.Status, rd.ForceShow, rd.Zombie, rd.LockBasicInfo, rd.LockMap, rd.LockPic, rd.HeadCount,
+		(SELECT count(Distinct HouseID) FROM basedata.house_sale S LEFT JOIN ( <include refid="allValideHouses"/> ) H ON H.ID = S.HouseID
+			WHERE rd.ID = H.ResidenceID AND S.SaleStatus = 1) OnSaleCount,
+		(SELECT count(Distinct HouseID) FROM basedata.house_rent R LEFT JOIN ( <include refid="allValideHouses"/> ) H ON H.ID = R.HouseID
+			WHERE rd.ID = H.ResidenceID AND R.RentStatus = 1) OnRentCount
 		FROM residence AS rd
 		JOIN region AS r ON rd.RegionID = r.RegionID
 		JOIN region AS rr ON r.ParentID = rr.RegionID
@@ -253,5 +266,6 @@
 	<update id="updateStatus" parameterClass="map">
 		UPDATE residence SET Status = #status#
 		WHERE ID = #id#; 	
-	</update>		
+	</update>
+	
 </sqlMap>
