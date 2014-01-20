@@ -34,9 +34,6 @@
 					<input type="submit" value="上传"/>
 	          	</div>
 	          	
-	          	<div class="hint" style="margin:10px 0;">
-	          	* 请至少上传两张房源照片，否则无法通过审核
-	          	</div>
 	          	
 			</form>
 		</div>
@@ -221,7 +218,7 @@
 				var baseUploadifyOpts = {
 			    	swf : '/resources/javascript/uploadify/uploadify.swf',
 			        uploader : "/multiPicUpload.controller",
-			        postData : {'residenceId' : residenceId, 'picType' : picType},
+			        postData : {'residenceId' : residenceId, 'picType' : picType, 'user_cookie' : $.cookie('user')},
 			        cancelImage : '/resources/javascript/uploadify/cancel.png',
 			        checkExisting : false,
 			        fileObjName:'imageFile', //和以下input的name属性一致   

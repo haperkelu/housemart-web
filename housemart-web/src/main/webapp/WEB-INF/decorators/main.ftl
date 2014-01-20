@@ -107,6 +107,7 @@
 		<script type="text/javascript" src="/resources/javascript/jquery.metadata.js"></script>
 		<script type="text/javascript" src="/resources/javascript/jquery.validate.js"></script>
 		<script type="text/javascript" src="/resources/javascript/jquery.validate.functions.js"></script>
+		<script type="text/javascript" src="/resources/javascript/jquery.cookie.js"></script>
 		
 		<script>
 			var isEmpty = function(str){
