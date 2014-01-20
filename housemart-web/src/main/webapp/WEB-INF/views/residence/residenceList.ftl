@@ -96,9 +96,9 @@
 		<td>${item.onRentCount}</td>
 		<td>${item.year}/${item.month}</td>
 		<td>${item.avgPrice}</td>
-		<td>${item.annualPriceInc}</td>
-		<td>${item.annualTurnover}</td>
-		<td>${item.annualRentRevenue}</td>
+		<td>${item.annualPriceInc?string("0.####")}</td>
+		<td>${item.annualTurnover?string("0.####")}</td>
+		<td>${item.annualRentRevenue?string("0.####")}</td>
 	</tr>
 </#list>
 </tbody>
