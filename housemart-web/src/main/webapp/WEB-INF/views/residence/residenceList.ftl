@@ -78,6 +78,7 @@
 <table>
 <thead><tr><th>区域</th><th>板块</th><th>小区名称</th><th>栋座数</th><th>单元数</th><th>是否设置地标</th><th>有效图片数量</th><th>是否强制显示</th><th>是否暗小区</th><th>是否锁定基本信息</th><th>是否暗锁定地图</th><th>是否锁定图片</th><th>在售数量</th><th>在租数量</th><th>数据年月</th><th>小区均价</th><th>年涨幅</th><th>年换手率</th><th>租金回报率</th></tr></thead>
 <tbody>
+<#if list??>
 <#list list as item> 
 	<tr>
 		<td>${item.regionName}</td>
@@ -101,6 +102,7 @@
 		<td>${item.annualRentRevenue?string("0.####")}</td>
 	</tr>
 </#list>
+</#if>
 </tbody>
 </table>
 <div id="pagination" class="pagination">
