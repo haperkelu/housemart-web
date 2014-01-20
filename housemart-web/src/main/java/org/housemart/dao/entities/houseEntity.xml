@@ -568,7 +568,7 @@
 		LEFT JOIN house_sold_building AS SB ON H.ID = SB.HouseID
 		LEFT JOIN  DumpData.Sheet1  AS DUMP_S1 ON DUMP_S1.HouseID = H.ID
 		LEFT JOIN admin.account AS A ON A.ID = H.Creator
-		LEFT JOIN (SELECT * FROM house_audit_history AS hah1 WHERE Result = 1 AND Type = 1 AND UpdateTime = (SELECT MAX(UpdateTime) FROM house_audit_history WHERE HouseID = hah1.HouseID AND Result = 1 AND Type = 1 )) AS HAH ON H.ID = HAH.HouseID
+		LEFT JOIN (SELECT * FROM house_audit_history AS hah1 WHERE Result = 1 AND Type = 1 AND UpdateTime = (SELECT MAX(UpdateTime) FROM house_audit_history WHERE HouseID = hah1.HouseID AND Result = 1 AND Type = 1 ) limit 1) AS HAH ON H.ID = HAH.HouseID
 		<include refid="houseWhereClause" />
 		<include refid="common.orderBy" />
 		<include refid="common.limit" />
