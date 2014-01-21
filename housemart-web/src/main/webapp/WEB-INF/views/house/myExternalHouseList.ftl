@@ -126,11 +126,9 @@
 							<td>
 								<#if ((house.clientType!1) == 2) >
 								IOS
-								</#if>
-								<#if ((house.clientType!1) == 3) >
+								<#elseif ((house.clientType!1) == 3) >
 								Android
-								</#if>
-								<#if ((house.clientType!1) == 1) >
+								<#else >
 								网页
 								</#if>
 							</td>
