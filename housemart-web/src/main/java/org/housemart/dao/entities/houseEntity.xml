@@ -368,6 +368,7 @@
 		<result property="detailName" column="DetailName" />
 		<result property="auditTime" column="AuditTime" />
 		<result property="blockUnit" column="BlockUnit" />
+		<result property="clientType" column="clientType" />
 	</resultMap>
 	
 	<resultMap id="houseExt" class="org.housemart.dao.entities.HouseExtEntity">
@@ -540,7 +541,7 @@
 	<select id="findHouseExtAgileList" resultMap="houseExtAgile" parameterClass="map">
 		SELECT H.ID, H.Name, H.Status, H.ResidenceID, H.CellID, H.Direction, H.PropertyArea,
 		H.OccupiedArea, H.HouseType, H.RoomType, H.Decorating, H.Floor, H.HasKey, H.HasKeyMemo, H.ViewHouseType, H.Memo,
-		H.SourceType, H.BuildingNo, H.CellNo, H.DetailName, H.Creator Creator, H.BlockUnit,
+		H.SourceType, H.BuildingNo, H.CellNo, H.DetailName, H.Creator Creator, H.BlockUnit, H.ClientType,
 		R.Price RentPrice, R.RentStatus RentRentStatus, 
 		S.Price SalePrice, S.SaleStatus SaleSaleStatus, 
 		RES.Name ResidenceName, 

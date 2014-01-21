@@ -83,6 +83,7 @@
 						<th>楼层</th>
 						<th>朝向</th><th>房型</th><th>面积</th><th>售价</th><th>租价</th><th>单价</th>
 						<th>钥匙</th><th>归属人</th>
+						<th>登盘来源</th>
 					</tr>
 					<#if houseList??>
 						<#list houseList as house> 
@@ -122,6 +123,17 @@
 							<td>${(house.salePrice)!}</td>
 							<td><#if house.hasKey??><@spring.message "house.house.hasKey.${house.hasKey}"/></#if></td>
 							<td>${(house.creatorName)!}</td>
+							<td>
+								<#if ((house.clientType!1) == 2) >
+								IOS
+								</#if>
+								<#if ((house.clientType!1) == 3) >
+								Android
+								</#if>
+								<#if ((house.clientType!1) == 1) >
+								网页
+								</#if>
+							</td>
 						</tr>
 						</#list>
 					</#if>	

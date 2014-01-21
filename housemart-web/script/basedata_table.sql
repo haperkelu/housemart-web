@@ -99,6 +99,7 @@ CREATE TABLE `house`(
    `HasKeyMemo` TEXT , 
    `ViewHouseType` INT , 
    `SourceType` TINYINT DEFAULT 1, 
+   `ClientType` TINYINT DEFAULT 1, 
    `Memo` TEXT , 
    `AddTime` DATETIME , 
    `UpdateTime` DATETIME , 
