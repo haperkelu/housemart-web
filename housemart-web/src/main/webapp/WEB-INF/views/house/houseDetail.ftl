@@ -739,11 +739,14 @@
 
 			#residences span {float:left;margin:5px 20px 5px 0;cursor:pointer;
 				border:1px dashed #aaa;padding:2px 5px;}
-				
+			#residences span a, #selectedResidences span a {text-decoration:none;color:#000;}
+			#residences .selected a {color:red;}
+			
 			#selectedResidences span {float:left;margin:5px 20px 5px 0;cursor:pointer;
 				border:1px solid #aaa;padding:2px 5px;}
-				
 			#selectedResidences span input {display:hidden;}
+			
+			#residences .zombie a, #selectedResidences .zombie a {color:#888;}
 
 		</style>
 		
@@ -1107,7 +1110,7 @@
 					}
 				}
 			}
-			
+					
 			function showResidenceList(data)
 			{
 				var total = '';
@@ -1121,9 +1124,10 @@
 						alpha = "";
 					}
 					
-					var option = '<span class="region-residence index-' + alpha + '" id="res-' + data.bizData[i].residenceId + '" onclick="addAccountResidence(' + data.bizData[i].residenceId + ',\'' + data.bizData[i].residenceName + '\')">' + 
+					var option = '<span class="region-residence index-' + alpha + (data.bizData[i].zombie == 1 ? ' zombie' : "")  + '" id="res-' + data.bizData[i].residenceId + '" onclick="addAccountResidence(' + data.bizData[i].residenceId + ',\'' + data.bizData[i].residenceName + '\')">' + 
+					'<a href="javascript:void(0)">' +
 					(data.bizData[i].pinyinName != null ? alpha + " " : "") + 
-					data.bizData[i].residenceName + '</span>';
+					data.bizData[i].residenceName + '(' + data.bizData[i].brokerCount + ')' + '</a></span>';
 					total += option;
 					
 					if ($.inArray(alpha, indexList) < 0)
