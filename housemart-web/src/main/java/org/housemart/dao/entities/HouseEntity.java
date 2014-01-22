@@ -36,6 +36,7 @@ public class HouseEntity {
   protected Integer creator;
   protected Integer lastUpdater;
   protected Integer sourceType;
+  protected Integer clientType;
   protected String buildingNo;
   protected String cellNo;
   protected String detailName;
@@ -94,6 +95,15 @@ public class HouseEntity {
       this.value = sourceType;
     }
   }
+  
+  public static enum ClientTypeEnum {
+		web(1), ios(2), android(3);
+		public Integer value;
+
+		ClientTypeEnum(Integer clientType) {
+			this.value = clientType;
+		}
+	}
   
   public Integer getId() {
     return id;
@@ -318,5 +328,13 @@ public class HouseEntity {
   public void setBlockUnit(String blockUnit) {
     this.blockUnit = blockUnit;
   }
+
+public Integer getClientType() {
+	return clientType;
+}
+
+public void setClientType(Integer clientType) {
+	this.clientType = clientType;
+}
   
 }
