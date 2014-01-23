@@ -746,7 +746,7 @@
 				border:1px solid #aaa;padding:2px 5px;}
 			#selectedResidences span input {display:hidden;}
 			
-			#residences .zombie a, #selectedResidences .zombie a {color:#888;}
+			#residences .zombie a, #selectedResidences .zombie a {color:#eee;}
 
 		</style>
 		
@@ -1127,7 +1127,7 @@
 					var option = '<span class="region-residence index-' + alpha + (data.bizData[i].zombie == 1 ? ' zombie' : "")  + '" id="res-' + data.bizData[i].residenceId + '" onclick="addAccountResidence(' + data.bizData[i].residenceId + ',\'' + data.bizData[i].residenceName + '\')">' + 
 					'<a href="javascript:void(0)">' +
 					(data.bizData[i].pinyinName != null ? alpha + " " : "") + 
-					data.bizData[i].residenceName + '(' + data.bizData[i].brokerCount + ')' + '</a></span>';
+					data.bizData[i].residenceName + '</a></span>';
 					total += option;
 					
 					if ($.inArray(alpha, indexList) < 0)

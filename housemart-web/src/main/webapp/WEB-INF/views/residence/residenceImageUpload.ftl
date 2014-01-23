@@ -196,7 +196,7 @@
 							if(item.showStatus == 0){
 								pic += '<div data-show-status="' + item.showStatus + '" class="toAudit" data-pic-id="' + item.id + '">';
 								pic += '<span style="color:red;">图片待审核</span>';
-								pic += '<a href="javascript:showPic(' + item.id + ');">通过</a>';
+								pic += '<a href="javascript:showPic(' + item.id + ');">通过</a>&nbsp;&nbsp;';
 								pic += '<a href="/removePic.controller?id=' + item.id + '" onclick="return confirm(\'是否拒绝此图片?\');">拒绝</a>';
 								pic += '</div>';
 							}
