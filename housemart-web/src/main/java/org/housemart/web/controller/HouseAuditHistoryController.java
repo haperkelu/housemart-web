@@ -734,7 +734,7 @@ public class HouseAuditHistoryController extends BaseController {
   
   @SuppressWarnings("unchecked")
   @RequestMapping(value = "rejectedHouseList.controller")
-  public String rejectedHouseList(Model model, int sourceType, int auditType) {
+  public String rejectedHouseList(Model model, int sourceType, int auditType, String residenceName, String creatorName) {
     
     List<AuditNewHouseBean> auditList = new ArrayList<AuditNewHouseBean>();
     List<HouseAuditHistoryEntity> tmpAuditList = null;
@@ -757,14 +757,32 @@ public class HouseAuditHistoryController extends BaseController {
     }
     
     if (tmpAuditList != null) {
+      List<HouseAuditHistoryEntity> tmpAuditList2 = new ArrayList<HouseAuditHistoryEntity>();
+      
       for (HouseAuditHistoryEntity item : tmpAuditList) {
         HouseExtEntity house = (HouseExtEntity) houseDao.load("loadHouseExt", item.getHouseId());
         if (StringUtils.isNotBlank(house.getAccountName())) {
           item.setHouseCreatorName(house.getAccountName());
         }
+        
+        // residence search
+        if (StringUtils.isNotBlank(residenceName)) {
+          if (house.getResidenceName() == null || !house.getResidenceName().contains(residenceName)) {
+            continue;
+          }
+        }
+        
+        // account search
+        if (StringUtils.isNotBlank(creatorName)) {
+          if (house.getAccountName() == null || !house.getAccountName().contains(creatorName)) {
+            continue;
+          }
+        }
+        
+        tmpAuditList2.add(item);
       }
       
-      auditList = (List<AuditNewHouseBean>) CollectionUtils.collect(tmpAuditList, new Transformer() {
+      auditList = (List<AuditNewHouseBean>) CollectionUtils.collect(tmpAuditList2, new Transformer() {
         
         public Object transform(Object obj) {
           HouseAuditHistoryEntity item = (HouseAuditHistoryEntity) obj;
@@ -792,6 +810,8 @@ public class HouseAuditHistoryController extends BaseController {
     }
     
     model.addAttribute("list", auditList);
+    model.addAttribute("sourceType", sourceType);
+    model.addAttribute("auditType", auditType);
     return "audit/rejectedHouseList";
     
   }

@@ -11,6 +11,19 @@
 <a href="/rejectedHouseList.controller?sourceType=3&auditType=1">外部房源拒绝列表</a>
 </h3>
 
+<p>
+<div>
+<form action="/rejectedHouseList.controller" method="post">
+	小区名称：<input type="text" name="residenceName" value="${(residenceName)!}" />
+	登盘人姓名：<input type="text" name="creatorName" value="${(creatorName)!}" />
+
+	<input type="hidden" value="${(auditType)!}" name="auditType"/>
+	<input type="hidden" value="${(sourceType)!}" name="sourceType"/>
+	<input type="submit" value="搜索"/>
+</form>
+</div>
+</p>
+
 <table>
 <thead>
 <th>编号</th><th>板块</th><th>楼盘</th><th>房号</th><th>房东信息</th><th>申请时间</th><th>拒绝理由</th><th>登盘人姓名</th><th>房源详情</th>
