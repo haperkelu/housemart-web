@@ -371,7 +371,12 @@ public class HouseAuditHistoryController extends BaseController {
     
     HouseExtEntity entityExt = (HouseExtEntity) houseDao.load("loadHouseExt", houseId);
     
-    return new ModelAndView(new RedirectView("/houseAudit.controller?sourceType=" + entityExt.getSourceType()));
+    Integer sourceType = HouseEntity.SourceTypeEnum.external.value;
+    if (entityExt != null) {
+      sourceType = entityExt.getSourceType();
+    }
+    
+    return new ModelAndView(new RedirectView("/houseAudit.controller?sourceType=" + sourceType));
     
   }
   
