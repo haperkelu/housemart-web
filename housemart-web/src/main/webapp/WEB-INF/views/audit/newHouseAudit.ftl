@@ -32,10 +32,10 @@
 <#list list as item> 
 <tr>
 <td><input type="checkbox" class="auditItem" readonly="readonly" _houseId='${item.houseId}' _id='${item.id}'/></td>
-<td>${item.plateName}</td>
-<td>${item.residenceName}</td>
-<td>${item.roomNo}</td>
-<td>${item.contactInfo}</td>
+<td>${(item.plateName)!}</td>
+<td>${(item.residenceName)!}</td>
+<td>${(item.roomNo)!}</td>
+<td>${(item.contactInfo)!}</td>
 <td>
 	<a href="/audit/approveNewHouse.controller?id=${item.id}&houseId=${item.houseId}">同意</a>&nbsp
 	<a href="javascript:;" onclick="rejectCfm(${item.id}, ${item.houseId})">拒绝</a></td>
