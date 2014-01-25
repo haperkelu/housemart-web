@@ -941,11 +941,13 @@ public class HouseAuditHistoryController extends BaseController {
         }
       });
       
-      Collections.sort(newList, new Comparator<AuditNewHouseBean>() {
-        public int compare(AuditNewHouseBean arg0, AuditNewHouseBean arg1) {
-          return arg0.getResidencePinyin().compareTo(arg1.getResidencePinyin());
-        }
-      });
+      if (newList != null) {
+        Collections.sort(newList, new Comparator<AuditNewHouseBean>() {
+          public int compare(AuditNewHouseBean arg0, AuditNewHouseBean arg1) {
+            return arg0.getResidencePinyin().compareTo(arg1.getResidencePinyin());
+          }
+        });
+      }
       
       logger.info("AuditFinalListCount: " + (newList == null ? 0 : newList.size()));
       if (model != null) {
