@@ -812,6 +812,8 @@ public class HouseAuditHistoryController extends BaseController {
     model.addAttribute("list", auditList);
     model.addAttribute("sourceType", sourceType);
     model.addAttribute("auditType", auditType);
+    model.addAttribute("residenceName", residenceName);
+    model.addAttribute("creatorName", creatorName);
     return "audit/rejectedHouseList";
     
   }
