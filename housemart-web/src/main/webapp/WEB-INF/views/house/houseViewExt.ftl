@@ -267,8 +267,6 @@
 			<div>小区图片</div>
 			<div class="view-0">
 			</div>
-			<div class="view-1" style="display:none;">
-			</div>
 			
 			<div id="dlg-move-house" title="迁移到其它小区">
 				<input type="hidden" id="destResidenceId"/>
