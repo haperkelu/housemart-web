@@ -746,7 +746,7 @@
 				border:1px solid #aaa;padding:2px 5px;}
 			#selectedResidences span input {display:hidden;}
 			
-			#residences .zombie a, #selectedResidences .zombie a {color:#eee;}
+			#residences .zombie a, #selectedResidences .zombie a {color:#999;}
 
 		</style>
 		
