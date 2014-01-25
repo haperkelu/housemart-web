@@ -39,8 +39,8 @@
 <td>
 	<a href="/audit/approveNewHouse.controller?id=${item.id}&houseId=${item.houseId}">同意</a>&nbsp
 	<a href="javascript:;" onclick="rejectCfm(${item.id}, ${item.houseId})">拒绝</a></td>
-<td>${item.addTime?string("yyyy-MM-dd HH:mm:ss")}</td>
-<td>${item.creatorName}</td>
+<td><#if item.addTime?exists>${item.addTime?string("yyyy-MM-dd HH:mm:ss")}</#></td>
+<td><#if item.creatorName?exists>${item.creatorName}</#></td>
 <td><a href="/external/houseView.controller?auditId=${item.id}&houseId=${item.houseId}" target="_blank">查看</a></td>
 </tr>
 </#list>
