@@ -944,7 +944,9 @@ public class HouseAuditHistoryController extends BaseController {
       if (newList != null) {
         Collections.sort(newList, new Comparator<AuditNewHouseBean>() {
           public int compare(AuditNewHouseBean arg0, AuditNewHouseBean arg1) {
-            return arg0.getResidencePinyin().compareTo(arg1.getResidencePinyin());
+            String a0 = arg0.getResidencePinyin() == null ? "" : arg0.getResidencePinyin();
+            String a1 = arg1.getResidencePinyin() == null ? "" : arg1.getResidencePinyin();
+            return a0.compareTo(a1);
           }
         });
       }
