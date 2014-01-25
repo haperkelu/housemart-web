@@ -51,45 +51,54 @@ public class ResidenceAuditHistoryController extends BaseController {
     Map<String,Object> map = new HashMap<String,Object>();
     map.put("type", AuditTypeEnum.LoggingAudit.getValue());
     map.put("result", ResidenceAuditHistoryEntity.ResultEnum.Default.getValue());
-    List<ResidenceAuditHistoryEntity> list = (List<ResidenceAuditHistoryEntity>) residenceAuditHistoryDao
-        .select("findResidenceAuditHistoryList", map);
+    List<ResidenceAuditHistoryEntity> list = (List<ResidenceAuditHistoryEntity>) residenceAuditHistoryDao.select(
+        "findResidenceAuditHistoryList", map);
     
     if (!CollectionUtils.isEmpty(list)) {
       
-      List<ResidenceAuditHistoryEntity> filteredList = new ArrayList<ResidenceAuditHistoryEntity>();
+      // List<ResidenceAuditHistoryEntity> filteredList = new
+      // ArrayList<ResidenceAuditHistoryEntity>();
       List<AuditNewResidenceBean> newList = new ArrayList<AuditNewResidenceBean>();
       
       // filter
       for (ResidenceAuditHistoryEntity item : list) {
-        ResidenceEntity residence = (ResidenceEntity) residenceDao.load(
-            "loadResidenceById", item.getResidenceId());
+        ResidenceEntity residence = (ResidenceEntity) residenceDao.load("loadResidenceById", item.getResidenceId());
         
         if (residence != null) {
-          if ((HouseMartContext.getRegionIds() != null && HouseMartContext
-              .getRegionIds().contains(
-                  Integer.valueOf(residence.getParentRegionId())))
-              || (HouseMartContext.getPlateIds() != null && HouseMartContext
-                  .getPlateIds().contains(
-                      Integer.valueOf(residence.getRegionId())))) {
-            if (HouseMartContext.getRegionMangerIds() != null
-                && HouseMartContext.getRegionMangerIds().contains(
-                    HouseMartContext.getCurrentUserId())) {
-              
-              filteredList.add(item);
-              
-              AuditNewResidenceBean result = new AuditNewResidenceBean();
-              result.setResidencePinyin(new PinyinTranslator()
-                  .toPinyin(residence.getRegionName()));
-              result.setId(item.getId());
-              result.setAddTime(item.getAddTime());
-              result.setResidenceId(item.getResidenceId());
-              result.setResidenceName(residence.getResidenceName());
-              result.setPlateName(residence.getPlateName());
-              newList.add(result);
-              
+          if (HouseMartContext.getCurrentUserId() == 0) {
+            
+            AuditNewResidenceBean result = new AuditNewResidenceBean();
+            result.setResidencePinyin(new PinyinTranslator().toPinyin(residence.getRegionName()));
+            result.setId(item.getId());
+            result.setAddTime(item.getAddTime());
+            result.setResidenceId(item.getResidenceId());
+            result.setResidenceName(residence.getResidenceName());
+            result.setPlateName(residence.getPlateName());
+            newList.add(result);
+            
+          } else {
+            
+            if ((HouseMartContext.getRegionIds() != null && HouseMartContext.getRegionIds().contains(
+                Integer.valueOf(residence.getParentRegionId())))
+                || (HouseMartContext.getPlateIds() != null && HouseMartContext.getPlateIds().contains(
+                    Integer.valueOf(residence.getRegionId())))) {
+              if (HouseMartContext.getRegionMangerIds() != null
+                  && HouseMartContext.getRegionMangerIds().contains(HouseMartContext.getCurrentUserId())) {
+                
+                // filteredList.add(item);
+                
+                AuditNewResidenceBean result = new AuditNewResidenceBean();
+                result.setResidencePinyin(new PinyinTranslator().toPinyin(residence.getRegionName()));
+                result.setId(item.getId());
+                result.setAddTime(item.getAddTime());
+                result.setResidenceId(item.getResidenceId());
+                result.setResidenceName(residence.getResidenceName());
+                result.setPlateName(residence.getPlateName());
+                newList.add(result);
+                
+              }
             }
           }
-          
         }
       }
       
@@ -107,108 +116,86 @@ public class ResidenceAuditHistoryController extends BaseController {
     Map<String,Object> map = new HashMap<String,Object>();
     map.put("type", AuditTypeEnum.ContentUpdateAudit.getValue());
     map.put("result", ResidenceAuditHistoryEntity.ResultEnum.Default.getValue());
-    List<ResidenceAuditHistoryEntity> list = (List<ResidenceAuditHistoryEntity>) residenceAuditHistoryDao
-        .select("findResidenceAuditHistoryList", map);
+    List<ResidenceAuditHistoryEntity> list = (List<ResidenceAuditHistoryEntity>) residenceAuditHistoryDao.select(
+        "findResidenceAuditHistoryList", map);
     
     List<ResidenceAuditHistoryEntity> filteredList = new ArrayList<ResidenceAuditHistoryEntity>();
     
     if (!CollectionUtils.isEmpty(list)) {
       // filter
       for (ResidenceAuditHistoryEntity item : list) {
-        ResidenceEntity residence = (ResidenceEntity) residenceDao.load(
-            "loadResidenceById", item.getResidenceId());
+        ResidenceEntity residence = (ResidenceEntity) residenceDao.load("loadResidenceById", item.getResidenceId());
         
         if (residence != null) {
-          if ((HouseMartContext.getRegionIds() != null && HouseMartContext
-              .getRegionIds().contains(
-                  Integer.valueOf(residence.getParentRegionId())))
-              || (HouseMartContext.getPlateIds() != null && HouseMartContext
-                  .getPlateIds().contains(
-                      Integer.valueOf(residence.getRegionId())))) {
-            if (HouseMartContext.getRegionMangerIds() != null
-                && HouseMartContext.getRegionMangerIds().contains(
-                    HouseMartContext.getCurrentUserId())) {
-              
-              filteredList.add(item);
+          
+          if (HouseMartContext.getCurrentUserId() == 0) {
+            filteredList.add(item);
+          } else {
+            if ((HouseMartContext.getRegionIds() != null && HouseMartContext.getRegionIds().contains(
+                Integer.valueOf(residence.getParentRegionId())))
+                || (HouseMartContext.getPlateIds() != null && HouseMartContext.getPlateIds().contains(
+                    Integer.valueOf(residence.getRegionId())))) {
+              if (HouseMartContext.getRegionMangerIds() != null
+                  && HouseMartContext.getRegionMangerIds().contains(HouseMartContext.getCurrentUserId())) {
+                filteredList.add(item);
+              }
             }
           }
-          
         }
       }
       
-      List<AuditResidenceStatusAndContentBean> newList = (List<AuditResidenceStatusAndContentBean>) CollectionUtils
-          .collect(filteredList, new Transformer() {
+      List<AuditResidenceStatusAndContentBean> newList = (List<AuditResidenceStatusAndContentBean>) CollectionUtils.collect(
+          filteredList, new Transformer() {
             
             public Object transform(Object obj) {
               ResidenceAuditHistoryEntity item = (ResidenceAuditHistoryEntity) obj;
               ObjectMapper mapper = new ObjectMapper();
               AuditResidenceStatusAndContentBean result = new AuditResidenceStatusAndContentBean();
-              ResidenceEntity residence = (ResidenceEntity) residenceDao.load(
-                  "loadResidenceById", item.getResidenceId());
+              ResidenceEntity residence = (ResidenceEntity) residenceDao.load("loadResidenceById", item.getResidenceId());
               
               try {
-                AuditResidenceStatusAndContentBean orinal = mapper.readValue(
-                    item.getPreContent(),
+                AuditResidenceStatusAndContentBean orinal = mapper.readValue(item.getPreContent(),
                     AuditResidenceStatusAndContentBean.class);
-                AuditResidenceStatusAndContentBean newBean = mapper.readValue(
-                    item.getPostContent(),
+                AuditResidenceStatusAndContentBean newBean = mapper.readValue(item.getPostContent(),
                     AuditResidenceStatusAndContentBean.class);
                 
                 BeanUtils.copyProperties(orinal, result);
                 String content = StringUtils.EMPTY;
                 
-                if (!StringUtils.equals(orinal.getAddress(),
-                    newBean.getAddress())) {
-                  content += "地址:" + orinal.getAddress() + "==>"
-                      + newBean.getAddress() + "<br/>";
+                if (!StringUtils.equals(orinal.getAddress(), newBean.getAddress())) {
+                  content += "地址:" + orinal.getAddress() + "==>" + newBean.getAddress() + "<br/>";
                 }
                 
-                if (!StringUtils.equals(orinal.getDeveloper(),
-                    newBean.getDeveloper())) {
-                  content += "开发商:" + orinal.getDeveloper() + "==>"
-                      + newBean.getDeveloper() + "<br/>";
+                if (!StringUtils.equals(orinal.getDeveloper(), newBean.getDeveloper())) {
+                  content += "开发商:" + orinal.getDeveloper() + "==>" + newBean.getDeveloper() + "<br/>";
                 }
                 
-                if (!StringUtils.equals(orinal.getGreenRate(),
-                    newBean.getGreenRate())) {
-                  content += "绿化率:" + orinal.getGreenRate() + "==>"
-                      + newBean.getGreenRate() + "<br/>";
+                if (!StringUtils.equals(orinal.getGreenRate(), newBean.getGreenRate())) {
+                  content += "绿化率:" + orinal.getGreenRate() + "==>" + newBean.getGreenRate() + "<br/>";
                 }
                 
-                if (!StringUtils.equals(orinal.getHeadCount(),
-                    newBean.getHeadCount())) {
-                  content += "总户数:" + orinal.getHeadCount() + "==>"
-                      + newBean.getHeadCount() + "<br/>";
+                if (!StringUtils.equals(orinal.getHeadCount(), newBean.getHeadCount())) {
+                  content += "总户数:" + orinal.getHeadCount() + "==>" + newBean.getHeadCount() + "<br/>";
                 }
                 
-                if (!StringUtils.equals(orinal.getParking(),
-                    newBean.getParking())) {
-                  content += "停车位:" + orinal.getParking() + "==>"
-                      + newBean.getParking() + "<br/>";
+                if (!StringUtils.equals(orinal.getParking(), newBean.getParking())) {
+                  content += "停车位:" + orinal.getParking() + "==>" + newBean.getParking() + "<br/>";
                 }
                 
-                if (!StringUtils.equals(orinal.getPropertyFee(),
-                    newBean.getPropertyFee())) {
-                  content += "物业费:" + orinal.getPropertyFee() + "==>"
-                      + newBean.getPropertyFee() + "<br/>";
+                if (!StringUtils.equals(orinal.getPropertyFee(), newBean.getPropertyFee())) {
+                  content += "物业费:" + orinal.getPropertyFee() + "==>" + newBean.getPropertyFee() + "<br/>";
                 }
                 
-                if (!StringUtils.equals(orinal.getPropertyType(),
-                    newBean.getPropertyType())) {
-                  content += "类型:" + orinal.getPropertyType() + "==>"
-                      + newBean.getPropertyType() + "<br/>";
+                if (!StringUtils.equals(orinal.getPropertyType(), newBean.getPropertyType())) {
+                  content += "类型:" + orinal.getPropertyType() + "==>" + newBean.getPropertyType() + "<br/>";
                 }
                 
-                if (!StringUtils.equals(orinal.getVolumeRate(),
-                    newBean.getVolumeRate())) {
-                  content += "容积率:" + orinal.getVolumeRate() + "==>"
-                      + newBean.getVolumeRate() + "<br/>";
+                if (!StringUtils.equals(orinal.getVolumeRate(), newBean.getVolumeRate())) {
+                  content += "容积率:" + orinal.getVolumeRate() + "==>" + newBean.getVolumeRate() + "<br/>";
                 }
                 
-                if (!StringUtils.equals(orinal.getFinishedTime(),
-                    newBean.getFinishedTime())) {
-                  content += "竣工时间:" + orinal.getFinishedTime() + "==>"
-                      + newBean.getFinishedTime() + "<br/>";
+                if (!StringUtils.equals(orinal.getFinishedTime(), newBean.getFinishedTime())) {
+                  content += "竣工时间:" + orinal.getFinishedTime() + "==>" + newBean.getFinishedTime() + "<br/>";
                 }
                 
                 result.setAddTime(item.getAddTime());
@@ -229,8 +216,7 @@ public class ResidenceAuditHistoryController extends BaseController {
   }
   
   @RequestMapping(value = "audit/approveNewResidence.controller")
-  public ModelAndView approveNewResidence(
-      @RequestParam("residenceId") int residenceId, @RequestParam("id") int id) {
+  public ModelAndView approveNewResidence(@RequestParam("residenceId") int residenceId, @RequestParam("id") int id) {
     
     auditService.approveNewResidence(id);
     
@@ -239,8 +225,7 @@ public class ResidenceAuditHistoryController extends BaseController {
   }
   
   @RequestMapping(value = "audit/rejectNewResidence.controller")
-  public ModelAndView rejectNewResidence(
-      @RequestParam("residenceId") int residenceId, @RequestParam("id") int id) {
+  public ModelAndView rejectNewResidence(@RequestParam("residenceId") int residenceId, @RequestParam("id") int id) {
     
     Map<String,Object> map = new HashMap<String,Object>();
     map.put("id", id);
@@ -256,27 +241,23 @@ public class ResidenceAuditHistoryController extends BaseController {
   }
   
   @RequestMapping(value = "audit/approveResidenceStatusAndContent.controller")
-  public ModelAndView approveStatusAndContent(
-      @RequestParam("residenceId") int residenceId, @RequestParam("id") int id) {
+  public ModelAndView approveStatusAndContent(@RequestParam("residenceId") int residenceId, @RequestParam("id") int id) {
     
     auditService.approveResidenceStatusAndContent(residenceId, id);
     
-    return new ModelAndView(new RedirectView(
-        "/auditResidenceContent.controller"));
+    return new ModelAndView(new RedirectView("/auditResidenceContent.controller"));
     
   }
   
   @RequestMapping(value = "audit/rejectResidenceStatusAndContent.controller")
-  public ModelAndView rejectStatusAndContent(
-      @RequestParam("residenceId") int residenceId, @RequestParam("id") int id) {
+  public ModelAndView rejectStatusAndContent(@RequestParam("residenceId") int residenceId, @RequestParam("id") int id) {
     
     Map<String,Object> map = new HashMap<String,Object>();
     map.put("id", id);
     map.put("result", 2);
     residenceAuditHistoryDao.update("updateAuditHistoryResultStatus", map);
     
-    return new ModelAndView(new RedirectView(
-        "/auditResidenceContent.controller"));
+    return new ModelAndView(new RedirectView("/auditResidenceContent.controller"));
     
   }
   
