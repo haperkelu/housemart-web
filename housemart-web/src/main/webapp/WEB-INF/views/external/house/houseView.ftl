@@ -164,8 +164,20 @@
 						<tr>
 							<td><b>房源标签</b></td>
 							<td>
-								${(house.saleTagList)!}
+								<div id="saleTagListView">
+								</div>
+								<input type="hidden" name="saleTagList" id="saleTagList" value="${(house.saleTagList)!}"/>
+								<div id="saleOptions" style="display:none;">
+									<#if saleTagOptions??>
+										<#list saleTagOptions as saleTag> 
+										<div class="saleTag" _tId="${(saleTag.id)!}" _tName="${(saleTag.name)!}" _tCategoryName="${(saleTag.categoryName)!}">
+											<a href="javascript:;" class="tagOption">${(saleTag.name)!}<input type="checkbox" class="status" readonly="readonly"/></a>
+										</div>
+										</#list>
+									</#if>
+								</div>
 							</td>
+							
 						</tr>
 						</#if>
 						
@@ -173,7 +185,18 @@
 						<tr>	
 							<td><b>房源标签</b></td>
 							<td>
-								${(house.rentTagList)!}
+								<div id="rentTagListView">
+								</div>
+								<input type="hidden" name="rentTagList" id="rentTagList" value="${(house.rentTagList)!}"/>
+								<div id="rentOptions" style="display:none;">
+									<#if rentTagOptions??>
+										<#list rentTagOptions as rentTag> 
+										<div class="rentTag" _tId="${(rentTag.id)!}" _tName="${(rentTag.name)!}" _tCategoryName="${(rentTag.categoryName)!}">
+											<a href="javascript:;" class="tagOption">${(rentTag.name)!}<input type="checkbox" class="status" readonly="readonly"/></a>
+										</div>
+										</#list>
+									</#if>
+								</div>
 							</td>
 						</tr>
 						</#if>
@@ -353,6 +376,5 @@
 		
 		    seajs.use(['jquery','header', 'detail']);
 		</script>
-		
 	</body>
 </html>

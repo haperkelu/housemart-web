@@ -51,6 +51,33 @@ define(function (require, exports, module){
             });
 			Header.setCurrent('house');
 
+			var saleTagsStr = $("#saleTagList").val();
+			var saleTags;
+			var saleTagsView = "";
+			if(saleTagsStr.length > 0){
+				saleTags = saleTagsStr.split(",");
+				for(i=0;i < saleTags.length ;i++){
+					if(i>0)
+						saleTagsView += ",";
+					saleTagsView += $("div[_tId=" + saleTags[i] + "]").attr("_tName");
+					$("div[_tId='" + saleTags[i] + "'][_tCategoryName='sale']").find(".status").attr("checked","true");
+				}
+				$("#saleTagListView").html(saleTagsView);
+			}
+			
+			var rentTagsStr = $("#rentTagList").val();
+			var rentTags;
+			var rentTagsView = "";
+			if(rentTagsStr != undefined && rentTagsStr.length > 0){
+				rentTags = rentTagsStr.split(",");
+				for(i=0;i < rentTags.length ;i++){
+					if(i>0)
+						rentTagsView += ",";
+					rentTagsView += $("div[_tId=" + rentTags[i] + "]").attr("_tName");
+					$("div[_tId='" + rentTags[i] + "'][_tCategoryName='rent']").find(".status").attr("checked","true");
+				}
+				$("#rentTagListView").html(rentTagsView);
+			}
         },
         repaintPage: function(){
             var ATTR_STR = 'data-origin',
