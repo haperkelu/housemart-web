@@ -172,7 +172,7 @@
                         </#if>
                         <#if ((tabIndex!1) == 4) >
                             <td>${(house.auditor)!}</td>
-                            <td>${(house.rentMemo)!}${(house.saleMemo)!}</td>
+                            <td>${(house.rentMemo)!}${(house.saleMemo)!} ${(house.auditComments)!}</td>
                         </#if>
                         <#if ((tabIndex!1) != 5) >
                         <td class="center">
