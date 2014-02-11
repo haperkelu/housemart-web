@@ -255,7 +255,7 @@ seajs.config({
 <#if isAdmin?exists && isAdmin == true || isManager?exists && isManager == true>
 	<div style="float:left;padding-left:40px;"><a target = "_blank" href="/addResidenceBuilding?residenceId=${entity.residenceId}">生成栋座</a></div>
 </#if>
-<div id="map_canvas" style="float:left;margin-left:20px;width: 500px; height: 300px"></div>
+<div id="map_canvas" style="float:left;margin-left:20px;width: 900px; height: 500px"></div>
 <div style="clear:both"></div>
 </div>
 
