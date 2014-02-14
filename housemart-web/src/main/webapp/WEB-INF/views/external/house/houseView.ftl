@@ -205,9 +205,9 @@
 				</table>
 			</div>
 			
-			<h3>房源图片</h3>
+			<h3>室内图片</h3>
 			<div id="J_picsHouse" class="picCategory"></div>
-			<h3>房型图片</h3>
+			<h3>户型图片</h3>
 			<div id="J_picsRoom" class="picCategory"></div>
 			<h3>小区图片</h3>
 			<div id="J_picsCommunity" class="picCategory"></div>
