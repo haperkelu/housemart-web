@@ -587,7 +587,7 @@ public class HouseControllerExt extends HouseController {
     model = super.findList(model, null, null, null, null, null, null, null,
         null, null, null, null, null, null, null, null,
         HouseMartContext.getCurrentUserId(), null, null, null, null, null,
-        null, null, null, true, page, pageSize, orderByClause);
+        null, null, null, true, null, page, pageSize, orderByClause);
     return "house/myHouseList";
   }
   
@@ -596,12 +596,16 @@ public class HouseControllerExt extends HouseController {
   public String myExternalHouseList(Model model, Integer page,
       Integer pageSize, String orderByClause, Integer regionId,
       Integer plateId, String residenceName, String creatorName,
-      Integer saleRent, Integer status
+      Integer saleRent, Integer status, Integer clientType
       ) {
     
 	saleRent = (saleRent == null ? 0 : saleRent);
+	
+	clientType = (clientType == null ? 0 : clientType);
+	
 	model.addAttribute("saleRent", saleRent);
 	model.addAttribute("status", status);
+	model.addAttribute("clientType", clientType);
 	
 	
     Integer currentUserId = HouseMartContext.getCurrentUserId();
@@ -661,8 +665,9 @@ public class HouseControllerExt extends HouseController {
     model = super.findList(model, null, regionId, plateId, residenceName,
         creatorName, null, null, null, null, null, null, null, status, saleRent == 1 ? 1 : null,
         saleRent == 2 ? 1 : null, currentUserId, null, null, null, null, null, null,
-        HouseEntity.SourceTypeEnum.external.value, null, true, page, pageSize,
-        orderByClause);
+        HouseEntity.SourceTypeEnum.external.value, null, true,
+        clientType,
+        page, pageSize, orderByClause);
     
     return "house/myExternalHouseList";
   }
@@ -674,7 +679,7 @@ public class HouseControllerExt extends HouseController {
     model = super.findList(model, null, null, null, null, null, null, null,
         null, null, null, null, null, null, null, null, null,
         HouseMartContext.getCurrentUserId(), true, null, null, null, null,
-        null, null, true, page, pageSize, orderByClause);
+        null, null, true, null, page, pageSize, orderByClause);
     return "house/myFavoriteHouseList";
   }
   
@@ -689,8 +694,8 @@ public class HouseControllerExt extends HouseController {
         residenceName, null, buildingInfo, cellInfo, salePriceGT, salePriceLE,
         propertyAreaGT, propertyAreaLE, null, null, saleStatus, null, null,
         null, null, null, null, null, null,
-        HouseEntity.SourceTypeEnum.internal.value, null, true, page, pageSize,
-        orderByClause);
+        HouseEntity.SourceTypeEnum.internal.value, null, true, null,
+        page, pageSize, orderByClause);
     return "house/soldHouseList";
   }
   
@@ -709,7 +714,7 @@ public class HouseControllerExt extends HouseController {
         salePriceLE, propertyAreaGT, propertyAreaLE, roomType, status,
         saleStatus, rentStatus, null, HouseMartContext.getCurrentUserId(),
         null, saleIntention, rentIntention, dialResult, phone, null,
-        sourceTypeIn, true, page, pageSize, orderByClause);
+        sourceTypeIn, true, null, page, pageSize, orderByClause);
     return "house/houseList";
   }
   

@@ -103,6 +103,12 @@
 	        <isNotNull prepend="AND" property="residenceId"> 
 	            H.ResidenceID = #residenceId#
 	        </isNotNull>
+	        <isGreaterThan prepend="AND" property="clientType" compareValue="1"> 
+	            H.clientType = #clientType#
+	        </isGreaterThan>
+	        <isEqual prepend="AND" property="clientType" compareValue="1"> 
+	            H.clientType NOT IN (2, 3)
+	        </isEqual>
 		</dynamic>
 	</sql>
 	

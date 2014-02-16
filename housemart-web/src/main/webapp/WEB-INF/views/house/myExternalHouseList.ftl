@@ -19,6 +19,13 @@
 				<option ${((status!100) == -2) ? string('selected="selected"', '')} value="-2">下架</option>
 				<option ${((status!100) == -1) ? string('selected="selected"', '')} value="-1">删除</option>
 			</select>
+			来源:
+			<select name="clientType" id="clientType">
+				<option ${((clientType!0) == 0) ? string('selected="selected"', '')} value="0">全部</option>
+				<option ${((clientType!1) == 1) ? string('selected="selected"', '')} value="1">网页</option>
+				<option ${((clientType!2) == 2) ? string('selected="selected"', '')} value="2">IOS</option>
+				<option ${((clientType!3) == 3) ? string('selected="selected"', '')} value="3">Android</option>
+			</select>
 			<br/>
 			<#if accountType == 'manager'>
 			区域:
@@ -301,9 +308,11 @@
 				var creatorName = $("#creatorName").val();
 				var saleRent = $("#saleRent").val();
 				var status = $("#status").val();
+				var clientType = $("#clientType").val();
 				
 				location.href = "/myExternalHouseList.controller?residenceName=" + residenceName +
-					"&creatorName=" + creatorName + "&page=" + page + "&saleRent=" + saleRent + "&status=" + status;
+					"&creatorName=" + creatorName + "&page=" + page + "&saleRent=" + saleRent + 
+					"&status=" + status + "&clientType=" + clientType;
 			}
 		</script>
 	</body>

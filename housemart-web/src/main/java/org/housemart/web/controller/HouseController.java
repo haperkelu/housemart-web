@@ -668,8 +668,10 @@ public class HouseController extends BaseController {
       Integer saleStatus, Integer rentStatus, Integer creator,
       Integer favUserId, Boolean isMyFavoritePage, String saleIntention,
       String rentIntention, String dialResult, String phone,
-      Integer sourceType, String sourceTypeIn, boolean isAgile, Integer page,
-      Integer pageSize, String orderByClause) {
+      Integer sourceType, String sourceTypeIn, boolean isAgile,
+      Integer clientType,
+      Integer page, Integer pageSize, String orderByClause
+      ) {
     
     String decodedResidenceName = null;
     if (residenceName != null) {
@@ -756,6 +758,8 @@ public class HouseController extends BaseController {
         : decodedDialResult);
     parameter.put("sourceType", sourceType);
     parameter.put("sourceTypeIn", sourceTypeIn);
+    
+    parameter.put("clientType", clientType);
     
     if (StringUtils.isNotBlank(phone)) {
       parameter.put("phone", phone.trim());
