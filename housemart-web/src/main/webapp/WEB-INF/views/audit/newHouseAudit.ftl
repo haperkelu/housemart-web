@@ -25,7 +25,7 @@
 <table>
 <thead>
 <th><input type="checkbox" id="allSelection"/></th>
-<th>板块</th><th>楼盘</th><th>房号</th><th>房东信息</th><th>操作</th><th>申请时间</th><th>登盘人姓名</th><th>房源详情</th>
+<th>板块</th><th>楼盘</th><th>房号</th><th>房东信息</th><th>操作</th><th>申请时间</th><th>登盘人姓名</th><th>客户端类型</th><th>房源详情</th>
 </thead>
 <#if list?exists>
 <tbody>
@@ -41,6 +41,7 @@
 	<a href="javascript:;" onclick="rejectCfm(${item.id}, ${item.houseId})">拒绝</a></td>
 <td><#if item.addTime?exists>${item.addTime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
 <td><#if item.creatorName?exists>${item.creatorName}</#if></td>
+<td>${(item.clientType)!}</td>
 <td><a href="/external/houseView.controller?auditId=${item.id}&houseId=${item.houseId}" target="_blank">查看</a></td>
 </tr>
 </#list>

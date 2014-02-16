@@ -497,12 +497,13 @@
 		<result property="detailName" column="DetailName" />
 		<result property="accountName" column="AccountName" />
 		<result property="blockUnit" column="BlockUnit" />
+		<result property="clientType" column="clientType" />
 	</resultMap>
 	
 	<select id="loadHouseExt" resultMap="houseExt" parameterClass="uniqueObject">
 		SELECT H.ID, H.Name, H.Status, H.ResidenceID, H.CellID, H.PicID, H.RoomTypePicID, H.Direction, H.PropertyArea,
 		H.OccupiedArea, H.BuildTime, H.HouseType, H.RoomType, H.Decorating, H.Floor, H.HasKey, H.HasKeyMemo, H.ViewHouseType, H.Memo,
-		H.AddTime, H.UpdateTime, H.Creator, H.LastUpdater, H.SourceType, H.BuildingNo, H.CellNo, H.DetailName, H.BlockUnit,
+		H.AddTime, H.UpdateTime, H.Creator, H.LastUpdater, H.SourceType, H.BuildingNo, H.CellNo, H.DetailName, H.BlockUnit,  H.ClientType,
 		C.ID ContactID, C.HouseID ContactHouseID, C.ContactType ContactContactType, C.Name ContactName, C.Mobile ContactMobile, C.Memo ContactMemo, 
 		C.Status ContactStatus, C.AddTime ContactAddTime, C.UpdateTime ContactUpdateTime, C.committer ContactCommitter, 
 		P.ID PropertyID, P.HouseID PropertyHouseID, P.PropertyCode PropertyPropertyCode, P.PropertyOwner PropertyPropertyOwner, 

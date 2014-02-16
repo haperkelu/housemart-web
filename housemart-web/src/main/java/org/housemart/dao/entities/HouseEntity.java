@@ -103,6 +103,17 @@ public class HouseEntity {
 		ClientTypeEnum(Integer clientType) {
 			this.value = clientType;
 		}
+		
+		public static String stringValueOf(int v){
+		  String result = null;
+		  for(ClientTypeEnum typeEnum : ClientTypeEnum.values()){
+		    if(typeEnum.value.intValue() == v){
+		      result = typeEnum.name();
+		      break;
+		    }
+		  }
+		  return result;
+		}
 	}
   
   public Integer getId() {

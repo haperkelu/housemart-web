@@ -42,6 +42,7 @@ import org.housemart.web.beans.AuditInvalidHouseBean;
 import org.housemart.web.beans.AuditNewHouseBean;
 import org.housemart.web.beans.AuditStatusAndContentBean;
 import org.housemart.web.context.HouseMartContext;
+import org.housemart.web.controller.ClientController.ClientTypeEnum;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -849,6 +850,7 @@ public class HouseAuditHistoryController extends BaseController {
     if (!CollectionUtils.isEmpty(list)) {
       
       List<HouseAuditHistoryEntity> filteredList = new ArrayList<HouseAuditHistoryEntity>();
+      final Map<Integer,HouseExtEntity> houseMap = new HashMap<Integer,HouseExtEntity>();
       
       // filter
       for (HouseAuditHistoryEntity item : list) {
@@ -857,7 +859,7 @@ public class HouseAuditHistoryController extends BaseController {
           HouseExtEntity house = (HouseExtEntity) houseDao.load("loadHouseExt", item.getHouseId());
           
           if (house != null) {
-            
+            houseMap.put(house.getId(), house);
             if (isAdmin()) {
               
               // residence search
@@ -953,11 +955,17 @@ public class HouseAuditHistoryController extends BaseController {
             ObjectMapper mapper = new ObjectMapper();
             try {
               result = mapper.readValue(item.getPostContent(), AuditNewHouseBean.class);
-              result.setResidencePinyin(new PinyinTranslator().toPinyin(result.getResidenceName()));
+              if (StringUtils.isNotBlank(result.getResidenceName())) {
+                result.setResidencePinyin(new PinyinTranslator().toPinyin(result.getResidenceName()));
+              }
               result.setId(item.getId());
               result.setAddTime(item.getAddTime());
               result.setHouseId(item.getHouseId());
               result.setCreatorName(item.getHouseCreatorName());
+              Integer type = -1;
+              if ((type = houseMap.get(item.getHouseId()).getClientType()) != null) {
+                result.setClientType(HouseEntity.ClientTypeEnum.stringValueOf(type));
+              }
             } catch (Exception e) {
               logger.error("audit new house json parse error", e);
             }

@@ -14,6 +14,7 @@ public class AuditNewHouseBean {
 	private String creatorName;
 	private Date addTime;
 	private String comments;
+	private String clientType;
 	
 	public int getId() {
 		return id;
@@ -75,4 +76,11 @@ public class AuditNewHouseBean {
   public void setComments(String comments) {
     this.comments = comments;
   }
+  public String getClientType() {
+    return clientType;
+  }
+  public void setClientType(String clientType) {
+    this.clientType = clientType;
+  }
+  
 }
