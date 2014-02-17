@@ -218,6 +218,12 @@
 				</br>
 				</br>
 				<div>
+					<h3>客户端类型</h3>
+					<#if house.clientType == 1>Web</#if>
+					<#if house.clientType == 2>IOS</#if>
+					<#if house.clientType == 3>Android</#if>
+				</div>
+				<div>
 					<h3>房源审核</h3>
 					<a href="/audit/approveNewHouseInDetailPage.controller?id=${(auditId)!}&houseId=${(house.id)!}">同意</a>&nbsp
 					<a href="javascript:;" onclick="$('#reject-dialog').show()">拒绝</a>
