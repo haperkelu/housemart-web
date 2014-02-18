@@ -397,7 +397,6 @@ refreshBuildingList();
 <script>
 
 	var initialize = function(){
-		var avgPoint = ${avgPoint};
 		//中心点	    
 	    var center = new google.maps.LatLng(${avgPoint.lat},${avgPoint.lng});
 	    
