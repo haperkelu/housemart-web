@@ -22,7 +22,7 @@
 			                <td>${(house.residenceName)!}</td>
 			            </tr>
 			            <tr>
-			                <td><b>具体名称</b></td>
+			                <td><b>小区别名</b></td>
 			                <td>${(house.detailName)!}</td>
 			            </tr>
 			            <tr>
