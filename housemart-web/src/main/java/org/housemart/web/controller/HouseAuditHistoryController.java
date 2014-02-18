@@ -42,7 +42,6 @@ import org.housemart.web.beans.AuditInvalidHouseBean;
 import org.housemart.web.beans.AuditNewHouseBean;
 import org.housemart.web.beans.AuditStatusAndContentBean;
 import org.housemart.web.context.HouseMartContext;
-import org.housemart.web.controller.ClientController.ClientTypeEnum;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -962,9 +961,12 @@ public class HouseAuditHistoryController extends BaseController {
               result.setAddTime(item.getAddTime());
               result.setHouseId(item.getHouseId());
               result.setCreatorName(item.getHouseCreatorName());
-              Integer type = -1;
+              Integer type;
               if ((type = houseMap.get(item.getHouseId()).getClientType()) != null) {
-                result.setClientType(HouseEntity.ClientTypeEnum.stringValueOf(type));
+                result.setClientType(type.toString());
+              } else {
+                type = 0;
+                result.setClientType(type.toString());
               }
             } catch (Exception e) {
               logger.error("audit new house json parse error", e);

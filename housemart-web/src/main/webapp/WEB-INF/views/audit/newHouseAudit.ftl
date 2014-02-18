@@ -42,9 +42,13 @@
 <td><#if item.addTime?exists>${item.addTime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
 <td><#if item.creatorName?exists>${item.creatorName}</#if></td>
 <td>
-<#if item.clientType != 2 && item.clientType != 3>网页</#if>
-<#if item.clientType == 2>IOS</#if>
-<#if item.clientType == 3>Android</#if>
+<#if item.clientType?exists>
+<#if item.clientType != "2" && item.clientType != "3">网页</#if>
+<#if item.clientType == "2">IOS</#if>
+<#if item.clientType == "3">Android</#if>
+<#else>
+网页
+</#if>
 </td>
 <td><a href="/external/houseView.controller?auditId=${item.id}&houseId=${item.houseId}" target="_blank">查看</a></td>
 </tr>
