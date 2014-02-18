@@ -219,7 +219,7 @@
 				</br>
 				<div>
 					<h3>客户端类型</h3>
-					<#if house.clientType == 1>Web</#if>
+					<#if house.clientType != 2 && house.clientType != 3>网页</#if>
 					<#if house.clientType == 2>IOS</#if>
 					<#if house.clientType == 3>Android</#if>
 				</div>
