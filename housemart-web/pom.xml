@@ -4,7 +4,7 @@
 	<groupId>org.housemart</groupId>
 	<packaging>war</packaging>
 	<version>1.0.0</version>
-	<name>ALL-In-One-Web Maven Webapp</name>
+	<name>HouseMart-Web</name>
 	<url>http://maven.apache.org</url>
 	<repositories>
 		<repository>
