@@ -405,7 +405,8 @@ refreshBuildingList();
 	        zoom: 13,
 	        mapTypeId: google.maps.MapTypeId.ROADMAP
 	     });  
-	         
+	     
+	     var points = ${points};    
 	     for(var index in points){
 	        
 	        var marker = new google.maps.Marker({
