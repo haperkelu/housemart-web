@@ -298,6 +298,11 @@ public class ResidenceController extends BaseController {
         avgPoint.setLng(121.440599 + "");
         model.addAttribute("avgPoint", avgPoint);
     }
+    if (!CollectionUtils.isEmpty(list)) {
+        model.addAttribute("points", JsonUtils.writeValue(list));
+    } else {
+        model.addAttribute("points", "[]");
+    }
     
     Map<String,Object> param = new HashMap<String,Object>();
     param.put("residenceId", id);
