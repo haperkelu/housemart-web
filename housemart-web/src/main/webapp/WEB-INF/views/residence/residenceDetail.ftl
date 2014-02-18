@@ -397,21 +397,10 @@ refreshBuildingList();
 <script>
 
 	var initialize = function(){
-		var points = ${points};
-		var center;
-	 
-		//中心点
-		var avgLat = 0;
-	    var avgLng = 0;
-	    for(var index in points){
-	        avgLat += parseFloat(points[index].lat);
-	        avgLng += parseFloat(points[index].lng);       
-	    }
-		if(points.length == 0){
-			center = new google.maps.LatLng(31.197162,121.440599);
-	    } else {
-	     	center = new google.maps.LatLng(avgLat * 1.0/points.length ,avgLng * 1.0/points.length);
-	    }
+		var avgPoint = ${avgPoint};
+		//中心点	    
+	    var center = new google.maps.LatLng(${avgPoint.lat},${avgPoint.lng});
+	    
 	    var map = new google.maps.Map(document.getElementById("map_canvas"),{
 	    	center: center,
 	        zoom: 13,

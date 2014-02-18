@@ -267,8 +267,9 @@ public class ResidenceController extends BaseController {
     map.put("residenceId", id);
     List<GooglePlaceBaseEntity> list = googlePlaceDao.select(
         "findRawDatByResidenceId", map);
+    GooglePlaceBaseEntity avgPoint = null;    
     if (!CollectionUtils.isEmpty(list)) {
-      GooglePlaceBaseEntity avgPoint = null;
+      
       for (GooglePlaceBaseEntity item : list) {
         if (item.getIsMain() == null) {
           item.setIsMain(false);
@@ -278,23 +279,24 @@ public class ResidenceController extends BaseController {
         }
       }
       if (avgPoint == null) {
-        avgPoint = new GooglePlaceBaseEntity();
-        double avgLat = 0;
-        double avgLng = 0;
-        for (GooglePlaceBaseEntity item : list) {
-          avgLat += Double.parseDouble(item.getLat());
-          avgLng += Double.parseDouble(item.getLng());
-        }
-        avgPoint.setLat((avgLat / list.size() + ""));
-        avgPoint.setLng((avgLng / list.size() + ""));
+          avgPoint = new GooglePlaceBaseEntity();
+          double avgLat = 0;
+          double avgLng = 0;
+          for (GooglePlaceBaseEntity item : list) {
+            avgLat += Double.parseDouble(item.getLat());
+            avgLng += Double.parseDouble(item.getLng());
+          }
+          avgPoint.setLat((avgLat / list.size() + ""));
+          avgPoint.setLng((avgLng / list.size() + ""));
+          model.addAttribute("avgPoint", avgPoint);
+      }     
+      
+    } 
+    if(avgPoint == null){
+    	avgPoint = new GooglePlaceBaseEntity();
+        avgPoint.setLat(31.197162 + "");
+        avgPoint.setLng(121.440599 + "");
         model.addAttribute("avgPoint", avgPoint);
-      }
-    }
-    
-    if (!CollectionUtils.isEmpty(list)) {
-      model.addAttribute("points", JsonUtils.writeValue(list));
-    } else {
-      model.addAttribute("points", "[]");
     }
     
     Map<String,Object> param = new HashMap<String,Object>();
