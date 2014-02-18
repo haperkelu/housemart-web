@@ -266,7 +266,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>ALL-In-One-Web</finalName>
+		<finalName>housemart-web</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
