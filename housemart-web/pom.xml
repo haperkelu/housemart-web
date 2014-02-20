@@ -4,7 +4,7 @@
 	<groupId>org.housemart</groupId>
 	<packaging>war</packaging>
 	<version>1.0.0</version>
-	<name>ALL-In-One-Web Maven Webapp</name>
+	<name>housemart-web</name>
 	<url>http://maven.apache.org</url>
 	<repositories>
 		<repository>
@@ -262,11 +262,11 @@
 		<dependency>
 			<groupId>org.brilliance</groupId>
 			<artifactId>rpc-middleware</artifactId>
-			<version>0.0.5-SNAPSHOT</version>
+			<version>0.0.7-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>ALL-In-One-Web</finalName>
+		<finalName>housemart-web</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
