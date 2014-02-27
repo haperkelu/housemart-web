@@ -4,7 +4,7 @@
  */
 package org.housemart.pic.crawl.anjuke;
 
-import org.housemart.pic.service.ResidencePicCrawlerService;
+import org.housemart.crawl.pic.service.ResidencePicCrawlerService;
 import org.housemart.web.context.SpringContextHolder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
