@@ -2,7 +2,7 @@
  * Created on 2013-4-20
  * 
  */
-package org.housemart.pic.crawl.anjuke;
+package org.housemart.crawl.pic.crawler.anjuke;
 
 import org.housemart.crawl.pic.service.ResidencePicCrawlerService;
 import org.housemart.web.context.SpringContextHolder;
