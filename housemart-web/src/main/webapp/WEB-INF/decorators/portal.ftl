@@ -57,7 +57,7 @@
 		    </div>       			    
             <div class="container">
                 <div class="navbar-header">
-                    <a href="#" class="navbar-brand logo">HouseMart</a>
+                    <a href="/" class="navbar-brand logo">HouseMart</a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                		<li><a href="/html/index.html">首页</a></li>

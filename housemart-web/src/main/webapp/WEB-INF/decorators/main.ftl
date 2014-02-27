@@ -50,7 +50,7 @@
 		    
             <div class="container">
                 <div class="navbar-header">
-                    <a href="#" class="navbar-brand logo">HouseMart</a>
+                    <a href="/" class="navbar-brand logo">HouseMart</a>
                 </div>
                 
                 <#if type?exists && type != -1>
