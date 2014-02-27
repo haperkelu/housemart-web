@@ -14,7 +14,7 @@ import org.webharvest.runtime.variables.ListVariable;
 public class JsonCrawler extends _ACrawler {
 
 	public JsonCrawler(String workDir) {
-		super("org/housemart/pic/common/crawler/JsonData.xml", workDir);
+		super("org/housemart/crawl/common/crawler/JsonData.xml", workDir);
 	}
 
 	public String crawlReturnJson(String url) throws Exception {
