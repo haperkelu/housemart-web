@@ -12,6 +12,9 @@
 		SELECT RegionID, Name, Level
 		FROM region AS rd
 		WHERE Level = #level#
+		<isNotNull prepend="AND" property="cityId"> 
+            CityID = #cityId#
+        </isNotNull>		
 	</select>
 
 	<select id="findPlateListByRegionId" resultMap="region">

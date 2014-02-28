@@ -32,11 +32,15 @@ public class PositionController {
 	GenericDao regionDao;
 	
 	@RequestMapping(value = "regionSet.controller")
-	public String  getList(Model model, @RequestParam("regionId")  int regionId) throws JsonGenerationException, JsonMappingException, IOException{
+	public String  getList(Model model, @RequestParam("cityId") int cityId, @RequestParam("regionId")  int regionId) throws JsonGenerationException, JsonMappingException, IOException{
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("cityId", 1);
+		map.put("cityId", cityId);
 		map.put("type", 2);
+		if(regionId == 0){
+			if(cityId == 1) {regionId = 359;}
+			if(cityId == 2) {regionId = 570;}
+		}
 		map.put("positionId", regionId);
 
 		List<AreaPositionEntity> list = areaPositionDao.select("findPositionList", map);
@@ -57,6 +61,7 @@ public class PositionController {
 		
 		//model.addAttribute("list", list);
 		model.addAttribute("regionid", regionId);
+		model.addAttribute("cityid", cityId);
 		
 		return "position/region"; 
 	}

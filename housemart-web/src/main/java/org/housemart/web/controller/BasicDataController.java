@@ -84,6 +84,20 @@ public class BasicDataController extends BaseController {
 	}
 	
 	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "ajax/getRegionListByCityId.controller")
+	public ModelAndView getRegionListByCityId(@RequestParam("cityId") int cityId){
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		map.put("level", 1);
+		map.put("cityId", cityId);
+		List<RegionEntity> list = regionDao.select("findRegionListByLevel", map);
+		AjaxResultBean result = new AjaxResultBean();
+		result.setBizData(list);
+		return new ModelAndView("jsonView", "json", result);
+		
+	}	
+	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "ajax/getPlateList.controller")
 	public ModelAndView getPlateList(@RequestParam("parentId") int parentId){
 		

@@ -2,18 +2,24 @@
 <body>
 
 
-<div>区域:<select style="width:50px" id="region" name="region"></select> &nbsp</div>
-
+<div>城市: <select id="city" name="city" style="width:50px"><option value="1">上海</option><option value="2">南加州</option></select>
+&nbsp区域:<select style="width:50px" id="region" name="region"></select> &nbsp</div>
 <br/>
 <div id="map_canvas" style="float:left;margin-left:20px;width: 500px; height: 300px"></div>
 <div style="clear:both"></div>
 
 <script>
+	var currentCity = ${cityid};
 	var currentRegion = ${regionid};
+	$('#city option').each(function(){
+		if($(this).val() == currentCity){
+			$(this).attr('selected', true);
+		}
+	});
 	$.ajax({
 		type: "post",
-		url: "/ajax/getRegionList.controller",
-		data: {},
+		url: "/ajax/getRegionListByCityId.controller",
+		data: {cityId:currentCity},
 		dataType: "json",
 		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 		success: function (data) {		
@@ -33,8 +39,11 @@
   	});  
   	
   	$(document).ready(function(){
+	  	$('#city').change(function(){
+	  		location.href = location.pathname + '?cityId=' + $("#city").find("option:selected").val() + '&regionId=0';
+	  	});  	
 	  	$('#region').change(function(){
-	  		location.href = location.pathname + '?regionId='  + $("#region").find("option:selected").val();
+	  		location.href = location.pathname + '?cityId=' + $("#city").find("option:selected").val() + '&regionId='  + $("#region").find("option:selected").val();
 	  	});				
 	});
 
