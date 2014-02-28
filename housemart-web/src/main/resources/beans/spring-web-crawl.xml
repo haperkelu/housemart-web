@@ -16,7 +16,9 @@
 	<bean id="communityCrawler" class="org.housemart.pic.service.anjuke.search.CommunityCrawler">
 		<constructor-arg value="/mnt/upload/repository"/>
 	</bean>
-	
+
+	<bean id="residencePicCrawlerService" class="org.housemart.crawl.pic.service.ResidencePicCrawlerService">
+	</bean>	
 	
 	<bean id="communitySearcher" class="org.housemart.pic.service.anjuke.search.CommunitySearcher">
 	</bean>

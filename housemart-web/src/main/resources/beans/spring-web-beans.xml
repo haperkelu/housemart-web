@@ -78,9 +78,6 @@
 	
 	<bean id="houseInteractionNotifier" class="org.housemart.message.HouseInteractionNotifier">
 	</bean>		
-	
-	<bean id="residencePicCrawlerService" class="org.housemart.pic.service.ResidencePicCrawlerService">
-	</bean>
 		
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
