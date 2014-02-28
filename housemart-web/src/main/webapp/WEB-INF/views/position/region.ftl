@@ -119,7 +119,7 @@
 		$.ajax({
 		type: "post",
 		url: "/regionSet/confirmPositionMannally.controller",
-		data: {id: obj.id, lat: obj.getAttribute('lat'), lng: obj.getAttribute('lng'), type:2, cityId:1, positionId: ${regionid}},
+		data: {id: obj.id, lat: obj.getAttribute('lat'), lng: obj.getAttribute('lng'), type:2, cityId:currentCity, positionId: ${regionid}},
 		dataType: "json",
 		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 		success: function (data) {	
