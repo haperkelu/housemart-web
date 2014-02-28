@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.housemart.crawl.pic.service.ResidencePicCrawlerService;
 import org.housemart.dao.entities.HouseEntity;
 import org.housemart.dao.entities.HouseExtEntity;
 import org.housemart.dao.entities.HousePicEntity;
@@ -24,7 +25,6 @@ import org.housemart.dao.entities.ResidenceEntity;
 import org.housemart.framework.dao.generic.GenericDao;
 import org.housemart.pic.api.HessianPicServiceInterface;
 import org.housemart.pic.api.PicSaveResult;
-import org.housemart.pic.service.ResidencePicCrawlerService;
 import org.housemart.util.GenericCollections;
 import org.housemart.util.PicUtils;
 import org.housemart.web.beans.AjaxResultBean;

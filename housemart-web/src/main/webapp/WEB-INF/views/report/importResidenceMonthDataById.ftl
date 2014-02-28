@@ -6,8 +6,8 @@
 
 				<form id="uploadForm" action="/importResidenceMonthDataByIdSubmit.controller" name="uploadForm" method="POST" enctype="multipart/form-data">  
 					选择要导入的数据：
-					<select name="colName" value="全部">
-						<option value="全部">全部</option>
+					<select name="colName">
+						<!--<option value="全部">全部</option>-->
 						<option value="年涨幅">年涨幅</option>
 						<option value="年换手百分比">年换手百分比</option>
 						<option value="年租金回报">年租金回报</option>

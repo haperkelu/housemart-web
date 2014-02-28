@@ -11,12 +11,12 @@ import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.housemart.crawl.pic.service.ResidencePicCrawlerService;
+import org.housemart.crawl.pic.service.ResidencePicCrawlerService.UploadResultBean;
 import org.housemart.dao.entities.HousePicEntity;
 import org.housemart.dao.entities.RepositoryHousePicEntity;
 import org.housemart.dao.entities.ResidenceEntity;
 import org.housemart.framework.dao.generic.GenericDao;
-import org.housemart.pic.service.ResidencePicCrawlerService;
-import org.housemart.pic.service.ResidencePicCrawlerService.UploadResultBean;
 import org.housemart.web.context.HouseMartContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
