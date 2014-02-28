@@ -34,28 +34,19 @@ import com.caucho.hessian.client.HessianProxyFactory;
 
 public class ResidencePicCrawlerService {
   
-  PicCrawler picCrawler = SpringContextHolder.getBean("picCrawler");
-  GenericDao<RepositoryHousePicEntity> repositoryHousePicDao = SpringContextHolder
-      .getBean("repositoryHousePicDao");
-  ResourceProvider resourceProvider = SpringContextHolder
-      .getBean("resourceProvider");
-  
-  public List<Integer> crawlAndSaveResidencePic(int housemartId, int anjukeId)
-      throws Exception {
+  public List<Integer> crawlAndSaveResidencePic(int housemartId, int anjukeId) throws Exception {
     
-    _IEntitySearchable<CommunityGet> communitySearcher = SpringContextHolder
-        .getBean("communitySearcher");
+    PicCrawler picCrawler = SpringContextHolder.getBean("picCrawler");
+    _IEntitySearchable<CommunityGet> communitySearcher = SpringContextHolder.getBean("communitySearcher");
     List<Integer> pics = new ArrayList<Integer>();
-    CommunityGet communityGet = communitySearcher.search(String
-        .valueOf(anjukeId));
+    CommunityGet communityGet = communitySearcher.search(String.valueOf(anjukeId));
     
     // pic of residence20131130
     List<String> photosOfResidence = communityGet.getPhotos();
     if (CollectionUtils.isNotEmpty(photosOfResidence)) {
       for (String photo : photosOfResidence) {
         String url = photo;
-        String photoName = StringUtils.substringAfterLast(url, "com/")
-            .replaceAll("/", "-");
+        String photoName = StringUtils.substringAfterLast(url, "com/").replaceAll("/", "-");
         String fileSavePath = getPicPathPrefix() + photoName;
         String fullPath = picCrawler.getWorkDir() + "/" + fileSavePath;
         
@@ -66,8 +57,8 @@ public class ResidencePicCrawlerService {
         RepositoryHousePicEntity.CrawlStatus crawlStatus = RepositoryHousePicEntity.CrawlStatus.Error;
         if (picCrawler.getScraper().getStatus() == Scraper.STATUS_FINISHED) {
           crawlStatus = RepositoryHousePicEntity.CrawlStatus.Success;
-          int picId = addHousePicToRespositoryDb(null, housemartId, fullPath,
-              RepositoryHousePicEntity.Type.Residence.getValue(), crawlStatus);
+          int picId = addHousePicToRespositoryDb(null, housemartId, fullPath, RepositoryHousePicEntity.Type.Residence.getValue(),
+              crawlStatus);
           pics.add(picId);
         }
         
@@ -95,23 +86,21 @@ public class ResidencePicCrawlerService {
   
   public boolean uploadPic(Integer picId) throws IOException {
     
+    GenericDao<RepositoryHousePicEntity> repositoryHousePicDao = SpringContextHolder.getBean("repositoryHousePicDao");
+    ResourceProvider resourceProvider = SpringContextHolder.getBean("resourceProvider");
+    
     boolean uploadSuccess = false;
-    RepositoryHousePicEntity pEntity = repositoryHousePicDao.load(
-        "loadHousePic", picId);
+    RepositoryHousePicEntity pEntity = repositoryHousePicDao.load("loadHousePic", picId);
     String fileFullPath = pEntity.getUrl();
     String[] arrNames = pEntity.getUrl().split("\\.");
-    final String fileName = UrlBase64Coder.encoded(StringUtils
-        .substringAfterLast(arrNames[0], "/"))
-        + "_"
+    final String fileName = UrlBase64Coder.encoded(StringUtils.substringAfterLast(arrNames[0], "/")) + "_"
         + Calendar.getInstance().getTime().getTime() + "." + arrNames[1];
     
     String URL = resourceProvider.getValue("housemart.pic.service.url");
     HessianProxyFactory factory = new HessianProxyFactory();
-    HessianPicServiceInterface service = (HessianPicServiceInterface) factory
-        .create(HessianPicServiceInterface.class, URL);
+    HessianPicServiceInterface service = (HessianPicServiceInterface) factory.create(HessianPicServiceInterface.class, URL);
     
-    PicSaveResult remoteResult = service.savePicToCloud(picId, fileName,
-        "image/" + arrNames[1], fileFullPath);
+    PicSaveResult remoteResult = service.savePicToCloud(picId, fileName, "image/" + arrNames[1], fileFullPath);
     
     if (remoteResult != null && remoteResult.getCode() == 200) {
       Map<String,Object> map = new HashMap<String,Object>();
@@ -125,8 +114,11 @@ public class ResidencePicCrawlerService {
     
   }
   
-  private int addHousePicToRespositoryDb(Integer houseId, Integer residenceId,
-      String path, int type, RepositoryHousePicEntity.CrawlStatus crawlStatus) {
+  private int addHousePicToRespositoryDb(Integer houseId, Integer residenceId, String path, int type,
+      RepositoryHousePicEntity.CrawlStatus crawlStatus) {
+    
+    GenericDao<RepositoryHousePicEntity> repositoryHousePicDao = SpringContextHolder.getBean("repositoryHousePicDao");
+    
     int picId = -1;
     RepositoryHousePicEntity picEntity = new RepositoryHousePicEntity();
     picEntity.setHouseId(houseId);
@@ -140,8 +132,8 @@ public class ResidencePicCrawlerService {
     return picId;
   }
   
-  public int addHousePicToRespositoryDb(Integer houseId, Integer residenceId,
-      String cloudPath, int type) {
+  public int addHousePicToRespositoryDb(Integer houseId, Integer residenceId, String cloudPath, int type) {
+    GenericDao<RepositoryHousePicEntity> repositoryHousePicDao = SpringContextHolder.getBean("repositoryHousePicDao");
     int picId = -1;
     RepositoryHousePicEntity picEntity = new RepositoryHousePicEntity();
     picEntity.setHouseId(houseId);
@@ -157,8 +149,7 @@ public class ResidencePicCrawlerService {
   }
   
   private String getPicPathPrefix() {
-    return new SimpleDateFormat("yyyyMMdd").format(new Date())
-        + _IPicConstants.FILE_SUBPATH_RESIDENCE + "/";
+    return new SimpleDateFormat("yyyyMMdd").format(new Date()) + _IPicConstants.FILE_SUBPATH_RESIDENCE + "/";
   }
   
   public static class UploadResultBean {

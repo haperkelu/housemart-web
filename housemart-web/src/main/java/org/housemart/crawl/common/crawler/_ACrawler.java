@@ -6,6 +6,7 @@ package org.housemart.crawl.common.crawler;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.webharvest.definition.ScraperConfiguration;
 import org.webharvest.runtime.Scraper;
@@ -25,6 +26,7 @@ public abstract class _ACrawler {
 		this.workDir = workDir;
 		this.scraper = new HouseMartScraper(config, workDir);
 		this.om = new ObjectMapper();
+		om.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
 	public Scraper getScraper() {
