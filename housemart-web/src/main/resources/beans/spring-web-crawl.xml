@@ -13,17 +13,17 @@
 
 
 	
-	<bean id="communityCrawler" class="org.housemart.pic.service.anjuke.search.CommunityCrawler">
+	<bean id="communityCrawler" class="org.housemart.crawl.pic.service.anjuke.search.CommunityCrawler">
 		<constructor-arg value="/mnt/upload/repository"/>
 	</bean>
 
 	<bean id="residencePicCrawlerService" class="org.housemart.crawl.pic.service.ResidencePicCrawlerService">
 	</bean>	
 	
-	<bean id="communitySearcher" class="org.housemart.pic.service.anjuke.search.CommunitySearcher">
+	<bean id="communitySearcher" class="org.housemart.crawl.pic.service.anjuke.search.CommunitySearcher">
 	</bean>
 
-	<bean id="picCrawler" class="org.housemart.pic.service.anjuke.store.PicCrawler">
+	<bean id="picCrawler" class="org.housemart.crawl.pic.service.anjuke.store.PicCrawler">
 		<constructor-arg value="/mnt/upload/repository"/>
 	</bean>
 	
