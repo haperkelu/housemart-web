@@ -67,11 +67,11 @@ public class PositionController {
 	}
 	
 	@RequestMapping(value = "plateSet.controller")
-	public String  getPlateList(Model model, @RequestParam("regionId")  int regionId, @RequestParam("plateId")  int plateId) throws JsonGenerationException, JsonMappingException, IOException{
+	public String  getPlateList(Model model, @RequestParam("cityId") int cityId, @RequestParam("regionId")  int regionId, @RequestParam("plateId")  int plateId) throws JsonGenerationException, JsonMappingException, IOException{
 		
 		int type = 3;
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("cityId", 1);
+		map.put("cityId", cityId);
 		map.put("type", type);
 		if(plateId == 0){
 			Map<Object, Object> mapParent = new HashMap<Object, Object>();
@@ -101,6 +101,7 @@ public class PositionController {
 		model.addAttribute("points", JsonUtils.writeValue(list));
 		
 		//model.addAttribute("list", list);
+		model.addAttribute("cityId", cityId);
 		model.addAttribute("regionId", regionId);
 		model.addAttribute("plateId", plateId);
 		

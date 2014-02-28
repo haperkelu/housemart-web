@@ -2,29 +2,36 @@
 <body>
 
 
-<div><#include "/common/regionSelect.ftl"></div>
+<div>
+城市: <select id="city" name="city" style="width:50px"><option value="1">上海</option><option value="2">南加州</option></select>
+&nbsp<#include "/common/regionSelect.ftl"></div>
 
 <br/>
 <div id="map_canvas" style="float:left;margin-left:20px;width: 500px; height: 300px"></div>
 <div style="clear:both"></div>
 
 <script>
+	var currentCity = ${cityId};
 	var currentRegion = ${regionId};
 	var currentPlate = ${plateId};
 	$(document).ready(function(){	
-			
+
+
+		$('#city').change(function(){ 
+			location.href = location.pathname + '?cityId=' + $("#city").find("option:selected").val() + '&regionId=0&plateId=0';
+		});			
 		$('#region').change(function(){ 
-			location.href = location.pathname + '?regionId='  + $("#region").find("option:selected").val()  +'&plateId=0';
+			location.href = location.pathname + '?cityId=' + $("#city").find("option:selected").val() + '&regionId='  + $("#region").find("option:selected").val()  +'&plateId=0';
 		});
 		$('#plate').change(function(){
-			location.href = location.pathname + '?regionId='  + $("#region").find("option:selected").val()  +'&plateId=' + $("#plate").find("option:selected").val();
+			location.href = location.pathname + '?cityId=' + $("#city").find("option:selected").val() + '&regionId='  + $("#region").find("option:selected").val()  +'&plateId=' + $("#plate").find("option:selected").val();
 		 });
 		
 	});
 	$.ajax({
 		type: "post",
-		url: "/ajax/getRegionList.controller",
-		data: {},
+		url: "/ajax/getRegionListByCityId.controller",
+		data: {cityId:currentCity},
 		dataType: "json",
 		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 		success: function (data) {		
@@ -153,7 +160,7 @@
 		$.ajax({
 		type: "post",
 		url: "/regionSet/confirmPositionMannally.controller",
-		data: {id: obj.id, lat: obj.getAttribute('lat'), lng: obj.getAttribute('lng'), type:3, cityId:1, positionId: currentPlate},
+		data: {id: obj.id, lat: obj.getAttribute('lat'), lng: obj.getAttribute('lng'), type:3, cityId:currentCity, positionId: currentPlate},
 		dataType: "json",
 		contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 		success: function (data) {	
