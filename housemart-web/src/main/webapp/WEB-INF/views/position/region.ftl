@@ -26,6 +26,9 @@
 			var total = '';
 			for(var i in data.bizData){
 				var selected = ' ';
+				if(i == 0 && currentRegion == 0) {
+					currentRegion = data.bizData[i].id;
+				}				
 				if(data.bizData[i].id == currentRegion){
 					selected += 'selected';
 				}

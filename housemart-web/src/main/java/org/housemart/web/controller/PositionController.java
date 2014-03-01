@@ -37,10 +37,6 @@ public class PositionController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cityId", cityId);
 		map.put("type", 2);
-		if(regionId == 0){
-			if(cityId == 1) {regionId = 359;}
-			if(cityId == 2) {regionId = 570;}
-		}
 		map.put("positionId", regionId);
 
 		List<AreaPositionEntity> list = areaPositionDao.select("findPositionList", map);

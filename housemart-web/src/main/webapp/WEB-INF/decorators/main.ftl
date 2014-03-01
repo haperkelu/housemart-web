@@ -216,8 +216,8 @@
 				<li><span><a href="/accountApplyList.controller">账号审核</a></span></li>
 				<li><span><a href="/accountResidenceList.controller">楼盘管理</a></span></li>
 				<li><span><a href="/accountRevokeList.controller">行政审核</a></span></li>
-				<li><span><a href="/regionSet.controller?cityId=1&regionId=359">设置行政区经纬度</a></span></li>
-				<li><span><a href="/plateSet.controller?cityId=1&regionId=359&plateId=380">设置板块经纬度</a></span></li>		
+				<li><span><a href="/regionSet.controller?cityId=1&regionId=0">设置行政区经纬度</a></span></li>
+				<li><span><a href="/plateSet.controller?cityId=1&regionId=359&plateId=0">设置板块经纬度</a></span></li>		
 				<li><span><a href="/importData.controller">导入脉信数据</a></span></li>	
 			</ul>
 			<ul id="cat-7-sub" class="sub-cat">
