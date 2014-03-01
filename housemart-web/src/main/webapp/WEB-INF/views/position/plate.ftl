@@ -14,6 +14,11 @@
 	var currentCity = ${cityId};
 	var currentRegion = ${regionId};
 	var currentPlate = ${plateId};
+	$('#city option').each(function(){
+		if($(this).val() == currentCity){
+			$(this).attr('selected', true);
+		}
+	});	
 	$(document).ready(function(){	
 
 
