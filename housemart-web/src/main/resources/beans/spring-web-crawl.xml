@@ -23,8 +23,10 @@
 	<bean id="communitySearcher" class="org.housemart.crawl.pic.service.anjuke.search.CommunitySearcher">
 	</bean>
 
-	<bean id="picCrawler" class="org.housemart.crawl.pic.service.anjuke.store.PicCrawler">
+	<bean id="picCrawler" class="org.housemart.crawl.common.crawler.PicCrawler">
 		<constructor-arg value="/mnt/upload/repository"/>
 	</bean>
+
+	
 	
 </beans>  
