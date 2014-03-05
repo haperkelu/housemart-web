@@ -30,6 +30,36 @@ public class PositionController {
 	@SuppressWarnings("rawtypes")
 	@Autowired
 	GenericDao regionDao;
+
+	@RequestMapping(value = "citySet.controller")
+	public String citySet(Model model, @RequestParam("cityId") int cityId) throws JsonGenerationException, JsonMappingException, IOException {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("cityId", cityId);
+		map.put("type", 1);
+		map.put("positionId", cityId);
+		
+		List<AreaPositionEntity> list = areaPositionDao.select("findPositionList", map);
+		
+		if(list != null && list.size() > 0){
+			AreaPositionEntity entity = (AreaPositionEntity)list.get(0);
+			model.addAttribute("points", JsonUtils.writeValue(list));
+		} else {
+			AreaPositionEntity entity = new AreaPositionEntity();
+			entity.setCityId(1);
+			entity.setType(1);
+			entity.setPositionId(cityId);
+			entity.setLat("31.197162");
+			entity.setLng("121.440599");		
+			areaPositionDao.add("addPosition", entity);
+			list.add(entity);
+		}
+		model.addAttribute("points", JsonUtils.writeValue(list));
+		model.addAttribute("cityid", cityId);
+		
+		
+		return "position/city"; 
+	}
 	
 	@RequestMapping(value = "regionSet.controller")
 	public String  getList(Model model, @RequestParam("cityId") int cityId, @RequestParam("regionId")  int regionId) throws JsonGenerationException, JsonMappingException, IOException{
