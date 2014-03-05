@@ -140,6 +140,7 @@
 				<select name="regionCityId" value="" id="city">
 					<option value="" selected="selected">选择城市</option>
 					<option value="1">上海</option>
+					<option value="2">南加州</option>
 				</select>
 				<select name="regionParentId" value="" id="region">
 					<option value="" selected="selected">选择区</option>

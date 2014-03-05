@@ -18,3 +18,4 @@
 
 #sys-msg {position:absolute;width:100%;line-height:22px;text-align:center;font-size:12px;top:-30px;
 border:1px solid #429a44;background: #d7ffd7; outline:none;color:#4f8342;display:none;}
+.pagination-summary {float:left;padding:3px 10px;}

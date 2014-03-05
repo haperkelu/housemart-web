@@ -79,7 +79,13 @@
 			<div class="container">
 				<p class="text-center text-muted">www.housemart.cn 2012-2013 &copy; All Right Reserved</p> 
 				<p class="text-center text-muted">沪ICP备：13014224号-1</p> 
-			</div> 
+			</div>
+			<div style="display:none;">
+			    <script type="text/javascript">
+				var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+				document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F493a93e6a9ac53ff6bb17cdf23509ef4' type='text/javascript'%3E%3C/script%3E"));
+				</script>
+		    </div> 
         </div>
 					
     </body>

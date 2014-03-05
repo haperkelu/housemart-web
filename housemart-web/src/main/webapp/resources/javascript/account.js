@@ -85,8 +85,8 @@ function refreshRegionList(selectedOpts){
 	if($("#city").find("option:selected").val() > 0){
 		$.ajax({
 			type: "post",
-			url: "ajax/getRegionList.controller",
-			data: {},
+			url: "ajax/getRegionListByCityId.controller",
+            data: {cityId: $("#city").val()},
 			dataType: "json",
 			contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 			success: function (data) {		
