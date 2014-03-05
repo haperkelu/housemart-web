@@ -145,7 +145,7 @@
 				</table>
 			</div>
 			<div class="pagination-summary">
-				共 ${(param.totalCount)!0}条, 每页显示 ${(param.pageSize)!0}
+				共 ${(param.totalCount)!0}条, 每页显示 ${(param.pageSize)!0} 条
 			</div>
 			<div id="pagination" class="pagination">
 			</div>
