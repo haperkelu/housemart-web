@@ -11,7 +11,8 @@
 				classpath*:beans/spring-web-crawl.xml,
                 classpath*:beans/spring-web-beans.xml,
                 classpath*:beans/spring-web-rpc-beans.xml,
-                classpath*:beans/spring-web-dao.xml
+                classpath*:beans/spring-web-dao.xml,
+                classpath*:beans/spring-web-ziprealty.xml
         </param-value>
 	</context-param>
 	<listener>

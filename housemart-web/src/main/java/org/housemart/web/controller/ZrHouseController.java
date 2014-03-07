@@ -16,7 +16,6 @@ import org.housemart.crawl.ziprealty.service.ListPageCrawler;
 import org.housemart.service.ZrHouseService;
 import org.housemart.web.context.SpringContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -27,8 +26,21 @@ public class ZrHouseController extends BaseController {
     return "zr/crawlerPage";
   }
   
+  @RequestMapping(value = "zr/crawlTask.controller")
+  public String crawlTask() {
+    List<String> urls = SpringContextHolder.getBean("zipRealtyHouseList");
+    for (String url : urls) {
+      try {
+        crawlUrl(url);
+      } catch (Exception e) {
+        logger.error("Crawl Task Error!", e);
+      }
+    }
+    return "zr/crawlerPage";
+  }
+  
   @RequestMapping(value = "zr/crawlHouse.controller")
-  public String externalHousePicConsole(Model model, String url) throws JsonGenerationException, JsonMappingException, IOException {
+  public String crawlUrl(String url) throws JsonGenerationException, JsonMappingException, IOException {
     ZrHouseService zrHouseService = SpringContextHolder.getBean("zrHouseService");
     int maxPage = 1;
     int currentPage = 1;
