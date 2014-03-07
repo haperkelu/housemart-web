@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<bean id="zipRealtyHouseList" class="java.util.ArrayList">
+		<constructor-arg>
+	        <list>
+	           	<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/14777/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/1295/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/14777/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/14782/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/1296/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/14800/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/1300/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/1301/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/14801/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/1303/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/1293/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/1304/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/14793/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/1299/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/14776/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/14792/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160101/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160174/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160129/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160126/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160144/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160192/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160032/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160132/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160170/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160161/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160143/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160066/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160179/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160100/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160068/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160023/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160061/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160141/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160186/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160154/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160110/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160037/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160026/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160081/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160096/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160178/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160042/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160119/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160176/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160053/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160190/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160155/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160071/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160138/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160103/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160158/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160021/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160084/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160058/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160111/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160149/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160088/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/160127/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/oc/by-city/Laguna-Beach,CA/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/oc/by-zip/92629/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/oc/by-zip/92624/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/2800/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/2805/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/2799/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/2798/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/la/by-neighborhood/2804/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2203/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2177/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2218/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2191/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2204/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2145/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2198/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2172/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2207/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2189/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2142/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/73224/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/176663/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2173/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2175/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2192/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2128/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2143/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2149/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2212/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2199/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2161/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2162/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2211/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2184/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2197/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2140/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2170/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2159/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2168/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2154/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2205/detailed</value>
+<value>http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2182/detailed</value>
+             
+	        </list>
+	    </constructor-arg>
+	</bean>
+
+
+</beans>  
