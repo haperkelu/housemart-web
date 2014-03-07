@@ -1,0 +1,177 @@
+<config charset="utf-8">
+
+	<var-def name="pageHtml">
+		<http url="${url}" charset="utf-8" >
+		</http>
+	</var-def>
+
+	<var-def name="pageXml">
+		<html-to-xml>
+			<template>${pageHtml}</template>
+		</html-to-xml>
+	</var-def>
+
+	<var-def name="titles">
+		<xpath expression="//*[@id='pdCol']/h1/text()">
+			<var name="pageXml" />
+		</xpath>
+	</var-def>
+
+	<var-def name="blocks">
+		<xpath expression="//*[@id='pdCol']/h2/text()">
+			<var name="pageXml" />
+		</xpath>
+	</var-def>
+	
+	<var-def name="mlss">
+		<xpath expression="//*[@id='propDetailCont']/dl[2]/dd[1]/text()">
+			<var name="pageXml" />
+		</xpath>
+	</var-def>
+		
+	<var-def name="prices">
+		<xpath expression="//*[@id='hdPriceCont']/div[1]/strong/text()">
+			<var name="pageXml" />
+		</xpath>
+	</var-def>
+		
+	<var-def name="statuss">
+		<xpath expression="//*[@id='propDetailCont']/dl[2]/dd[2]/text()">
+			<var name="pageXml" />
+		</xpath>
+	</var-def>
+		
+	<var-def name="listeds">
+		<xpath expression="//*[@id='propDetailCont']/dl[1]/dd[4]/text()">
+			<var name="pageXml" />
+		</xpath>
+	</var-def>
+	
+	<var-def name="details">
+		<xpath expression="//*[@id='corePropDetails']">
+			<var name="pageXml" />
+		</xpath>
+	</var-def>
+	
+	<var-def name="neighborhoods">
+		<xpath expression="//*[@id='pdCol']/div[2]/span/span[1]/text()">
+			<var name="pageXml" />
+		</xpath>
+	</var-def>
+	
+	<var-def name="pics">
+		<xpath expression="//*[@id='caro1']/li/a/@href">
+			<var name="pageXml" />
+		</xpath>
+	</var-def>
+	
+	<loop item="item" index="i">
+		<list>
+			<var name="titles" />
+		</list>
+
+		<body>
+			<template>
+				${title.add(item)};
+			</template>
+		</body>
+	</loop>
+
+	<loop item="item" index="i">
+		<list>
+			<var name="blocks" />
+		</list>
+
+		<body>
+			<template>
+				${block.add(item)};
+			</template>
+		</body>
+	</loop>
+
+	<loop item="item" index="i">
+		<list>
+			<var name="mlss" />
+		</list>
+
+		<body>
+			<template>
+				${mls.add(item)};
+			</template>
+		</body>
+	</loop>
+	
+	<loop item="item" index="i">
+		<list>
+			<var name="prices" />
+		</list>
+
+		<body>
+			<template>
+				${price.add(item)};
+			</template>
+		</body>
+	</loop>
+	
+	<loop item="item" index="i">
+		<list>
+			<var name="listeds" />
+		</list>
+
+		<body>
+			<template>
+				${listed.add(item)};
+			</template>
+		</body>
+	</loop>
+	
+	<loop item="item" index="i">
+		<list>
+			<var name="statuss" />
+		</list>
+
+		<body>
+			<template>
+				${status.add(item)};
+			</template>
+		</body>
+	</loop>
+	
+	<loop item="item" index="i">
+		<list>
+			<var name="details" />
+		</list>
+
+		<body>
+			<template>
+				${detail.add(item)};
+			</template>
+		</body>
+	</loop>
+	
+	<loop item="item" index="i">
+		<list>
+			<var name="neighborhoods" />
+		</list>
+
+		<body>
+			<template>
+				${neighborhood.add(item)};
+			</template>
+		</body>
+	</loop>
+		
+	<loop item="item" index="i">
+		<list>
+			<var name="pics" />
+		</list>
+
+		<body>
+			<template>
+				${pic.add(item)};
+			</template>
+		</body>
+	</loop>
+	
+	
+</config>

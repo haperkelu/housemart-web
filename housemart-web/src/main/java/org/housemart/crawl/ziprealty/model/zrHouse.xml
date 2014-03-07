@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ZrHouse">
+	
+	<resultMap id="zrHouse" class="org.housemart.crawl.ziprealty.model.ZrHouse">
+		<result property="id" column="ID" />
+		<result property="title" column="Title" />
+		<result property="block" column="Block" />
+		<result property="mls" column="Mls" />
+		<result property="neighborhood" column="Neighborhood" />
+		<result property="houseDetail" column="HouseDetail" />
+		<result property="price" column="Price" />
+		<result property="status" column="Status" />
+		<result property="listed" column="Listed" />
+		<result property="link" column="Link" />
+		<result property="qnPics" column="QnPics" />
+		<result property="zrPics" column="ZrPics" />
+		<result property="addTime" column="AddTime" />
+		<result property="updateTime" column="UpdateTime" />
+	</resultMap>
+	
+	<insert id="addZrHouse" parameterClass="org.housemart.crawl.ziprealty.model.ZrHouse">
+		INSERT INTO zr_house (AddTime, UpdateTime, Title, Block, Mls, Neighborhood, HouseDetail, 
+			Price, Status, Listed, Link, QnPics, ZrPics)
+		VALUES(#addTime#, #updateTime#, #title#, #block#, #mls#, #neighborhood#, #houseDetail#, 
+			#price#, #status#, #listed#, #link#, #qnPics#, #zrPics#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<update id="updateZrHouse" parameterClass="org.housemart.crawl.ziprealty.model.ZrHouse">
+		UPDATE zr_house SET UpdateTime = #updateTime#, Title = #title#, Block = #block#, Mls = #mls#, 
+			Neighborhood = #neighborhood#, HouseDetail = #houseDetail#, Price = #price#, Status = #status#, 
+			Listed = #listed#, Link = #link#, QnPics = #qnPics#, ZrPics = #zrPics# 
+		WHERE ID = #id#
+	</update>
+
+	<select id="queryByMls" resultClass="org.housemart.crawl.ziprealty.model.ZrHouse" parameterClass="map">
+		SELECT * FROM zr_house WHERE Mls = #mls#
+	</select>
+	
+</sqlMap>

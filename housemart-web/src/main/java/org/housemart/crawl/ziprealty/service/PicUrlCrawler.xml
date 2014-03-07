@@ -1,0 +1,21 @@
+<config charset="utf-8">
+
+	<var-def name="pageHtml">
+		<http url="${url}" charset="utf-8" >
+		</http>
+	</var-def>
+			
+	<loop item="item" index="i">
+		<list>
+			<var name="pageHtml" />
+		</list>
+
+		<body>
+			<template>
+				${pic.add(item)};
+			</template>
+		</body>
+	</loop>
+	
+	
+</config>
