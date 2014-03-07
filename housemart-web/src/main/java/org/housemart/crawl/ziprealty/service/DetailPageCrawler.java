@@ -20,10 +20,14 @@ import org.housemart.crawl.common.crawler.PicCrawler;
 import org.housemart.crawl.common.crawler._ACrawler;
 import org.housemart.crawl.ziprealty._IZrConstants;
 import org.housemart.crawl.ziprealty.model.ZrHouse;
+import org.housemart.pic.api.HessianPicServiceInterface;
+import org.housemart.pic.api.PicSaveResult;
 import org.housemart.resource.ResourceProvider;
 import org.housemart.web.context.SpringContextHolder;
 import org.webharvest.runtime.Scraper;
 import org.webharvest.runtime.variables.NodeVariable;
+
+import com.caucho.hessian.client.HessianProxyFactory;
 
 public class DetailPageCrawler extends _ACrawler {
   
@@ -92,25 +96,20 @@ public class DetailPageCrawler extends _ACrawler {
             try {
               String path = pc.crawl(_IZrConstants.HOST_ZIP_REALTY + puOnZr, fileSavePath);
               // TODO:uncomments
-              // String URL =
-              // resourceProvider.getValue("housemart.pic.service.url");
-              // HessianProxyFactory factory = new HessianProxyFactory();
-              // HessianPicServiceInterface service =
-              // (HessianPicServiceInterface)
-              // factory.create(HessianPicServiceInterface.class,
-              // URL);
-              // PicSaveResult remoteResult = service.savePicToCloud(-1,
-              // photoName, "image/jpg", path);
-              // if (remoteResult != null && remoteResult.getCode() == 200) {
-              // picUrlsOnQn.add(remoteResult.getUrl());
-              // }
+              String URL = resourceProvider.getValue("housemart.pic.service.url");
+              HessianProxyFactory factory = new HessianProxyFactory();
+              HessianPicServiceInterface service = (HessianPicServiceInterface) factory.create(HessianPicServiceInterface.class,
+                  URL);
+              PicSaveResult remoteResult = service.savePicToCloud(-1, photoName, "image/jpg", path);
+              if (remoteResult != null && remoteResult.getCode() == 200) {
+                picUrlsOnQn.add(remoteResult.getUrl());
+              }
             } catch (Exception e) {
               log.error(e.getMessage(), e);
             }
           }
         }
         zrHouse.setQnPics(om.writeValueAsString(picUrlsOnQn));
-        // TODO::delete
         zrHouse.setZrPics(om.writeValueAsString(picUrlsOnZr));
       }
     }
