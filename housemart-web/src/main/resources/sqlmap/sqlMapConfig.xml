@@ -40,4 +40,6 @@
 <sqlMap resource="org/housemart/dao/entities/repositoryHousePic.xml" />
 <!-- house contact view -->
 <sqlMap resource="org/housemart/dao/entities/houseContactView.xml" />
+
+<sqlMap resource="org/housemart/crawl/ziprealty/model/zrHouse.xml" />
 </sqlMapConfig>

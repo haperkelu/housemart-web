@@ -25,6 +25,9 @@
 	<bean id="houseService" class="org.housemart.service.HouseService">
 	</bean>
 	
+	<bean id="zrHouseService" class="org.housemart.service.ZrHouseService">
+	</bean>
+
 	<bean id="clientService" class="org.housemart.service.ClientService">
 	</bean>
 	
