@@ -191,6 +191,7 @@
 			<ul id="cat-1-sub" class="sub-cat">
 				<li><span><a href="/residenceList?regionId=359&plateId=380">小区列表</a></span></li>		
 				<li><span><a href="/residencePinYin.controller">小区拼音</a></span></li>
+				<li><span><a href="/zr/findHouse.controller">加州房源</a></span></li>
 			</ul>
 			<ul id="cat-2-sub" class="sub-cat">
 				<li><span><a href="/houseEdit.controller">登盘</a></span></li>

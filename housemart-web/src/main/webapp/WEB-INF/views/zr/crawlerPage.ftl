@@ -2,9 +2,6 @@
 	<head></head>	
 	<title>抓取加州房源</title>
 	<body>
-		<div>
-			<#include "/house/houseNav.ftl">
-		</div>
 		<br>
 		<hr>
 		<div style="width:800px;height:500px;">
