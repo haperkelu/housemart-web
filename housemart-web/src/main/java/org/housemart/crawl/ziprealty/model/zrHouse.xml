@@ -40,4 +40,18 @@
 		SELECT * FROM zr_house WHERE Mls = #mls#
 	</select>
 	
+	<select id="queryList" resultClass="org.housemart.crawl.ziprealty.model.ZrHouse" parameterClass="map">
+		SELECT * FROM zr_house WHERE 1
+		<isNotNull prepend="AND" property="mlsLike"> 
+            Mls like '%$mlsLike$%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="neighborhoodLike"> 
+            Neighborhood like '%$neighborhoodLike$%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="blockLike"> 
+            Block like '%$blockLike$%'
+        </isNotNull>
+		<include refid="common.limit" />
+	</select>
+	
 </sqlMap>
