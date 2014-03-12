@@ -42,4 +42,8 @@ public class ZrHouseService {
     }
     return -1;
   }
+  
+  public List<ZrHouse> findHouse(Map<String,Object> para) {
+    return zrHouseDao.select("queryList", para);
+  }
 }

@@ -5,21 +5,29 @@
 package org.housemart.web.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.housemart.crawl.ziprealty.ZrHouseConverter;
 import org.housemart.crawl.ziprealty.model.ZrHouse;
+import org.housemart.crawl.ziprealty.model.ZrHouseBean;
 import org.housemart.crawl.ziprealty.service.DetailPageCrawler;
 import org.housemart.crawl.ziprealty.service.ListPageCrawler;
 import org.housemart.service.ZrHouseService;
 import org.housemart.web.context.SpringContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ZrHouseController extends BaseController {
+  
+  private ZrHouseConverter converter = new ZrHouseConverter();
   
   @RequestMapping(value = "zr/crawlerPage.controller")
   public String externalHousePicConsole() {
@@ -63,5 +71,30 @@ public class ZrHouseController extends BaseController {
     }
     
     return "zr/crawlerPage";
+  }
+  
+  @RequestMapping(value = "zr/findHouse.controller")
+  public String find(Model model, Integer page, String mlsLike, String neighborhoodLike, String blockLike)
+      throws JsonParseException, JsonMappingException, IOException {
+    ZrHouseService zrHouseService = SpringContextHolder.getBean("zrHouseService");
+    int pageSize = 10;
+    Map<String,Object> para = new HashMap<String,Object>();
+    if (StringUtils.isNotBlank(mlsLike)) {
+      para.put("mlsLike", mlsLike);
+    }
+    if (StringUtils.isNotBlank(neighborhoodLike)) {
+      para.put("neighborhoodLike", neighborhoodLike);
+    }
+    if (StringUtils.isNotBlank(blockLike)) {
+      para.put("blockLike", blockLike);
+    }
+    para.put("skip", 0);
+    para.put("count", pageSize);
+    List<ZrHouse> houses = zrHouseService.findHouse(para);
+    List<ZrHouseBean> result = converter.toBean(houses);
+    model.addAttribute("houses", result);
+    model.addAllAttributes(para);
+    
+    return "zr/houseList";
   }
 }
