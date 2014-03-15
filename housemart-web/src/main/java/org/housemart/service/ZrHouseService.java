@@ -46,4 +46,8 @@ public class ZrHouseService {
   public List<ZrHouse> findHouse(Map<String,Object> para) {
     return zrHouseDao.select("queryList", para);
   }
+  
+  public int countHouse(Map<String,Object> para) {
+    return zrHouseDao.count("count", para);
+  }
 }

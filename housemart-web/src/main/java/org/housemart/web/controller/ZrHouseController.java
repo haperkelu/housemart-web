@@ -77,7 +77,10 @@ public class ZrHouseController extends BaseController {
   public String find(Model model, Integer page, String mlsLike, String neighborhoodLike, String blockLike)
       throws JsonParseException, JsonMappingException, IOException {
     ZrHouseService zrHouseService = SpringContextHolder.getBean("zrHouseService");
-    int pageSize = 10;
+    if (page == null || page < 0) {
+      page = 0;
+    }
+    int pageSize = 20;
     Map<String,Object> para = new HashMap<String,Object>();
     if (StringUtils.isNotBlank(mlsLike)) {
       para.put("mlsLike", mlsLike);
@@ -88,11 +91,15 @@ public class ZrHouseController extends BaseController {
     if (StringUtils.isNotBlank(blockLike)) {
       para.put("blockLike", blockLike);
     }
-    para.put("skip", 0);
+    para.put("skip", page * pageSize);
     para.put("count", pageSize);
     List<ZrHouse> houses = zrHouseService.findHouse(para);
+    int total = zrHouseService.countHouse(para);
     List<ZrHouseBean> result = converter.toBean(houses);
     model.addAttribute("houses", result);
+    model.addAttribute("total", total);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("page", page);
     model.addAllAttributes(para);
     
     return "zr/houseList";

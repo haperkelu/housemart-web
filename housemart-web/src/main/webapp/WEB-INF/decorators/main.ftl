@@ -191,7 +191,6 @@
 			<ul id="cat-1-sub" class="sub-cat">
 				<li><span><a href="/residenceList?regionId=359&plateId=380">小区列表</a></span></li>		
 				<li><span><a href="/residencePinYin.controller">小区拼音</a></span></li>
-				<li><span><a href="/zr/findHouse.controller">加州房源</a></span></li>
 			</ul>
 			<ul id="cat-2-sub" class="sub-cat">
 				<li><span><a href="/houseEdit.controller">登盘</a></span></li>
@@ -199,6 +198,8 @@
 				<li><span><a href="/soldHouseList.controller">已售房源</a></span></li>
 				<#if isAdmin?exists && isAdmin == true || isManager?exists && isManager == true>
 					<li><span><a href="/houseAudit.controller?sourceType=1">房源审核</a></span></li>
+					<li><span><a href="/zr/findHouse.controller">加州房源</a></span></li>
+					<li><span><a href="/zr/crawlerPage.controller">加州房源抓取</a></span></li>
 				</#if>
 			</ul>
 			<ul id="cat-3-sub" class="sub-cat">

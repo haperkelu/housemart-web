@@ -15,6 +15,13 @@
 					&nbsp;&nbsp;&nbsp;
 					邮编或者区域<input name="blockLike" type="text" value="${(blockLike)!}"/>
 					<input type="submit" value="搜索"/>
+					
+					<input type="hidden" value="${(total)!0}" id="total"/>
+					<input type="hidden" name="page" value="${(page)!}" id="page"/>
+					<input type="hidden" name="pageSize" value="${(pageSize)!}" id="pageSize"/>
+					
+					<div id="pagination" class="pagination">
+					</div>
 				</form>
 			</div>
 			<br>					
@@ -50,5 +57,28 @@
 				</table>		
 			</div>				
 		</div>
+		<script>
+			var callbackCounter = 0;
+			
+			function pageselectCallback(page_index, jq){
+				if(callbackCounter>0){
+					$("#page").val(page_index);
+					$("#search").submit();
+				}
+				callbackCounter++;
+			}
+			
+			$(document).ready(function(){
+				$("#pagination").pagination(parseInt($("#total").val()), {
+				    num_edge_entries: 2,
+				    num_display_entries: 4,
+				    callback: pageselectCallback,
+				    items_per_page:$("#pageSize").val(),
+				    current_page:parseInt($("#page").val())
+				});
+			});
+			
+			
+		</script>
 	</body>
 </html>

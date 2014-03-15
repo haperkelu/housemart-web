@@ -54,4 +54,17 @@
 		<include refid="common.limit" />
 	</select>
 	
+	<select id="count" resultClass="int" parameterClass="map">
+		SELECT count(*) FROM zr_house WHERE 1
+		<isNotNull prepend="AND" property="mlsLike"> 
+            Mls like '%$mlsLike$%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="neighborhoodLike"> 
+            Neighborhood like '%$neighborhoodLike$%'
+        </isNotNull>
+        <isNotNull prepend="AND" property="blockLike"> 
+            Block like '%$blockLike$%'
+        </isNotNull>
+	</select>
+	
 </sqlMap>

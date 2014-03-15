@@ -4,20 +4,21 @@
 	<body>
 		<br>
 		<hr>
-		<div style="width:800px;height:500px;">
-			<div class="view" style="width:450px;" >
+		<div>
+			<div class="view">
 			</div>	
-			<div class="update" style="width:450px;">
+			<div class="update">
 				<form id="crawlForm" action="/zr/crawlHouse.controller" name="crawlForm" method="POST">  
-					<input name="url" type="text"/>  
-					<input type="submit" value="submit"/>
+					链接：<input name="url" type="text"/> <span>例如：http://www.ziprealty.com/homes-for-sale/list/oc/by-city/Irvine,CA/detailed</span>  
+					<br/>
+					<input type="submit" value="抓取链接"/>
 				</form>
 			</div>
 			<br>					
 			<hr>
-			<div class="update" style="width:450px;">
+			<div class="update">
 				<form id="crawlForm" action="/zr/crawlTask.controller" name="crawlForm" method="POST">  
-					<input type="submit" value="启动后台任务"/>
+					<input type="submit" value="重新执行后台抓取任务"/>
 				</form>
 			</div>				
 		</div>
