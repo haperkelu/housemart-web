@@ -50,7 +50,7 @@
 							<td>${(house.status)!}</td>
 							<td>${(house.listed)!}</td>
 							<td><a href="${(house.link)!}" target="_blank">点击</a></td>
-							<td><#if house.updateTime??>${house.updateTime?string("yyyy-mm-dd")}</#if></td>
+							<td><#if house.updateTime??>${house.updateTime?string("yyyy-MM-dd")}</#if></td>
 						</tr>
 					</#list>
 				</#if>
