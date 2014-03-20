@@ -2,7 +2,7 @@
 <body>
 
 
-<div>城市: <select id="city" name="city" style="width:50px"><option value="1">上海</option><option value="2">南加州</option></select>
+<div>城市: <select id="city" name="city" style="width:50px"><option value="1">上海</option><option value="2">南加州</option><option value="3">北加州</option></select>
 <br/>
 <div id="map_canvas" style="float:left;margin-left:20px;width: 500px; height: 300px"></div>
 <div style="clear:both"></div>

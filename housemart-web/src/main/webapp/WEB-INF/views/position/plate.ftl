@@ -3,7 +3,7 @@
 
 
 <div>
-城市: <select id="city" name="city" style="width:50px"><option value="1">上海</option><option value="2">南加州</option></select>
+城市: <select id="city" name="city" style="width:50px"><option value="1">上海</option><option value="2">南加州</option><option value="3">北加州</option></select>
 &nbsp<#include "/common/regionSelect.ftl"></div>
 
 <br/>
