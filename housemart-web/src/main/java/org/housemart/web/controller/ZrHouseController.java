@@ -96,6 +96,13 @@ public class ZrHouseController extends BaseController {
     List<ZrHouse> houses = zrHouseService.findHouse(para);
     int total = zrHouseService.countHouse(para);
     List<ZrHouseBean> result = converter.toBean(houses);
+    if (result != null) {
+      for (ZrHouseBean bean : result) {
+        if (bean.getQnPics() != null && bean.getQnPics().size() > 5) {
+          bean.setQnPics(bean.getQnPics().subList(0, 4));
+        }
+      }
+    }
     model.addAttribute("houses", result);
     model.addAttribute("total", total);
     model.addAttribute("pageSize", pageSize);
