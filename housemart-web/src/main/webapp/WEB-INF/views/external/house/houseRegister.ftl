@@ -251,7 +251,7 @@
 		                <div class="col-sm-3">
 		                    <select id="J_history" name="buildTimeString" class="form-control" <#if house.buildTime??>value='${house.buildTime?string("yyyy")}'</#if>>（日期：1980-1-1）
 							  	<option value="">选择</option>
-								<#list 2013..1900 as i>
+								<#list 2014..1900 as i>
 									<option value="${i}" <#if house.buildTime?? && house.buildTime?string("yyyy") == i?string>selected= "selected"</#if>>${i}</option>
 								</#list>
 							</select>
