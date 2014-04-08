@@ -298,7 +298,7 @@ public class ClientService {
 					}
 					else if (client.getClientToken() != null && client.getDevice().toLowerCase().contains("iphone"))
 					{
-						JavaPNSProvider.pushMessageToAPNS(client.getClientToken(), notificationSend.getNotificationContent(), 1, client.getBrokerID() == null);
+						JavaPNSProvider.pushMessageToAPNS(client.getClientToken(), notificationSend.getNotificationContent(), 1, client.getBrokerID() == null || client.getBrokerID() == -1);
 					}
 					else if (client.getClientToken() != null)
 					{
