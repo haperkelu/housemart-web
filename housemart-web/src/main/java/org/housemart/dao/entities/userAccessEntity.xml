@@ -37,7 +37,7 @@
 		<include refid="common.limit" />
 	</select>
 	
-	<select id="findUserAccessListCount" parameterClass="map" resultClass="Integer">
+	<select id="findUserAccessListCount" parameterClass="map" resultClass="int">
 		select count(1) from user_access_log
 		<dynamic prepend="WHERE">
 			<isNotNull prepend="AND" property="tag"> 
