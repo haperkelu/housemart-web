@@ -24,7 +24,7 @@
 		select * from user_access_log
 		<dynamic prepend="WHERE">
 			<isNotNull prepend="AND" property="tag"> 
-	            BizTag in ('$tag')
+	            BizTag in ('$tag$')
 	    	</isNotNull> 
 			<isNotNull prepend="AND" property="urlQuery"> 
 	            URL like '%$urlQuery$%'
@@ -41,7 +41,7 @@
 		select count(1) from user_access_log
 		<dynamic prepend="WHERE">
 			<isNotNull prepend="AND" property="tag"> 
-	            BizTag in ('$tag')
+	            BizTag in ('$tag$')
 	    	</isNotNull> 
 			<isNotNull prepend="AND" property="urlQuery"> 
 	            URL like '%$urlQuery$%'
