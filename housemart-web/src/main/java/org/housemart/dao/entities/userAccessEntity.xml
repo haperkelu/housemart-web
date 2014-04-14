@@ -23,9 +23,10 @@
 	<select id="findUserAccessList" parameterClass="map" resultMap="userAccess">
 		select * from user_access_log
 		<dynamic prepend="WHERE">
+			BizTag in 
 			<iterate prepend="AND" property="tag"
 			  open="(" close=")" conjunction=",">
-			  BizTag in #tag[]#
+			  #tag[]#
 			</iterate>		 
 			<isNotNull prepend="AND" property="urlQuery"> 
 	            URL like '%$urlQuery$%'
@@ -41,9 +42,10 @@
 	<select id="findUserAccessListCount" parameterClass="map" resultClass="int">
 		select count(1) from user_access_log
 		<dynamic prepend="WHERE">
+			BizTag in 
 			<iterate prepend="AND" property="tag"
 			  open="(" close=")" conjunction=",">
-			  BizTag in #tag[]#
+			  #tag[]#
 			</iterate>
 			<isNotNull prepend="AND" property="urlQuery"> 
 	            URL like '%$urlQuery$%'
