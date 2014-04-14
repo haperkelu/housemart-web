@@ -36,7 +36,7 @@ public class MonitorController {
 	public String addToFavoriteByHouseAndUser(Model model, Integer page, Integer pageSize) {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("tag", StringUtils.join(new String[] {"Page Request Context", "Page Load Performance"}, ","));
+		map.put("tag", new String[] {"Page Request Context", "Page Load Performance"});
 		PaginateObject		paginateObject	=	userAccessDao.paginate("findUserAccessList", page, pageSize, map, "findUserAccessListCount");
 		List<Object> list = paginateObject.getResult();
 		if(!CollectionUtils.isEmpty(list)){
