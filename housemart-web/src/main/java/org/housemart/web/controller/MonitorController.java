@@ -11,12 +11,11 @@ package org.housemart.web.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.collections.CollectionUtils;
-import org.housemart.dao.entities.UserAccessEntity;
 import org.housemart.framework.dao.generic.GenericDao;
 import org.housemart.framework.dao.generic.PaginateObject;
 import org.housemart.framework.web.context.SpringContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +29,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MonitorController {
 
 	@SuppressWarnings("rawtypes")
-	private GenericDao userAccessDao = SpringContextHolder.getBean("userAccessDao");
+	@Autowired
+	GenericDao userAccessDao;
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "monitor/list.controller")
 	public String addToFavoriteByHouseAndUser(Model model, Integer page, Integer pageSize) {
 		
