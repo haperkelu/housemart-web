@@ -1,5 +1,7 @@
 package org.housemart.dao.entities;
 
+import jxl.write.DateTime;
+
 public class UserAccessEntity {
 
 	
@@ -8,6 +10,7 @@ public class UserAccessEntity {
 	private int userId;
 	private String accessText;
 	private String url;
+	private DateTime addTime;
 	
 	public int getId() {
 		return id;
@@ -38,6 +41,18 @@ public class UserAccessEntity {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	/**
+	 * @return the addTime
+	 */
+	public DateTime getAddTime() {
+		return addTime;
+	}
+	/**
+	 * @param addTime the addTime to set
+	 */
+	public void setAddTime(DateTime addTime) {
+		this.addTime = addTime;
 	}
 
 }

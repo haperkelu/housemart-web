@@ -225,7 +225,8 @@
 			</ul>
 			<ul id="cat-7-sub" class="sub-cat">
 				<li><span><a href="/appUserPublishedHouse.controller?page=0&pageSize=20">客户端发布房源列表</a></span></li>
-				<li><span><a href="/appUserFeedback.controller?page=0&pageSize=20">客户端反馈</a></span></li>			
+				<li><span><a href="/appUserFeedback.controller?page=0&pageSize=20">客户端反馈</a></span></li>
+				<li><span><a href="/monitor/list.controller?page=0&pageSize=20">手机客户端请求Profiling Dashaboard</a></span></li>			
 			</ul>
 			<ul id="cat-8-sub" class="sub-cat">
 				<li><span><a href="/client/version/view.controller">客户端版本信息</a></span></li>

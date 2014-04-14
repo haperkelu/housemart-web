@@ -8,7 +8,8 @@
 		<result property="bizTag" column="BizTag" />
 		<result property="url" column="URL" />
 		<result property="userId" column="UserID" />
-		<result property="accessText" column="AccessText" />		
+		<result property="accessText" column="AccessText" />	
+		<result property="addTime" column="AddTime" />	
 	</resultMap>
 
 	<insert id="addUserAccessLog" parameterClass="userAccess">
@@ -33,6 +34,7 @@
 	    	</isNotNull>	    	 	    	
 		</dynamic>
 		order by AddTime desc
+		<include refid="common.limit" />
 	</select>
 	
 </sqlMap>
