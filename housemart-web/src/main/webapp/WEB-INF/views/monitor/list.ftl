@@ -3,9 +3,11 @@
 
 
 <#if paginateObject?exists>
+<form name="mainForm" id="mainForm" action="/monitor/list.controller" method="get">
 	<input type="hidden" value="${(paginateObject.count)!0}" id="totalCount"/>
 	<input type="hidden" name="page" value="${(paginateObject.pageNo)!}" id="page"/>
 	<input type="hidden" name="pageSize" value="${(paginateObject.pageSize)!}" id="pageSize"/>
+</form>	
 <table>
 	<thead>
 		<th>ID</th><th>标签</th><th>URL</th><th>内容</th><th>时间</th>		
@@ -38,7 +40,7 @@
 		function pageselectCallback(page_index, jq){
 			if(callbackCounter > 0){
 				$("#page").val(page_index);
-				$("#houseListForm").submit();
+				$("#mainForm").submit();
 			}
 			callbackCounter++;
 		}
