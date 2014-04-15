@@ -55,5 +55,11 @@
 	    	</isNotNull>	    	 	    	
 		</dynamic>
 	</select>	
+
+	<select id="loadRecord" parameterClass="map" resultMap="userAccess">
+		select * from user_access_log
+		where ID = #id#
+	</select>		
+	loadRecord
 	
 </sqlMap>
