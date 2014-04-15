@@ -49,7 +49,7 @@ public class MonitorController {
 	}
 	
 	@RequestMapping(value = "monitor/item.controller")
-	public String showItem(Model model, @RequestParam("file")Integer id) {
+	public String showItem(Model model, @RequestParam("id")Integer id) {
 		
 		UserAccessEntity item = (UserAccessEntity)userAccessDao.load("loadRecord", id);
 		model.addAttribute("record", item);
