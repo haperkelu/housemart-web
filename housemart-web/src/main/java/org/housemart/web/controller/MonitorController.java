@@ -11,12 +11,10 @@ package org.housemart.web.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.housemart.dao.entities.UserAccessEntity;
 import org.housemart.framework.dao.generic.GenericDao;
 import org.housemart.framework.dao.generic.PaginateObject;
-import org.housemart.framework.dao.generic.UniqueIdObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,8 +51,6 @@ public class MonitorController {
 	@RequestMapping(value = "monitor/item.controller")
 	public String showItem(Model model, @RequestParam("file")Integer id) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", id);
 		UserAccessEntity item = (UserAccessEntity)userAccessDao.load("loadRecord", id);
 		model.addAttribute("record", item);
 		return "monitor/item";			
