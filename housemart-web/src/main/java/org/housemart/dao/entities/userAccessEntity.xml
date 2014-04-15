@@ -60,6 +60,5 @@
 		select * from user_access_log
 		where ID = #id#
 	</select>		
-	loadRecord
 	
 </sqlMap>
