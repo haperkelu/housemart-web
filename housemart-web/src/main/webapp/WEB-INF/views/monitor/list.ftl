@@ -4,11 +4,18 @@
 
 </style>
 <#if paginateObject?exists>
+
 	<form name="mainForm" id="mainForm" action="/monitor/list.controller" method="get">
-		<input type="hidden" value="${(paginateObject.count)!0}" id="totalCount"/>
-		<input type="hidden" name="page" value="${(paginateObject.pageNo)!}" id="page"/>
-		<input type="hidden" name="pageSize" value="${(paginateObject.pageSize)!}" id="pageSize"/>
+		<div>
+			<lable for="search">搜索URL:</lable>
+			<input type="text" name="search" id="search" value="${search!''}"/>
+			<input type="submit" value="提交"/>
+			<input type="hidden" value="${(paginateObject.count)!0}" id="totalCount"/>
+			<input type="hidden" name="page" value="${(paginateObject.pageNo)!}" id="page"/>
+			<input type="hidden" name="pageSize" value="${(paginateObject.pageSize)!}" id="pageSize"/>
+		</div>	
 	</form>	
+	<br/>
 	<table>
 		<thead>
 			<th>ID</th><th>标签</th><th>URL</th><th>内容</th><th>时间</th>		
