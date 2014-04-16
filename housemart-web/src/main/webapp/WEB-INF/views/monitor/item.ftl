@@ -12,7 +12,7 @@
 
 	var app = angular.module('content_module',[]);
 	app.controller("main_controller", function($scope){
-		$scope.content = ${item.accessText}
+		$scope.content = ${record.accessText}
 	});
 </script>
 </body>
