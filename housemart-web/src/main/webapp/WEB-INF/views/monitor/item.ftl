@@ -1,10 +1,6 @@
 <title></title>
-<head>
-<script src="/webresources/js/third_party_js/angular.min.js"></script>
-</head>
 <body>
-<style>
-</style>
+<script src="/webresources/js/third_party_js/angular.min.js"></script>
 <div>request context data: </div>
 <div ng-app="content_module" ng-controller="main_controller">
 	{{content}}
