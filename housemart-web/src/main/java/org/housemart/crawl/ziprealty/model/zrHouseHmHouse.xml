@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ZrHouseHmHouse">
+	
+	<resultMap id="zrHouse" class="org.housemart.crawl.ziprealty.model.ZrHouseHmHouse">
+		<result property="id" column="ID" />
+		<result property="zrId" column="ZrID" />
+		<result property="hmId" column="HmID" />
+		<result property="accountId" column="AccountID" />
+		<result property="addTime" column="AddTime" />
+		<result property="updateTime" column="UpdateTime" />
+	</resultMap>
+	
+	<insert id="addZrHouseHmHouse" parameterClass="org.housemart.crawl.ziprealty.model.ZrHouseHmHouse">
+		INSERT INTO basedata.zr_house_hm_house (AddTime, UpdateTime, ZrID, HmID, AccountID)
+		VALUES(#addTime#, #updateTime#, #zrId#, #hmId#, #accountId#);
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<select id="queryByZrId" resultClass="org.housemart.crawl.ziprealty.model.ZrHouseHmHouse" parameterClass="map">
+		SELECT * FROM basedata.zr_house_hm_house WHERE ZrID = #zrId#
+	</select>
+	
+</sqlMap>
