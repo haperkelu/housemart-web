@@ -1,5 +1,8 @@
 package org.housemart.dao.entities;
 
+import java.util.Date;
+
+
 public class UserAccessEntity {
 
 	
@@ -8,6 +11,7 @@ public class UserAccessEntity {
 	private int userId;
 	private String accessText;
 	private String url;
+	private Date addTime;
 	
 	public int getId() {
 		return id;
@@ -38,6 +42,18 @@ public class UserAccessEntity {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	/**
+	 * @return the addTime
+	 */
+	public Date getAddTime() {
+		return addTime;
+	}
+	/**
+	 * @param addTime the addTime to set
+	 */
+	public void setAddTime(Date addTime) {
+		this.addTime = addTime;
 	}
 
 }

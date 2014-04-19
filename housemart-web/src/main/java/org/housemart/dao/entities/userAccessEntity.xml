@@ -8,7 +8,8 @@
 		<result property="bizTag" column="BizTag" />
 		<result property="url" column="URL" />
 		<result property="userId" column="UserID" />
-		<result property="accessText" column="AccessText" />		
+		<result property="accessText" column="AccessText" />	
+		<result property="addTime" column="AddTime" />	
 	</resultMap>
 
 	<insert id="addUserAccessLog" parameterClass="userAccess">
@@ -22,9 +23,11 @@
 	<select id="findUserAccessList" parameterClass="map" resultMap="userAccess">
 		select * from user_access_log
 		<dynamic prepend="WHERE">
-			<isNotNull prepend="AND" property="tag"> 
-	            BizTag = #tag#
-	    	</isNotNull> 
+			BizTag in 
+			<iterate prepend="AND" property="tag"
+			  open="(" close=")" conjunction=",">
+			  #tag[]#
+			</iterate>		 
 			<isNotNull prepend="AND" property="urlQuery"> 
 	            URL like '%$urlQuery$%'
 	    	</isNotNull>
@@ -33,6 +36,29 @@
 	    	</isNotNull>	    	 	    	
 		</dynamic>
 		order by AddTime desc
+		<include refid="common.limit" />
 	</select>
+	
+	<select id="findUserAccessListCount" parameterClass="map" resultClass="int">
+		select count(1) from user_access_log
+		<dynamic prepend="WHERE">
+			BizTag in 
+			<iterate prepend="AND" property="tag"
+			  open="(" close=")" conjunction=",">
+			  #tag[]#
+			</iterate>
+			<isNotNull prepend="AND" property="urlQuery"> 
+	            URL like '%$urlQuery$%'
+	    	</isNotNull>
+			<isNotNull prepend="AND" property="laterThan"> 
+	            AddTime >= laterThan
+	    	</isNotNull>	    	 	    	
+		</dynamic>
+	</select>	
+
+	<select id="loadRecord" parameterClass="uniqueObject" resultMap="userAccess">
+		select * from user_access_log
+		where ID = #id#
+	</select>		
 	
 </sqlMap>
