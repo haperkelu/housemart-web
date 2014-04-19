@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = {"classpath*:/beans/spring*.xml"})
 public class ListPageCrawlerTest {
   
-  @Test
+//  @Test
   public void houseUrlsTest() throws Exception {
     ZrHouseService zrHouseService = SpringContextHolder.getBean("zrHouseService");
     String url = "http://www.ziprealty.com/homes-for-sale/list/oc/by-city/Irvine,CA/detailed";
@@ -49,7 +49,7 @@ public class ListPageCrawlerTest {
     }
   }
   
-  @Test
+//  @Test
   public void houseDetailTest() throws JsonGenerationException, JsonMappingException, IOException {
     DetailPageCrawler detailCrawler = new DetailPageCrawler();
     ZrHouse h = detailCrawler
