@@ -17,37 +17,42 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ZrHouseService {
-  private final Logger logger = LoggerFactory.getLogger(this.getClass());
-  
-  @SuppressWarnings("rawtypes")
-  private GenericDao zrHouseDao = SpringContextHolder.getBean("zrHouseDao");
-  
-  public int addZrHouse(ZrHouse zrHouse) {
-    try {
-      if (zrHouse != null) {
-        if (StringUtils.isNotBlank(zrHouse.getMls().trim())) {
-          Map<String,Object> para = new HashMap<String,Object>();
-          para.put("mls", zrHouse.getMls().trim());
-          List<ZrHouse> zrHouses = (List<ZrHouse>) zrHouseDao.select("queryByMls", para);
-          if (CollectionUtils.isNotEmpty(zrHouses)) {
-            zrHouseDao.update("updateZrHouse", zrHouse);
-            return zrHouses.get(0).getId();
-          } else {
-            return zrHouseDao.add("addZrHouse", zrHouse);
-          }
-        }
-      }
-    } catch (Exception e) {
-      logger.error("Crawl zrhouse error.", e);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @SuppressWarnings("rawtypes")
+    private GenericDao zrHouseDao = SpringContextHolder.getBean("zrHouseDao");
+
+    public int addZrHouse(ZrHouse zrHouse) {
+	try {
+	    if (zrHouse != null) {
+		if (StringUtils.isNotBlank(zrHouse.getMls().trim())) {
+		    Map<String, Object> para = new HashMap<String, Object>();
+		    para.put("mls", zrHouse.getMls().trim());
+		    List<ZrHouse> zrHouses = (List<ZrHouse>) zrHouseDao.select(
+			    "queryByMls", para);
+		    if (CollectionUtils.isNotEmpty(zrHouses)) {
+			zrHouseDao.update("updateZrHouse", zrHouse);
+			return zrHouses.get(0).getId();
+		    } else {
+			return zrHouseDao.add("addZrHouse", zrHouse);
+		    }
+		}
+	    }
+	} catch (Exception e) {
+	    logger.error("Crawl zrhouse error.", e);
+	}
+	return -1;
     }
-    return -1;
-  }
-  
-  public List<ZrHouse> findHouse(Map<String,Object> para) {
-    return zrHouseDao.select("queryList", para);
-  }
-  
-  public int countHouse(Map<String,Object> para) {
-    return zrHouseDao.count("count", para);
-  }
+
+    public List<ZrHouse> findHouse(Map<String, Object> para) {
+	return zrHouseDao.select("queryList", para);
+    }
+
+    public int countHouse(Map<String, Object> para) {
+	return zrHouseDao.count("count", para);
+    }
+
+    public ZrHouse findHouseById(int id) {
+	return (ZrHouse) zrHouseDao.load("queryById", id);
+    }
 }

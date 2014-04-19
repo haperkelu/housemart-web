@@ -67,4 +67,7 @@
         </isNotNull>
 	</select>
 	
+	<select id="queryById" resultClass="org.housemart.crawl.ziprealty.model.ZrHouse" parameterClass="uniqueObject">
+		SELECT * FROM zr_house WHERE ID = #id#
+	</select>
 </sqlMap>

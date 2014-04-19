@@ -371,4 +371,11 @@
 		</constructor-arg>
 	</bean>	
 	
+	<bean id="zrHouseHmHouseDao"
+		class="org.housemart.framework.dao.generic.GenericDaoImp">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<constructor-arg>
+			<value>org.housemart.crawl.ziprealty.model.ZrHouseHmHouse</value>
+		</constructor-arg>
+	</bean>	
 </beans>

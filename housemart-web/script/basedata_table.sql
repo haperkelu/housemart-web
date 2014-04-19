@@ -416,4 +416,35 @@ WHERE status=1
 AND ShowStatus=0
 GROUP BY ResidenceID;
 
+CREATE TABLE `zr_house` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Title` varchar(256) DEFAULT NULL,
+  `Block` varchar(64) DEFAULT NULL,
+  `Mls` varchar(64) DEFAULT NULL,
+  `Neighborhood` varchar(64) DEFAULT NULL,
+  `HouseDetail` varchar(256) DEFAULT NULL,
+  `Price` varchar(64) DEFAULT NULL,
+  `Status` varchar(64) DEFAULT NULL,
+  `Listed` varchar(64) DEFAULT NULL,
+  `Link` text,
+  `QnPics` text,
+  `ZrPics` text,
+  `AddTime` datetime DEFAULT NULL,
+  `UpdateTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `index2` (`Block`,`Mls`)
+) ENGINE=InnoDB AUTO_INCREMENT=796 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zr_house_hm_house` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ZrID` int(11) DEFAULT NULL,
+  `HmID` int(11) DEFAULT NULL,
+  `AccountID` int(11) DEFAULT NULL,
+  `AddTime` datetime DEFAULT NULL,
+  `UpdateTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+
+
 

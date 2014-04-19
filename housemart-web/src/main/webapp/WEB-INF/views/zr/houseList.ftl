@@ -29,7 +29,7 @@
 			<div class="update">
 				<table>
 						<tr>
-							<th>ID</th><th>预览</th><th>标题</th><th>街区</th><th>MLS</th><th>区域</th><th>详情</th><th>价格</th><th>状态</th><th>发布时间</th><th>链接</th><th>抓取日期</th>
+							<th>ID</th><th>预览</th><th>标题</th><th>操作</th><th>已创建房源</th><th>街区</th><th>MLS</th><th>区域</th><th>详情</th><th>价格</th><th>状态</th><th>发布时间</th><th>抓取日期</th>
 						</tr>
 				<#if houses??>
 					<#list houses as house>
@@ -42,6 +42,17 @@
 							</#list>
 							</td>
 							<td>${(house.title)!}</td>
+							<td>
+								<a href="${(house.link)!}" target="_blank">原链接</a>
+								<br/>
+								<br/>
+								<a href="/zr/accountList.controller?zrHouseId=${(house.id)!}" target="_blank">创建房源</a>
+							</td>
+							<td>
+								<#list house.hmIds as hmId>
+									<a href="/external/houseView.controller?houseId=${(hmId)!}" target="_blank">${(hmId)!}</a><br/>
+								</#list>
+							</td>
 							<td>${(house.block)!}</td>
 							<td>${(house.mls)!}</td>
 							<td>${(house.neighborhood)!}</td>
@@ -49,7 +60,6 @@
 							<td>${(house.price)!}</td>
 							<td>${(house.status)!}</td>
 							<td>${(house.listed)!}</td>
-							<td><a href="${(house.link)!}" target="_blank">点击</a></td>
 							<td><#if house.updateTime??>${house.updateTime?string("yyyy-MM-dd")}</#if></td>
 						</tr>
 					</#list>
