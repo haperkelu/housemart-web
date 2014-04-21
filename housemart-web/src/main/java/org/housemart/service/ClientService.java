@@ -282,12 +282,12 @@ public class ClientService {
 		
 		if (clientMessageList.size() > 0)
 		{
-			JavaPNSProvider.pushMessageListToAPNS(clientMessageList.toArray(), true);
+			JavaPNSProvider.pushMessageListToAPNS(clientMessageList, true);
 		}
 		
 		if (brokerMessageList.size() > 0)
 		{
-			JavaPNSProvider.pushMessageListToAPNS(brokerMessageList.toArray(), false);
+			JavaPNSProvider.pushMessageListToAPNS(brokerMessageList, false);
 		}
 		
 	}
