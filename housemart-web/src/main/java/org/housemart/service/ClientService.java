@@ -260,14 +260,40 @@ public class ClientService {
 			clientNotificationDao.update("updateClientNotificationSendByMap", map);
 		}
 		
+		List<Map<String, String>> clientMessageList  = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> brokerMessageList  = new ArrayList<Map<String, String>>();
+		
 		for (ClientNotificationSendEntity notificationSend : list)
 		{
-			this.sendClientNotification(notificationSend);
+			Map<String, String> result = this.sendClientNotification(notificationSend, false);
+			
+			if (result != null)
+			{
+				if (result.get("target").equals("client"))
+				{
+					clientMessageList.add(result);
+				}
+				else
+				{
+					brokerMessageList.add(result);
+				}
+			}
 		}
+		
+		if (clientMessageList.size() > 0)
+		{
+			JavaPNSProvider.pushMessageToAPNS(clientMessageList.toArray(), true);
+		}
+		
+		if (brokerMessageList.size() > 0)
+		{
+			JavaPNSProvider.pushMessageToAPNS(brokerMessageList.toArray(), false);
+		}
+		
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void sendClientNotification(ClientNotificationSendEntity notificationSend)
+	public Map<String, String> sendClientNotification(ClientNotificationSendEntity notificationSend, boolean skipIOS)
 	{
 		notificationSend.setProcessTime(new Date());
 		notificationSend.setStatus(ClientNotificationSendEntity.StatusEnum.Processed.value);
@@ -287,6 +313,8 @@ public class ClientService {
 		
 		List<ClientRegisterEntity> clientList = (List<ClientRegisterEntity>)clientRegisterDao.select("findClientRegisterList", para);
 		
+		Map<String, String> result = null;
+		
 		if (clientList.size() > 0)
 		{
 			for (ClientRegisterEntity client : clientList)
@@ -298,7 +326,17 @@ public class ClientService {
 					}
 					else if (client.getClientToken() != null && client.getDevice().toLowerCase().contains("iphone"))
 					{
-						JavaPNSProvider.pushMessageToAPNS(client.getClientToken(), notificationSend.getNotificationContent(), 1, client.getBrokerID() == null || client.getBrokerID() == -1);
+						if (skipIOS)
+						{
+							result = new HashMap<String, String>();
+							result.put("deviceToken", client.getClientToken());
+							result.put("content", notificationSend.getNotificationContent());
+							result.put("toClient", (client.getBrokerID() == null || client.getBrokerID() == -1) ? "client" : "broker");
+						}
+						else
+						{
+							JavaPNSProvider.pushMessageToAPNS(client.getClientToken(), notificationSend.getNotificationContent(), 1, client.getBrokerID() == null || client.getBrokerID() == -1);
+						}
 					}
 					else if (client.getClientToken() != null)
 					{
@@ -344,5 +382,7 @@ public class ClientService {
 			{
 			}
 		}
+		
+		return result;
 	}
 }
