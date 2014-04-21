@@ -280,14 +280,21 @@ public class ClientService {
 			}
 		}
 		
-		if (clientMessageList.size() > 0)
+		try
 		{
-			JavaPNSProvider.pushMessageListToAPNS(clientMessageList, true);
+			if (clientMessageList.size() > 0)
+			{
+				JavaPNSProvider.pushMessageListToAPNS(clientMessageList, true);
+			}
+			
+			if (brokerMessageList.size() > 0)
+			{
+				JavaPNSProvider.pushMessageListToAPNS(brokerMessageList, false);
+			}
 		}
-		
-		if (brokerMessageList.size() > 0)
+		catch(Exception ex)
 		{
-			JavaPNSProvider.pushMessageListToAPNS(brokerMessageList, false);
+			
 		}
 		
 	}
