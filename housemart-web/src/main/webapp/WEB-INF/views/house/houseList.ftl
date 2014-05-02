@@ -18,6 +18,8 @@
 							<select name="regionCityId" value="${(param.regionCityId)!}" id="city">
 								<option value="" selected="selected">选择</option>
 								<option value="1" <#if param.regionCityId?? && param.regionCityId == 1>selected= "selected"</#if>>上海</option>
+								<option value="2" <#if param.regionCityId?? && param.regionCityId == 2>selected= "selected"</#if>>南加州</option>
+								<option value="3" <#if param.regionCityId?? && param.regionCityId == 3>selected= "selected"</#if>>北加州</option>
 							</select>
 							区域
 							<select name="regionParentId" _value="${(param.regionParentId)!}" id="region">
@@ -239,10 +241,11 @@
 			
 			function refreshRegionList(selectedOpts){
 				if($("#city").find("option:selected").val() > 0){
+					var cityId = $("#city").find("option:selected").val();
 					$.ajax({
 						type: "post",
-						url: "ajax/getRegionList.controller",
-						data: {},
+						url: "ajax/getRegionListByCityId.controller",
+						data: {cityId:cityId},
 						dataType: "json",
 						contentType:'application/x-www-form-urlencoded; charset=UTF-8',
 						success: function (data) {		
