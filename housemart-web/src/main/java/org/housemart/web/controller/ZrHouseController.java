@@ -51,7 +51,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 @Controller
 public class ZrHouseController extends BaseController {
@@ -84,51 +83,76 @@ public class ZrHouseController extends BaseController {
     @Autowired
     private GenericDao residenceDao;
 
-    ObjectMapper om = new ObjectMapper();
+    private ObjectMapper om = new ObjectMapper();
+
+    private static final Set<Task> runningTasks = new HashSet<Task>();
+    private static final List<Task> finishedTasks = new ArrayList<Task>();
 
     @RequestMapping(value = "zr/crawlerPage.controller")
-    public String externalHousePicConsole() {
+    public String externalHousePicConsole(Model model) {
+
+	model.addAttribute("runningTasks", runningTasks);
+	model.addAttribute("finishedTasks", finishedTasks);
 	return "zr/crawlerPage";
     }
 
     @RequestMapping(value = "zr/crawlTask.controller")
-    public String crawlTask() {
+    public String crawlTask(Model model) {
 	List<String> urls = SpringContextHolder.getBean("zipRealtyHouseList");
 	for (String url : urls) {
 	    try {
-		crawlUrl(url);
+		crawlUrl(model, url);
 	    } catch (Exception e) {
 		logger.error("Crawl Task Error!", e);
 	    }
 	}
+	model.addAttribute("runningTasks", runningTasks);
+	model.addAttribute("finishedTasks", finishedTasks);
 	return "zr/crawlerPage";
     }
 
     @RequestMapping(value = "zr/crawlHouse.controller")
-    public String crawlUrl(String url) throws JsonGenerationException,
-	    JsonMappingException, IOException {
+    public String crawlUrl(Model model, String url)
+	    throws JsonGenerationException, JsonMappingException, IOException {
 	ZrHouseService zrHouseService = SpringContextHolder
 		.getBean("zrHouseService");
-	int maxPage = 1;
-	int currentPage = 1;
-	while (currentPage <= maxPage) {
-	    ListPageCrawler listCrawler = new ListPageCrawler();
-	    Map<String, Object> result = listCrawler.crawlDetailUrls(url
-		    + "?pageNum=" + currentPage);
-	    List<String> urls = (List<String>) result.get("urls");
-	    if (currentPage == 1) {
-		maxPage = Integer.valueOf(result.get("maxPage").toString());
-	    }
 
-	    if (urls != null) {
-		DetailPageCrawler detailCrawler = new DetailPageCrawler();
-		for (String u : urls) {
-		    ZrHouse h = detailCrawler.crawlDetailInfo(u);
-		    zrHouseService.addZrHouse(h);
+	Task task = new Task();
+	task.setStart(new Date());
+	task.setName(url);
+	runningTasks.add(task);
+
+	try {
+	    int maxPage = 1;
+	    int currentPage = 1;
+	    while (currentPage <= maxPage) {
+		ListPageCrawler listCrawler = new ListPageCrawler();
+		Map<String, Object> result = listCrawler.crawlDetailUrls(url
+			+ "?pageNum=" + currentPage);
+		List<String> urls = (List<String>) result.get("urls");
+		if (currentPage == 1) {
+		    maxPage = Integer.valueOf(result.get("maxPage").toString());
 		}
+
+		if (urls != null) {
+		    DetailPageCrawler detailCrawler = new DetailPageCrawler();
+		    for (String u : urls) {
+			ZrHouse h = detailCrawler.crawlDetailInfo(u);
+			zrHouseService.addZrHouse(h);
+		    }
+		}
+		currentPage++;
 	    }
-	    currentPage++;
+	} catch (Exception e) {
+	    logger.error(e.getMessage(), e);
+	} finally {
+	    runningTasks.remove(task);
+	    task.setEnd(new Date());
+	    finishedTasks.add(task);
 	}
+
+	model.addAttribute("runningTasks", runningTasks);
+	model.addAttribute("finishedTasks", finishedTasks);
 
 	return "zr/crawlerPage";
     }
@@ -364,4 +388,47 @@ public class ZrHouseController extends BaseController {
 
 	return "zr/accountList";
     }
+
+    public static class Task {
+	private Date start;
+	private Date end;
+	private String name;
+
+	public Date getStart() {
+	    return start;
+	}
+
+	public void setStart(Date start) {
+	    this.start = start;
+	}
+
+	public Date getEnd() {
+	    return end;
+	}
+
+	public void setEnd(Date end) {
+	    this.end = end;
+	}
+
+	public String getName() {
+	    return name;
+	}
+
+	public void setName(String name) {
+	    this.name = name;
+	}
+
+	@Override
+	public int hashCode() {
+	    return name.hashCode() + start.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    Task o = (Task) obj;
+	    return o.getName().equals(this.name)
+		    && o.getStart().getTime() == this.start.getTime();
+	}
+    }
+
 }
