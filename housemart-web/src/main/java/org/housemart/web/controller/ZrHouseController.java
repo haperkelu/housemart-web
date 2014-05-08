@@ -112,44 +112,54 @@ public class ZrHouseController extends BaseController {
     }
 
     @RequestMapping(value = "zr/crawlHouse.controller")
-    public String crawlUrl(Model model, String url)
+    public String crawlUrl(Model model, final String url)
 	    throws JsonGenerationException, JsonMappingException, IOException {
-	ZrHouseService zrHouseService = SpringContextHolder
+	final ZrHouseService zrHouseService = SpringContextHolder
 		.getBean("zrHouseService");
 
-	Task task = new Task();
+	final Task task = new Task();
 	task.setStart(new Date());
 	task.setName(url);
 	runningTasks.add(task);
 
-	try {
-	    int maxPage = 1;
-	    int currentPage = 1;
-	    while (currentPage <= maxPage) {
-		ListPageCrawler listCrawler = new ListPageCrawler();
-		Map<String, Object> result = listCrawler.crawlDetailUrls(url
-			+ "?pageNum=" + currentPage);
-		List<String> urls = (List<String>) result.get("urls");
-		if (currentPage == 1) {
-		    maxPage = Integer.valueOf(result.get("maxPage").toString());
+	Thread thread = new Thread(new Runnable() {
+
+	    @Override
+	    public void run() {
+		try {
+		    int maxPage = 1;
+		    int currentPage = 1;
+		    while (currentPage <= maxPage) {
+			ListPageCrawler listCrawler = new ListPageCrawler();
+			Map<String, Object> result = listCrawler
+				.crawlDetailUrls(url + "?pageNum="
+					+ currentPage);
+			List<String> urls = (List<String>) result.get("urls");
+			if (currentPage == 1) {
+			    maxPage = Integer.valueOf(result.get("maxPage")
+				    .toString());
+			}
+
+			if (urls != null) {
+			    DetailPageCrawler detailCrawler = new DetailPageCrawler();
+			    for (String u : urls) {
+				ZrHouse h = detailCrawler.crawlDetailInfo(u);
+				zrHouseService.addZrHouse(h);
+			    }
+			}
+			currentPage++;
+		    }
+		} catch (Exception e) {
+		    logger.error(e.getMessage(), e);
+		} finally {
+		    runningTasks.remove(task);
+		    task.setEnd(new Date());
+		    finishedTasks.add(task);
 		}
 
-		if (urls != null) {
-		    DetailPageCrawler detailCrawler = new DetailPageCrawler();
-		    for (String u : urls) {
-			ZrHouse h = detailCrawler.crawlDetailInfo(u);
-			zrHouseService.addZrHouse(h);
-		    }
-		}
-		currentPage++;
 	    }
-	} catch (Exception e) {
-	    logger.error(e.getMessage(), e);
-	} finally {
-	    runningTasks.remove(task);
-	    task.setEnd(new Date());
-	    finishedTasks.add(task);
-	}
+	});
+	thread.run();
 
 	model.addAttribute("runningTasks", runningTasks);
 	model.addAttribute("finishedTasks", finishedTasks);
