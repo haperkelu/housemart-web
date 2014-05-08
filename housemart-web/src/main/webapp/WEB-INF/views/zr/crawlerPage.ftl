@@ -26,7 +26,7 @@
 				<#if runningTasks??>
 					<#list runningTasks as task>
 						<tr>
-							<td><#if task.start??>${task.start?string("yyyy-MM-dd:mm:ss")}</#if></td>
+							<td><#if task.start??>${task.start?string("yyyy-MM-dd:HH:mm:ss")}</#if></td>
 							<td>${(task.name)!}</td>
 						</tr>
 					</#list>
@@ -42,8 +42,8 @@
 				<#if finishedTasks??>
 					<#list finishedTasks as task>
 						<tr>
-							<td><#if task.start??>${task.start?string("yyyy-MM-dd:mm:ss")}</#if></td>
-							<td><#if task.end??>${task.end?string("yyyy-MM-dd:mm:ss")}</#if></td>
+							<td><#if task.start??>${task.start?string("yyyy-MM-dd:HH:mm:ss")}</#if></td>
+							<td><#if task.end??>${task.end?string("yyyy-MM-dd:HH:mm:ss")}</#if></td>
 							<td>${(task.name)!}</td>
 						</tr>
 					</#list>
