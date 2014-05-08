@@ -159,7 +159,7 @@ public class ZrHouseController extends BaseController {
 
 	    }
 	});
-	thread.run();
+	thread.start();
 
 	model.addAttribute("runningTasks", runningTasks);
 	model.addAttribute("finishedTasks", finishedTasks);
