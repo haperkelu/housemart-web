@@ -350,7 +350,7 @@ public class ZrHouseController extends BaseController {
 	    // 自动审核通过
 	    int auditId = auditService.requestAddNewHouse(house.getId());
 	    auditService.approveNewHouse(house.getId(), auditId);
-	    HouseMartContext.setSysMsg("已添加新房源");
+	    HouseMartContext.setSysMsg("已添加新房源 ,请审核");
 
 	    ZrHouseHmHouse zrhmHouse = new ZrHouseHmHouse();
 	    zrhmHouse.setZrId(hId);
