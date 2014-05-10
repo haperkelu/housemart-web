@@ -29,12 +29,13 @@
 			<div class="update">
 				<table>
 						<tr>
+							<th><a id="batchCreate" href="javascript:void;">批量创建</a></th>
 							<th>ID</th><th>预览</th><th>标题</th><th>操作</th><th>已创建房源</th><th>街区</th><th>MLS</th><th>区域</th><th>详情</th><th>价格</th><th>状态</th><th>发布时间</th><th>抓取日期</th>
 						</tr>
 				<#if houses??>
 					<#list houses as house>
 						<tr>
-						
+							<td><input type="checkbox" class="houseIds" value="${(house.id)!}" /></td>
 							<td>${(house.id)!}</td>
 							<td>
 							<#list house.qnPics as pic>
@@ -86,6 +87,23 @@
 				    items_per_page:$("#pageSize").val(),
 				    current_page:parseInt($("#page").val())
 				});
+				
+				$("#batchCreate").click(function(){
+					if(!$("input:checkbox[class='houseIds']:checked").size() > 0){
+						alert("请先勾选关联房源");
+						return false;
+					}
+					var ids = "";
+					$("input:checkbox[class='houseIds']:checked").each(function(){
+						ids=ids+$(this).val()+",";	
+					});
+					ids=ids.substring(0,ids.length-1);
+					if(confirm("关联房源" + ids)){
+						location.href = "/zr/accountList.controller?zrHouseId=" + ids;
+					}
+				});
+				
+				
 			});
 			
 			

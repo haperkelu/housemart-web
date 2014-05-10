@@ -221,7 +221,7 @@ public class ZrHouseController extends BaseController {
 
     @RequestMapping(value = "zr/createHouse.controller")
     public ModelAndView createHouse(int accountId, int residenceId,
-	    int zrHouseId) {
+	    String zrHouseId) {
 
 	// TODO: account & residence validate
 	boolean hasPower = false;
@@ -281,84 +281,92 @@ public class ZrHouseController extends BaseController {
 
 	ZrHouseService zrHouseService = SpringContextHolder
 		.getBean("zrHouseService");
-	ZrHouse zrHouse = zrHouseService.findHouseById(zrHouseId);
 
-	HouseSaleEntity sale = null;
-	HouseRentEntity rent = null;
+	String[] zrIds = zrHouseId.split(",");
+	for (String zrId : zrIds) {
 
-	// 登盘
-	HouseExtEntity house = ZrHouseHelper.zrHouse2HMHouse(zrHouse);
-	house.setSourceType(HouseEntity.SourceTypeEnum.external.value);
-	house.setStatus(StatusEnum.Default.value);
-	house.setAddTime(Calendar.getInstance().getTime());
-	house.setUpdateTime(Calendar.getInstance().getTime());
-	house.setCreator(accountId);
-	house.setResidenceId(residenceId);
-	house.setHouseType("7"); // 独栋
-	house.setDirection(101); // 南北朝向
-	house.setDecorating(HouseEntity.DecoratingEnum.Well.value);
-	house.setFloor(6); // 独栋
-	houseDao.add("addHouse", house);
+	    int hId = Integer.valueOf(zrId);
+	    ZrHouse zrHouse = zrHouseService.findHouseById(hId);
 
-	sale = house.generateHouseSaleEntity();
-	rent = house.generateHouseRentEntity();
+	    HouseSaleEntity sale = null;
+	    HouseRentEntity rent = null;
 
-	sale.setPrice(house.getSalePrice());
-	sale.setAvgPrice(sale.getPrice() / house.getPropertyArea());
-	sale.setSaleStatus(HouseSaleEntity.SaleStatusEnum.Saling.saleStatus);
-	sale.setHouseId(house.getId());
-	sale.setSource("2");
-	sale.setAddTime(Calendar.getInstance().getTime());
-	sale.setUpdateTime(Calendar.getInstance().getTime());
-	rent.setHouseId(house.getId());
-	rent.setAddTime(Calendar.getInstance().getTime());
-	rent.setUpdateTime(Calendar.getInstance().getTime());
+	    // 登盘
+	    HouseExtEntity house = ZrHouseHelper.zrHouse2HMHouse(zrHouse);
+	    house.setSourceType(HouseEntity.SourceTypeEnum.external.value);
+	    house.setStatus(StatusEnum.Default.value);
+	    house.setAddTime(Calendar.getInstance().getTime());
+	    house.setUpdateTime(Calendar.getInstance().getTime());
+	    house.setCreator(accountId);
+	    house.setResidenceId(residenceId);
+	    house.setHouseType("7"); // 独栋
+	    house.setDirection(101); // 南北朝向
+	    house.setDecorating(HouseEntity.DecoratingEnum.Well.value);
+	    house.setFloor(6); // 独栋
+	    houseDao.add("addHouse", house);
 
-	houseSaleDao.add("addHouseSale", sale);
-	houseRentDao.add("addHouseRent", rent);
+	    sale = house.generateHouseSaleEntity();
+	    rent = house.generateHouseRentEntity();
 
-	String qnpics = zrHouse.getQnPics();
-	if (StringUtils.isNotBlank(qnpics)) {
-	    try {
-		List<String> pics = om.readValue(qnpics, List.class);
-		if (pics != null) {
-		    for (String pic : pics) {
-			HousePicEntity housePic = new HousePicEntity();
-			housePic.setHouseId(house.getId());
-			housePic.setResidenceId(0);
-			housePic.setType(HousePicEntity.Type.HousePic
-				.getValue());
-			housePic.setCloudUrl(pic);
-			housePic.setStatus(1);
-			housePic.setAddTime(Calendar.getInstance().getTime());
-			housePic.setUpdateTime(Calendar.getInstance().getTime());
-			housePic.setShowStatus(1);
-			housePicDao.add("addHousePic", housePic);
+	    sale.setPrice(house.getSalePrice());
+	    sale.setAvgPrice(sale.getPrice() / house.getPropertyArea());
+	    sale.setSaleStatus(HouseSaleEntity.SaleStatusEnum.Saling.saleStatus);
+	    sale.setHouseId(house.getId());
+	    sale.setSource("2");
+	    sale.setAddTime(Calendar.getInstance().getTime());
+	    sale.setUpdateTime(Calendar.getInstance().getTime());
+	    rent.setHouseId(house.getId());
+	    rent.setAddTime(Calendar.getInstance().getTime());
+	    rent.setUpdateTime(Calendar.getInstance().getTime());
+
+	    houseSaleDao.add("addHouseSale", sale);
+	    houseRentDao.add("addHouseRent", rent);
+
+	    String qnpics = zrHouse.getQnPics();
+	    if (StringUtils.isNotBlank(qnpics)) {
+		try {
+		    List<String> pics = om.readValue(qnpics, List.class);
+		    if (pics != null) {
+			for (String pic : pics) {
+			    HousePicEntity housePic = new HousePicEntity();
+			    housePic.setHouseId(house.getId());
+			    housePic.setResidenceId(0);
+			    housePic.setType(HousePicEntity.Type.HousePic
+				    .getValue());
+			    housePic.setCloudUrl(pic);
+			    housePic.setStatus(1);
+			    housePic.setAddTime(Calendar.getInstance()
+				    .getTime());
+			    housePic.setUpdateTime(Calendar.getInstance()
+				    .getTime());
+			    housePic.setShowStatus(1);
+			    housePicDao.add("addHousePic", housePic);
+			}
 		    }
+		} catch (Exception e) {
+		    logger.error(e.getMessage(), e);
 		}
-	    } catch (Exception e) {
-		logger.error(e.getMessage(), e);
 	    }
+	    // 自动审核通过
+	    int auditId = auditService.requestAddNewHouse(house.getId());
+	    auditService.approveNewHouse(house.getId(), auditId);
+	    HouseMartContext.setSysMsg("已添加新房源");
+
+	    ZrHouseHmHouse zrhmHouse = new ZrHouseHmHouse();
+	    zrhmHouse.setZrId(hId);
+	    zrhmHouse.setHmId(house.getId());
+	    zrhmHouse.setAccountId(accountId);
+	    zrhmHouse.setAddTime(new Date());
+	    zrhmHouse.setUpdateTime(new Date());
+	    zrHouseHmHouseDao.add("addZrHouseHmHouse", zrhmHouse);
 	}
-	// 自动审核通过
-	int auditId = auditService.requestAddNewHouse(house.getId());
-	auditService.approveNewHouse(house.getId(), auditId);
-	HouseMartContext.setSysMsg("已添加新房源");
-
-	ZrHouseHmHouse zrhmHouse = new ZrHouseHmHouse();
-	zrhmHouse.setZrId(zrHouseId);
-	zrhmHouse.setHmId(house.getId());
-	zrhmHouse.setAccountId(accountId);
-	zrhmHouse.setAddTime(new Date());
-	zrhmHouse.setUpdateTime(new Date());
-	zrHouseHmHouseDao.add("addZrHouseHmHouse", zrhmHouse);
-
 	return new ModelAndView(new RedirectView("/zr/findHouse.controller"));
     }
 
     @RequestMapping(value = "zr/accountList.controller", method = RequestMethod.GET)
-    public String accountList(Model model,
-	    @RequestParam(value = "zrHouseId", required = true) int zrHouseId,
+    public String accountList(
+	    Model model,
+	    @RequestParam(value = "zrHouseId", required = true) String zrHouseId,
 	    @RequestParam(value = "keyword", required = false) String keyword,
 	    @RequestParam(value = "page", required = false) Integer page,
 	    @RequestParam(value = "pageSize", required = false) Integer pageSize) {
@@ -389,12 +397,20 @@ public class ZrHouseController extends BaseController {
 
 	ZrHouseService zrHouseService = SpringContextHolder
 		.getBean("zrHouseService");
-	ZrHouse zrHouse = zrHouseService.findHouseById(zrHouseId);
+
+	String titles = "";
+	String[] zrIds = zrHouseId.split(",");
+	for (String zrId : zrIds) {
+	    ZrHouse zrHouse = zrHouseService.findHouseById(Integer
+		    .valueOf(zrId));
+	    titles = titles + "," + zrHouse.getTitle();
+	}
+	titles = titles.substring(1);
 
 	model.addAttribute("pager", pager);
 	model.addAttribute("keyword", keyword);
 	model.addAttribute("zrHouseId", zrHouseId);
-	model.addAttribute("zrHouseTitle", zrHouse.getTitle());
+	model.addAttribute("zrHouseTitle", titles);
 
 	return "zr/accountList";
     }
