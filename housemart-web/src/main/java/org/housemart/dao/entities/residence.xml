@@ -77,6 +77,9 @@
 			</isNotNull>
 		</dynamic>
 		<dynamic prepend="WHERE">
+			<isNotNull prepend="AND" property="cityId"> 
+	            rr.CityID = #cityId#
+	        </isNotNull>
 			<isNotNull prepend="AND" property="id">
 	            rd.RegionID = #id#  
 	        </isNotNull>  
