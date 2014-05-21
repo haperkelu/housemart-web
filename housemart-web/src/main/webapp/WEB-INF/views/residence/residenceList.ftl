@@ -60,6 +60,13 @@
 	</div>
 
 <div>
+城市
+<select name="cityId" value="${(cityId)!}" id="city">
+	<option value="" selected="selected">选择</option>
+	<option value="1" <#if cityId?? && cityId == 1>selected= "selected"</#if>>上海</option>
+	<option value="2" <#if cityId?? && cityId == 2>selected= "selected"</#if>>南加州</option>
+	<option value="3" <#if cityId?? && cityId == 3>selected= "selected"</#if>>北加州</option>
+</select>
 <#include "/common/regionSelect.ftl">
 楼盘<input type="text" value="${(residenceName)!}" id="maskName"/><span style="color:red;">（楼板名称：静安新城 或者 静安）</span>
 <input type="hidden" name="residenceName" id="residenceName"/>
@@ -112,7 +119,10 @@
 	var currentRegion = <#if regionId?? && regionId != ''>${(regionId)!}<#else>''</#if>;
 	var currentPlate = <#if plateId?? && plateId != ''>${(plateId)!}<#else>''</#if>;
 	var callbackCounter = 0;
-	$(document).ready(function(){		
+	$(document).ready(function(){
+		$('#city').change(function(){
+			refreshRegionList();
+		});		
 		$('#region').change(function(){ 
 			refreshPlateList();
 		});
@@ -147,7 +157,7 @@
 	}
 	
 	function submit() {
-		location.href = location.pathname + '?positionSet='  + $("#J_positionSet").find("option:selected").val()+'&forceShow='+ $("#J_forceShow").find("option:selected").val()  +'&zombie=' + $("#J_zombie").find("option:selected").val()  +'&lockBasicInfo='  + $("#J_lockBasicInfo").find("option:selected").val()  +'&lockMap='  + $("#J_lockMap").find("option:selected").val()+'&lockPic='  + $("#J_lockPic").find("option:selected").val()  +'&hasPic='  + $("#J_hasPic").find("option:selected").val()+'&picApprove='  + $("#J_picApprove").find("option:selected").val() +'&regionId='  + $("#region").find("option:selected").val()  +'&plateId=' + $("#plate").find("option:selected").val() + '&residenceName=' + $("#residenceName").val() +'&page=' + $("#page").val() + '&pageSize=' + $("#pageSize").val();	
+		location.href = location.pathname + '?positionSet='  + $("#J_positionSet").find("option:selected").val()+'&forceShow='+ $("#J_forceShow").find("option:selected").val()  +'&zombie=' + $("#J_zombie").find("option:selected").val()  +'&lockBasicInfo='  + $("#J_lockBasicInfo").find("option:selected").val()  +'&lockMap='  + $("#J_lockMap").find("option:selected").val()+'&lockPic='  + $("#J_lockPic").find("option:selected").val()  +'&hasPic='  + $("#J_hasPic").find("option:selected").val()+'&picApprove='  + $("#J_picApprove").find("option:selected").val() +'&cityId=' + $("#city").find("option:selected").val()  + '&regionId=' + $("#region").find("option:selected").val()  +'&plateId=' + $("#plate").find("option:selected").val() + '&residenceName=' + $("#residenceName").val() +'&page=' + $("#page").val() + '&pageSize=' + $("#pageSize").val();	
 	}
 	
 
@@ -168,12 +178,42 @@
 				total += option;
 			}
 			$('#region').html(total);
-			refreshPlateList();		
+			refreshRegionList([${(regionId)!}, ${(id)!}]);
+			//refreshPlateList();		
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 		}
   	}); 
   	
+  	function refreshRegionList(selectedOpts){
+		if($("#city").find("option:selected").val() > 0){
+			var cityId = $("#city").find("option:selected").val();
+			$.ajax({
+				type: "post",
+				url: "ajax/getRegionListByCityId.controller",
+				data: {cityId:cityId},
+				dataType: "json",
+				contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+				success: function (data) {		
+					var total = '<option value="">选择</option>';
+					for(var i in data.bizData){
+						var option;
+						if(typeof(selectedOpts) !== 'undefined' && typeof(selectedOpts[0]) !== 'undefined'  && selectedOpts[0] == data.bizData[i].id )
+							option = '<option value=' + data.bizData[i].id + ' selected="selected">' + data.bizData[i].name + '</option>';
+						else
+							option = '<option value=' + data.bizData[i].id + '>' + data.bizData[i].name + '</option>';
+						total += option;
+					}
+					$('#region').html(total);
+					//console.debug(selectedOpts);
+					refreshPlateList(selectedOpts);
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+				}
+		  	});
+	  	}
+	}
+			
   	var refreshPlateList = function(){
   		//console.debug(currentRegion != '' && $("#region").find("option:selected").val() != '');
   		if(currentRegion != '' && $("#region").find("option:selected").val() != ''){
