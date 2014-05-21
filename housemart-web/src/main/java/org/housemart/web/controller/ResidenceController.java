@@ -103,7 +103,7 @@ public class ResidenceController extends BaseController {
   @SuppressWarnings("unchecked")
   @RequestMapping(value = "residenceList.controller", method = RequestMethod.GET)
   public String residenceList(Model model, final String positionSet, String forceShow, String zombie, 
-		 String lockBasicInfo, String lockMap, String lockPic, final String hasPic, final String picApprove, String regionId, String plateId,
+		 String lockBasicInfo, String lockMap, String lockPic, final String hasPic, final String picApprove, Integer cityId, String regionId, String plateId,
 		 String residenceName, Integer page, Integer pageSize) {
     
     String decodedResidenceName = null;
@@ -120,6 +120,11 @@ public class ResidenceController extends BaseController {
     Map<String,Object> param = new HashMap<String,Object>();
     param.put("residenceName", decodedResidenceName);
     param.put("status", 1);
+    if (cityId!=null) {
+	param.put("cityId", cityId);
+    }else{
+	param.put("cityId", 1);
+    }
     if (!StringUtils.isEmpty(plateId)) {
       param.put("id", plateId);
     }
@@ -225,6 +230,9 @@ public class ResidenceController extends BaseController {
       
     }
     
+    if(cityId == null)
+	cityId = 1;
+    model.addAttribute("cityId", cityId);
     model.addAttribute("positionSet", positionSet);
     model.addAttribute("forceShow", forceShow);
     model.addAttribute("zombie", zombie);
