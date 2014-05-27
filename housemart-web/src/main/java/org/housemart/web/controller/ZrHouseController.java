@@ -299,10 +299,8 @@ public class ZrHouseController extends BaseController {
 	    house.setUpdateTime(Calendar.getInstance().getTime());
 	    house.setCreator(accountId);
 	    house.setResidenceId(residenceId);
-	    house.setHouseType("7"); // 独栋
 	    house.setDirection(101); // 南北朝向
 	    house.setDecorating(HouseEntity.DecoratingEnum.Well.value);
-	    house.setFloor(6); // 独栋
 	    houseDao.add("addHouse", house);
 
 	    sale = house.generateHouseSaleEntity();

@@ -81,6 +81,20 @@ public class ZrHouseHelper {
 	    }
 
 	    house.setSaleMemo("税费各付");
+
+	    if (zrHouseDetail.getType().equalsIgnoreCase("Single Family")) {
+		house.setHouseType("7"); // 独栋
+		house.setFloor(6);
+	    } else if (zrHouseDetail.getType().equalsIgnoreCase("Condo")) {
+		house.setHouseType("4"); // 公寓
+		house.setFloor(3);
+	    } else if (zrHouseDetail.getType().equalsIgnoreCase("Townhouse")) {
+		house.setHouseType("2"); // 联排
+		house.setFloor(8);
+	    } else {
+		house.setHouseType("7"); // 独栋
+		house.setFloor(6);
+	    }
 	}
 	return house;
     }
