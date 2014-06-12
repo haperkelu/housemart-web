@@ -307,7 +307,8 @@ public class ZrHouseController extends BaseController {
 	    rent = house.generateHouseRentEntity();
 
 	    sale.setPrice(house.getSalePrice());
-	    sale.setAvgPrice(sale.getPrice() / house.getPropertyArea());
+	    if(house.getPropertyArea()>0 && sale.getPrice() / house.getPropertyArea() >0)
+		sale.setAvgPrice(sale.getPrice() / house.getPropertyArea());
 	    sale.setSaleStatus(HouseSaleEntity.SaleStatusEnum.Saling.saleStatus);
 	    sale.setHouseId(house.getId());
 	    sale.setSource("2");
