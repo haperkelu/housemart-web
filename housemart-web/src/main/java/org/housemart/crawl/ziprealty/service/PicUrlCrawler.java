@@ -25,7 +25,7 @@ public class PicUrlCrawler extends _ACrawler {
     List<String> urls = new ArrayList<String>();
     final List<NodeVariable> pic = new ArrayList<NodeVariable>();
     Scraper scraper = new HouseMartScraper(config, workDir);
-    scraper.getContext().put("url", "http://www.ziprealty.com/xhr/photoserver?listing_num=" + mls + "&source=CARETS");
+    scraper.getContext().put("url", "http://www.ziprealty.com/xhr/photoserver?listing_num=" + mls + "&source=CARETS_OC");
     scraper.getContext().put("pic", pic);
     // scraper.getHttpClientManager().setHttpProxy("localhost", 8888);
     scraper.setDebug(false);
