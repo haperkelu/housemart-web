@@ -147,35 +147,35 @@ public class HouseMartTimer {
 	});  
     
     //刷新登盘日期
-//    final  HouseOnboardDateTask task6 = new HouseOnboardDateTask();
-//    Thread t6 = new Thread(new Runnable() {
-//      
-//      @SuppressWarnings("static-access")
-//      @Override
-//      public void run() {
-//        
-//        while (true) {
-//          
-//          try {
-//            logger.info("RefreshOnboardTimeTask begin to execute");
-//            task6.run();
-//            logger.info("RefreshOnboardTimeTask finish");
-//          } catch (Exception e) {
-//            logger.error(e.getMessage(), e);
-//          }
-//          try {
-//            Thread.currentThread().sleep(INTERVAL * 12 * 24);
-//          } catch (InterruptedException e) {}
-//          
-//        }
-//      }
-//    });  
+    final  HouseOnboardDateTask task6 = new HouseOnboardDateTask();
+    Thread t6 = new Thread(new Runnable() {
+      
+      @SuppressWarnings("static-access")
+      @Override
+      public void run() {
+        
+        while (true) {
+          
+          try {
+            logger.info("RefreshOnboardTimeTask begin to execute");
+            task6.run();
+            logger.info("RefreshOnboardTimeTask finish");
+          } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+          }
+          try {
+            Thread.currentThread().sleep(INTERVAL * 12 * 24);
+          } catch (InterruptedException e) {}
+          
+        }
+      }
+    });  
     t1.start();   
     t2.start();  
     t3.start();
     t4.start();
     t5.start();
-   // t6.start();
+    t6.start();
   }
   
   
