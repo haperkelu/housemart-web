@@ -24,31 +24,31 @@
 	</var-def>
 	
 	<var-def name="mlss">
-		<xpath expression="//*[@id='propDetailCont']/dl[2]/dd[1]/text()">
+		<xpath expression="//*[@id='propDetailCont']/div[3]/div[1]/span/text()">
 			<var name="pageXml" />
 		</xpath>
 	</var-def>
 		
 	<var-def name="prices">
-		<xpath expression="//*[@id='hdPriceCont']/div[1]/strong/text()">
+		<xpath expression="//*[@id='hdPriceCont']/div[1]/span[2]/text()">
 			<var name="pageXml" />
 		</xpath>
 	</var-def>
 		
 	<var-def name="statuss">
-		<xpath expression="//*[@id='propDetailCont']/dl[2]/dd[2]/text()">
+		<xpath expression="//*[@id='propDetailCont']/div[2]/div/div[1]/span[4]/text()">
 			<var name="pageXml" />
 		</xpath>
 	</var-def>
 		
 	<var-def name="listeds">
-		<xpath expression="//*[@id='propDetailCont']/dl[1]/dd[4]/text()">
+		<xpath expression="//*[@id='propDetailCont']/div[3]/div[1]/span/text()">
 			<var name="pageXml" />
 		</xpath>
 	</var-def>
 	
 	<var-def name="details">
-		<xpath expression="//*[@id='corePropDetails']">
+		<xpath expression="//*[@id='pdCol']/div[3]">
 			<var name="pageXml" />
 		</xpath>
 	</var-def>
@@ -64,6 +64,14 @@
 			<var name="pageXml" />
 		</xpath>
 	</var-def>
+	
+	<var-def name="sources">
+		<xpath expression="//*[@id='hiddenMLSSource']/@value">
+			<var name="pageXml" />
+		</xpath>
+	</var-def>
+	
+	
 	
 	<loop item="item" index="i">
 		<list>
@@ -173,5 +181,15 @@
 		</body>
 	</loop>
 	
-	
+	<loop item="item" index="i">
+		<list>
+			<var name="sources" />
+		</list>
+
+		<body>
+			<template>
+				${source.add(item)};
+			</template>
+		</body>
+	</loop>
 </config>

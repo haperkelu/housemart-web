@@ -12,7 +12,7 @@
 	</var-def>
 
 	<var-def name="houseUrlList">
-		<xpath expression="//*[@id='jsBigParent']/div/div[1]/div[2]/a/@href">
+		<xpath expression="//*[@id='jsBigParent']/div/div/div/h2/a/@href">
 			<var name="pageXml" />
 		</xpath>
 	</var-def>
@@ -31,7 +31,7 @@
 	</loop>
 
 	<var-def name="maxSize">
-		<xpath expression="//*[@class='pgn__text']/text()">
+		<xpath expression="//*[@id='jsAdvOptions']//div/span/text()">
 			<var name="pageXml" />
 		</xpath>
 	</var-def>
