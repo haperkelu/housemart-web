@@ -79,7 +79,8 @@ public class DetailPageCrawler extends _ACrawler {
 	    if (price.size() > 0)
 		zrHouse.setPrice(price.get(0).toString());
 	    if (listed.size() > 0)
-		zrHouse.setListed(listed.get(0).toString());
+		zrHouse.setListed(StringUtils.substringAfter(
+			listed.get(0).toString(), "by").trim());
 	    if (status.size() > 0)
 		zrHouse.setStatus(status.size() > 0 ? status.get(0).toString()
 			: "");
@@ -152,6 +153,6 @@ public class DetailPageCrawler extends _ACrawler {
 	content = content.replaceAll("\\<.*?>", "");
 	// 还原HTML
 	// content = HTMLDecoder.decode(content);
-	return content;
+	return content.trim();
     }
 }
