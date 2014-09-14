@@ -21,42 +21,45 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:/beans/spring*.xml"})
+@ContextConfiguration(locations = { "classpath*:/beans/spring*.xml" })
 public class ListPageCrawlerTest {
-  
-//  @Test
-  public void houseUrlsTest() throws Exception {
-    ZrHouseService zrHouseService = SpringContextHolder.getBean("zrHouseService");
-    String url = "http://www.ziprealty.com/homes-for-sale/list/oc/by-city/Irvine,CA/detailed";
-    int maxPage = 1;
-    int currentPage = 1;
-    while (currentPage <= maxPage) {
-      ListPageCrawler listCrawler = new ListPageCrawler();
-      Map<String,Object> result = listCrawler.crawlDetailUrls(url + "?pageNum=" + currentPage);
-      List<String> urls = (List<String>) result.get("urls");
-      if (currentPage == 1) {
-        maxPage = Integer.valueOf(result.get("maxPage").toString());
-      }
-      
-      if (urls != null) {
-        DetailPageCrawler detailCrawler = new DetailPageCrawler();
-        for (String u : urls) {
-          ZrHouse h = detailCrawler.crawlDetailInfo(u);
-          zrHouseService.addZrHouse(h);
-        }
-      }
-      currentPage++;
+
+    @Test
+    public void houseUrlsTest() throws Exception {
+	ZrHouseService zrHouseService = SpringContextHolder
+		.getBean("zrHouseService");
+	String url = "http://www.ziprealty.com/homes-for-sale/list/sf/by-neighborhood/2218/detailed";
+	int maxPage = 1;
+	int currentPage = 1;
+	while (currentPage <= maxPage) {
+	    ListPageCrawler listCrawler = new ListPageCrawler();
+	    Map<String, Object> result = listCrawler.crawlDetailUrls(url
+		    + "?pageNum=" + currentPage);
+	    List<String> urls = (List<String>) result.get("urls");
+	    if (currentPage == 1) {
+		maxPage = Integer.valueOf(result.get("maxPage").toString());
+	    }
+
+	    if (urls != null) {
+		DetailPageCrawler detailCrawler = new DetailPageCrawler();
+		for (String u : urls) {
+		    ZrHouse h = detailCrawler.crawlDetailInfo(u);
+		    zrHouseService.addZrHouse(h);
+		}
+	    }
+	    currentPage++;
+	}
     }
-  }
-  
-//  @Test
-  public void houseDetailTest() throws JsonGenerationException, JsonMappingException, IOException {
-    DetailPageCrawler detailCrawler = new DetailPageCrawler();
-    ZrHouse h = detailCrawler
-        .crawlDetailInfo("http://www.ziprealty.com/property/2705-LADRILLO-AISLE-IRVINE-CA-92606/8014022/detail");
-    System.out.println(h.getBlock());
-    System.out.println(h.getTitle());
-    System.out.println(h.getQnPics());
-  }
-  
+
+    @Test
+    public void houseDetailTest() throws JsonGenerationException,
+	    JsonMappingException, IOException {
+	DetailPageCrawler detailCrawler = new DetailPageCrawler();
+	ZrHouse h = detailCrawler
+		.crawlDetailInfo("http://www.ziprealty.com/property/613-CHURCH-AVE-SANGER-CA-93657/84081137/detail");
+	System.out.println(h.getBlock());
+	System.out.println(h.getTitle());
+	System.out.println(h.getQnPics());
+    }
+
 }
