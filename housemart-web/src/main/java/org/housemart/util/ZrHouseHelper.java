@@ -14,33 +14,71 @@ public class ZrHouseHelper {
     public static ZrHouseDetail parseZrHouseDetail(String detailString) {
 	ZrHouseDetail zrHouseDetail = new ZrHouseDetail();
 	if (StringUtils.isNotBlank(detailString)) {
+	    // 老格式
 	    String[] info = detailString.split(",\n");
-	    for (int i = 0; i < info.length; i++) {
-		if (StringUtils.isNotBlank(info[i])) {
-		    String inf = info[i].replaceAll("\n", " ").trim();
-		    if (inf.indexOf("N/A") > -1) {
-			continue;
-		    }
+	    if (info.length > 1) {
+		for (int i = 0; i < info.length; i++) {
+		    if (StringUtils.isNotBlank(info[i])) {
+			String inf = info[i].replaceAll("\n", " ").trim();
+			if (inf.indexOf("N/A") > -1) {
+			    continue;
+			}
 
-		    if (inf.indexOf("bed") > -1) {
-			zrHouseDetail.setBed(Integer.valueOf(StringUtils
-				.substringBefore(inf, "bed")));
-		    } else if (inf.indexOf("bath") > -1
-			    && inf.indexOf(" bath") == -1) {
-			zrHouseDetail.setBath(Integer.valueOf(StringUtils
-				.substringBefore(inf, "bath")));
-		    } else if (inf.indexOf(" bath") > -1) {
-		    } else if (inf.indexOf("sq") > -1) {
-			zrHouseDetail.setAreaFeet(Integer
-				.valueOf(StringUtils.substringBefore(inf, "sq")
-					.replaceAll(",", "")));
-		    } else if (inf.indexOf("Built") > -1) {
-			zrHouseDetail.setBuildYear(Integer.valueOf(StringUtils
-				.substringAfter(inf, "Built").trim()));
-		    } else {
-			zrHouseDetail.setType(inf);
-		    }
+			if (inf.indexOf("bed") > -1) {
+			    zrHouseDetail.setBed(Integer.valueOf(StringUtils
+				    .substringBefore(inf, "bed").trim()));
+			} else if (inf.indexOf("bath") > -1
+				&& inf.indexOf(" bath") == -1) {
+			    zrHouseDetail.setBath(Integer.valueOf(StringUtils
+				    .substringBefore(inf, "bath").trim()));
+			} else if (inf.indexOf(" bath") > -1) {
+			} else if (inf.indexOf("sq") > -1) {
+			    zrHouseDetail.setAreaFeet(Integer
+				    .valueOf(StringUtils.substringBefore(inf,
+					    "sq").replaceAll(",", "")));
+			} else if (inf.indexOf("Built") > -1) {
+			    zrHouseDetail.setBuildYear(Integer
+				    .valueOf(StringUtils.substringAfter(inf,
+					    "Built").trim()));
+			} else {
+			    zrHouseDetail.setType(inf);
+			}
 
+		    }
+		}
+	    } else {
+		// 新格式
+		info = detailString.split(" ");
+		try {
+		    zrHouseDetail.setBed(Integer.valueOf(info[0].trim()));
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+
+		try {
+		    zrHouseDetail.setBath(Integer.valueOf(info[2].trim()));
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+
+		try {
+		    zrHouseDetail.setAreaFeet(Integer.valueOf(info[4]
+			    .replaceAll(",", "").trim()));
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+
+		try {
+		    zrHouseDetail
+			    .setBuildYear(Integer.valueOf(info[18].trim()));
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+
+		try {
+		    zrHouseDetail.setType(info[11].trim());
+		} catch (Exception e) {
+		    e.printStackTrace();
 		}
 	    }
 	}
