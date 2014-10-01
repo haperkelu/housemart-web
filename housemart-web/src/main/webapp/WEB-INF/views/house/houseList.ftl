@@ -149,7 +149,7 @@
 								<td>${(house.propertyArea)!}</td>
 								<td>${(house.salePrice?number/10000)!}</td>
 								<td>${(house.rentPrice)!}</td>
-								<td><#if house.propertyArea??>${(house.salePrice?number/house.propertyArea?number/10000)!}</#if></td>
+								<td><#if house.propertyArea?? && house.propertyArea != 0>${(house.salePrice?number/house.propertyArea?number/10000)!}</#if></td>
 								<td><#if house.hasKey??><@spring.message "house.house.hasKey.${house.hasKey}"/></#if></td>
 								<td></td>
 								<td><#if house.auditTime??>${house.auditTime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
